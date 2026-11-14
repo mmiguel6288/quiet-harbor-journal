@@ -395,27 +395,41 @@
     let giftData = null;
 
     const RIDDLES = [
-      { q: "What do snowmen eat for breakfast?", answers: ["frosted flakes","frosted flake","snowflakes","snow flakes"], hint: "Think cereal..." },
-      { q: "I have needles but never sew, and I wear lights but never glow on my own. What am I?", answers: ["christmas tree","tree","pine tree"], hint: "You decorate me every December." },
-      { q: "I come down the chimney once a year with a bag full of toys. Who am I?", answers: ["santa","santa claus","saint nick","st nick","father christmas"], hint: "Ho ho ho!" },
-      { q: "What is the name of the Grinch's loyal dog?", answers: ["max"], hint: "It's a short, three-letter name." },
-      { q: "On the first day of Christmas, my true love sent to me a bird in a pear tree. Which bird?", answers: ["partridge","a partridge","partridge in a pear tree","a partridge in a pear tree"], hint: "It's the first gift in the carol." },
-      { q: "Which carol begins with the words \"Silent night, holy night\"?", answers: ["silent night","silent night holy night"], hint: "It's a calm, quiet kind of night." },
-      { q: "Which of Santa's reindeer is named after a streak across the night sky?", answers: ["comet"], hint: "Think of a bright visitor with a tail, racing through the stars." },
-      { q: "What do children hang by the fireplace for Santa to fill?", answers: ["stockings","stocking","christmas stocking","christmas stockings","socks"], hint: "They're hung in a row, one for each person." },
-      { q: "What sweet treat is often left out for Santa with a glass of milk?", answers: ["cookies","cookie","milk and cookies","cookies and milk","chocolate chip cookies","christmas cookies"], hint: "They're often baked with chocolate chips." },
-      { q: "How many reindeer traditionally pull Santa's sleigh, not counting Rudolph?", answers: ["8","eight","8 reindeer","eight reindeer"], hint: "It's an even number between 6 and 10." }
+      { q: "Santa's mother had three children: Fred, Annette, and... who?", answers: ["santa","santa claus"], hint: "Read the question again carefully." },
+      { q: "On Christmas Eve you walk into a dark room with a match, an oil lamp, a candle, and a fireplace. What do you light first?", answers: ["match","the match"], hint: "What do you need to light anything?" },
+      { q: "In what year did Christmas Day and New Year's Day fall in the same year?", answers: ["every year","each year","all years","always","every","all of them","any year"], hint: "Think about which New Year's Day." },
+      { q: "If the end of the year is December 31st, what is the end of Christmas?", answers: ["s","the letter s","letter s"], hint: "Think spelling, not calendars." },
+      { q: "When Santa leaves the North Pole, which direction does he travel?", answers: ["south"], hint: "Where can you go from the very top of the world?" },
+      { q: "What can you catch easily in winter but never throw?", answers: ["cold","a cold","the flu","flu","a flu","the cold"], hint: "You might need tissues." },
+      { q: "I travel all around the world like Santa but never leave my corner. What am I?", answers: ["stamp","a stamp","postage stamp","a postage stamp"], hint: "Look at a Christmas card envelope." },
+      { q: "How many of Santa's reindeer have names that start with D?", answers: ["3","three"], hint: "Dash away, dash away..." },
+      { q: "What is red and white, red and white, red and white?", answers: ["santa rolling down a hill","santa falling down a hill","santa rolling","santa falling","candy cane rolling"], hint: "Picture Santa on a snowy slope...", need: { all: ["santa"], any: ["roll","fall","tumbl","fell"] } },
+      { q: "What can you keep after giving it to someone?", answers: ["your word","word","a promise","promise"], hint: "You make it, and you should keep it." }
     ];
     function norm(s) {
       return String(s || "").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/&/g, " and ").replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
     }
-    function answersMatch(input, accepted) {
+    function answersMatch(input, riddle) {
       const a = norm(input);
       if (!a) return false;
-      return accepted.some(function (ans) {
+      const accepted = riddle.answers || [];
+      if (accepted.some(function (ans) {
         const b = norm(ans);
-        return a === b || a.indexOf(b) !== -1 || b.indexOf(a) !== -1;
-      });
+        if (!b) return false;
+        if (a === b) return true;
+        // Input may be a longer phrase that includes the accepted answer.
+        // Do not match short fragments inside longer accepted answers
+        // (e.g. "santa" should not match "santa rolling").
+        if (b.length >= 3 && a.indexOf(b) !== -1) return true;
+        return false;
+      })) return true;
+      if (riddle.need) {
+        const hasAll = (riddle.need.all || []).every(function (w) { return a.indexOf(norm(w)) !== -1; });
+        const anyList = riddle.need.any || [];
+        const hasAny = anyList.length === 0 || anyList.some(function (w) { return a.indexOf(norm(w)) !== -1; });
+        if (hasAll && hasAny) return true;
+      }
+      return false;
     }
     function pickRiddle() {
       let n = 0;
@@ -466,7 +480,7 @@
     riddleForm.addEventListener("submit", function (ev) {
       ev.preventDefault();
       if (unlocked || !currentRiddle) return;
-      if (answersMatch(riddleInput.value, currentRiddle.answers)) {
+      if (answersMatch(riddleInput.value, currentRiddle)) {
         unlockGift("You got it!");
         return;
       }
