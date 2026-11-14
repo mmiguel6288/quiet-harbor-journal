@@ -224,8 +224,97 @@
       color: rgba(247,241,228,.55);
       font-size: 0.8rem;
     }
+
+    .riddle {
+      display: none;
+      max-width: 26em;
+      margin: 8px auto 18px;
+      text-align: left;
+      background: rgba(20, 40, 32, 0.92);
+      border: 1px solid rgba(226,196,121,.4);
+      border-radius: 16px;
+      padding: 18px 18px 16px;
+      color: var(--cream);
+    }
+    .riddle.show { display: block; }
+    .riddle h2 {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      color: var(--gold);
+      font-size: 1.25rem;
+      margin: 0 0 10px;
+      text-align: center;
+      letter-spacing: 0.04em;
+    }
+    .riddle .prompt { margin: 0 0 14px; line-height: 1.5; font-size: 1.05rem; text-align: center; }
+    .riddle-row { display: flex; gap: 8px; }
+    .riddle input {
+      flex: 1;
+      min-width: 0;
+      border: 1px solid rgba(226,196,121,.45);
+      background: #10241c;
+      color: var(--cream);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font: 600 1rem Nunito, sans-serif;
+    }
+    .riddle button {
+      border: 0;
+      border-radius: 8px;
+      background: #b42732;
+      color: #fff;
+      font: 700 0.95rem Nunito, sans-serif;
+      padding: 10px 14px;
+      cursor: pointer;
+    }
+    .riddle button.secondary {
+      display: none;
+      width: 100%;
+      margin-top: 10px;
+      background: transparent;
+      border: 1px solid rgba(226,196,121,.45);
+      color: var(--gold);
+    }
+    .riddle button.secondary.show { display: block; }
+    .riddle .status { min-height: 1.3em; margin: 10px 0 0; text-align: center; font-size: 0.95rem; }
+    .riddle .hint {
+      display: none;
+      margin: 10px 0 0;
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: rgba(226,196,121,.12);
+      color: var(--gold);
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+    .riddle .hint.show { display: block; }
+    .riddle.shake { animation: riddle-shake 0.45s ease; }
+    @keyframes riddle-shake {
+      0%,100% { transform: translateX(0); }
+      20% { transform: translateX(-10px) rotate(-1deg); }
+      40% { transform: translateX(10px) rotate(1deg); }
+      60% { transform: translateX(-7px); }
+      80% { transform: translateX(7px); }
+    }
+    .celebrate {
+      position: fixed; inset: 0; z-index: 9; pointer-events: none;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity .25s ease;
+    }
+    .celebrate.show { opacity: 1; }
+    .celebrate span {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2rem, 8vw, 3.2rem);
+      color: var(--gold);
+      text-shadow: 0 6px 24px rgba(0,0,0,.45);
+      transform: scale(.86);
+      transition: transform .45s cubic-bezier(.2,.8,.2,1);
+    }
+    .celebrate.show span { transform: scale(1); }
+    .stage.locked { opacity: 0.42; pointer-events: none; filter: grayscale(.15); }
+    body.bad-link .riddle { display: none !important; }
     @media (prefers-reduced-motion: reduce) {
-      .gift, .lid, .names, .details, .paper { transition: none; }
+      .gift, .lid, .names, .details, .paper, .riddle, .celebrate { transition: none; }
+      .riddle.shake { animation: none; }
     }
   </style>
 </head>
@@ -242,6 +331,20 @@
       <p class="hint" id="hint">Scratch the wrapping or tap the gift to unwrap it.</p>
       <p class="error-msg" id="errorMsg"></p>
     </header>
+    <div class="celebrate" id="celebrate" aria-hidden="true"><span id="celebrateMsg"></span></div>
+    <section class="riddle" id="riddle">
+      <h2>A little Christmas riddle</h2>
+      <p class="prompt" id="riddlePrompt"></p>
+      <form id="riddleForm" action="#" autocomplete="off">
+        <div class="riddle-row">
+          <input id="riddleAnswer" type="text" enterkeyhint="done" autocapitalize="off" spellcheck="false" aria-label="Your answer">
+          <button type="submit" id="riddleSubmit">Guess</button>
+        </div>
+      </form>
+      <p class="status" id="riddleStatus"></p>
+      <p class="hint" id="riddleHint"></p>
+      <button type="button" class="secondary" id="riddleGiveUp">Give up &amp; open anyway</button>
+    </section>
     <div class="stage" id="stage">
       <div class="gift" id="gift">
         <div class="glow"></div>
@@ -291,11 +394,102 @@
     }
     let giftData = null;
 
+    const RIDDLES = [
+      { q: "What do you call a snowman in the summer?", answers: ["puddle","a puddle","water","melted","a melted snowman","melted snowman"], hint: "Think about what happens when ice warms up." },
+      { q: "What do snowmen eat for breakfast?", answers: ["snowflakes","snow flakes","snowflake","frosted flakes","frosties"], hint: "They're very small and fall from the sky." },
+      { q: "Which of Santa's reindeer has a glowing red nose?", answers: ["rudolph","rudolf","rudolph the red nosed reindeer","rudolph the red-nosed reindeer"], hint: "He leads the sleigh on foggy nights." },
+      { q: "What is the name of the Grinch's loyal dog?", answers: ["max"], hint: "It's a short, three-letter name." },
+      { q: "On the first day of Christmas, my true love sent to me a bird in a pear tree. Which bird?", answers: ["partridge","a partridge","partridge in a pear tree","a partridge in a pear tree"], hint: "It's the first gift in the carol." },
+      { q: "Which carol begins with the words \"Silent night, holy night\"?", answers: ["silent night","silent night holy night"], hint: "It's a calm, quiet kind of night." },
+      { q: "Which of Santa's reindeer is named after a streak across the night sky?", answers: ["comet"], hint: "Think of a bright visitor with a tail, racing through the stars." },
+      { q: "What do children hang by the fireplace for Santa to fill?", answers: ["stockings","stocking","christmas stocking","christmas stockings","socks"], hint: "They're hung in a row, one for each person." },
+      { q: "What sweet treat is often left out for Santa with a glass of milk?", answers: ["cookies","cookie","milk and cookies","cookies and milk","chocolate chip cookies","christmas cookies"], hint: "They're often baked with chocolate chips." },
+      { q: "How many reindeer traditionally pull Santa's sleigh, not counting Rudolph?", answers: ["8","eight","8 reindeer","eight reindeer"], hint: "It's an even number between 6 and 10." }
+    ];
+    function norm(s) {
+      return String(s || "").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/&/g, " and ").replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
+    }
+    function answersMatch(input, accepted) {
+      const a = norm(input);
+      if (!a) return false;
+      return accepted.some(function (ans) {
+        const b = norm(ans);
+        return a === b || a.indexOf(b) !== -1 || b.indexOf(a) !== -1;
+      });
+    }
+    function pickRiddle() {
+      let n = 0;
+      const h = location.hash || "";
+      for (let i = 0; i < h.length; i++) n = (n * 33 + h.charCodeAt(i)) >>> 0;
+      return RIDDLES[n % RIDDLES.length];
+    }
+
+    const riddleEl = document.getElementById("riddle");
+    const riddleForm = document.getElementById("riddleForm");
+    const riddleInput = document.getElementById("riddleAnswer");
+    const riddleStatus = document.getElementById("riddleStatus");
+    const riddleHint = document.getElementById("riddleHint");
+    const riddleGiveUp = document.getElementById("riddleGiveUp");
+    const stage = document.getElementById("stage");
+    let currentRiddle = null, wrongs = 0, unlocked = false;
+
+    function lockGift() {
+      unlocked = false;
+      stage.classList.add("locked");
+      riddleEl.classList.add("show");
+    }
+    function unlockGift(message) {
+      unlocked = true;
+      riddleEl.classList.remove("show");
+      stage.classList.remove("locked");
+      const celeb = document.getElementById("celebrate");
+      const msg = document.getElementById("celebrateMsg");
+      msg.textContent = message;
+      celeb.classList.add("show");
+      burst();
+      setTimeout(function () { celeb.classList.remove("show"); }, 1400);
+      document.getElementById("hint").textContent = "Scratch the wrapping or tap the gift to unwrap it.";
+    }
+    function startRiddle() {
+      currentRiddle = pickRiddle();
+      wrongs = 0;
+      document.getElementById("riddlePrompt").textContent = currentRiddle.q;
+      riddleHint.textContent = "Hint: " + currentRiddle.hint;
+      riddleHint.classList.remove("show");
+      riddleGiveUp.classList.remove("show");
+      riddleStatus.textContent = "";
+      riddleInput.value = "";
+      document.getElementById("hint").textContent = "Solve the riddle to unwrap your gift.";
+      lockGift();
+      setTimeout(function () { riddleInput.focus(); }, 200);
+    }
+    riddleForm.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      if (unlocked || !currentRiddle) return;
+      if (answersMatch(riddleInput.value, currentRiddle.answers)) {
+        unlockGift("You got it!");
+        return;
+      }
+      wrongs += 1;
+      riddleEl.classList.remove("shake");
+      void riddleEl.offsetWidth;
+      riddleEl.classList.add("shake");
+      if (wrongs === 1) riddleStatus.textContent = "Not quite — try again!";
+      else if (wrongs === 2) riddleStatus.textContent = "Still not it. Here's a hint.";
+      else riddleStatus.textContent = "No worries — you can keep guessing, or give up and open anyway.";
+      if (wrongs >= 2) riddleHint.classList.add("show");
+      if (wrongs >= 3) riddleGiveUp.classList.add("show");
+    });
+    riddleGiveUp.addEventListener("click", function () {
+      if (unlocked) return;
+      unlockGift("On to the gift!");
+    });
+
+
     const paper = document.getElementById("paper");
     const canvas = document.getElementById("wrap");
     const gift = document.getElementById("gift");
-    const stage = document.getElementById("stage");
-    const hint = document.getElementById("hint");
+        const hint = document.getElementById("hint");
     const details = document.getElementById("details");
     const soundBtn = document.getElementById("soundBtn");
     let opened = false, soundOn = false, audioCtx = null, taps = 0;
@@ -360,6 +554,7 @@
 
     function openGift(instant) {
       if (opened) return;
+      if (!unlocked && !instant) return;
       opened = true;
       paper.classList.add("gone");
       if (instant) paper.classList.add("instant");
@@ -489,7 +684,14 @@
       giftData = parsed;
       document.getElementById("hello").textContent = "Hi " + parsed.recipient + "!";
       var params = new URLSearchParams(location.search);
-      if (params.get("unwrap") === "1") openGift(true);
+      if (params.get("unwrap") === "1") {
+        unlocked = true;
+        stage.classList.remove("locked");
+        riddleEl.classList.remove("show");
+        openGift(true);
+      } else {
+        startRiddle();
+      }
     }
     boot();
     window.addEventListener("hashchange", function () {
@@ -501,6 +703,8 @@
       document.getElementById("details").classList.remove("show", "instant");
       document.getElementById("paper").classList.remove("gone", "instant");
       document.getElementById("hint").textContent = "Scratch the wrapping or tap the gift to unwrap it.";
+      unlocked = false; wrongs = 0; currentRiddle = null;
+      riddleEl.classList.remove("show", "shake");
       if (!opened) sizeCanvas();
       boot();
     });
