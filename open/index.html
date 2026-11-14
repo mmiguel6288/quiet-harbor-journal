@@ -403,7 +403,7 @@
       { q: "What can you catch easily in winter but never throw?", answers: ["cold","a cold","the flu","flu","a flu","the cold"], hint: "You might need tissues." },
       { q: "I travel all around the world like Santa but never leave my corner. What am I?", answers: ["stamp","a stamp","postage stamp","a postage stamp"], hint: "Look at a Christmas card envelope." },
       { q: "How many of Santa's reindeer have names that start with D?", answers: ["3","three"], hint: "Dash away, dash away..." },
-      { q: "What is red and white, red and white, red and white?", answers: ["santa rolling down a hill","santa falling down a hill","santa rolling","santa falling","candy cane rolling"], hint: "Picture Santa on a snowy slope...", need: { all: ["santa"], any: ["roll","fall","tumbl","fell"] } },
+      { q: "What did Adam say on the day before Christmas?", answers: ["christmas eve","it's christmas eve","its christmas eve"], hint: "Adam's wife might be involved...", need: { word: ["eve"] } },
       { q: "What can you keep after giving it to someone?", answers: ["your word","word","a promise","promise"], hint: "You make it, and you should keep it." }
     ];
     function norm(s) {
@@ -424,10 +424,13 @@
         return false;
       })) return true;
       if (riddle.need) {
+        const tokens = a.split(" ").filter(Boolean);
+        const hasWord = (riddle.need.word || []).some(function (w) { return tokens.indexOf(norm(w)) !== -1; });
+        if ((riddle.need.word || []).length && hasWord) return true;
         const hasAll = (riddle.need.all || []).every(function (w) { return a.indexOf(norm(w)) !== -1; });
         const anyList = riddle.need.any || [];
         const hasAny = anyList.length === 0 || anyList.some(function (w) { return a.indexOf(norm(w)) !== -1; });
-        if (hasAll && hasAny) return true;
+        if ((riddle.need.all || []).length && hasAll && hasAny) return true;
       }
       return false;
     }
