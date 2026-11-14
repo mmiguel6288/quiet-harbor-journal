@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Case 25-1102-0417 · The Extra Hour</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;600;800&family=Caveat:wght@500&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#141210;--cork:#3b2a1c;--paper:#f3ecd9;--paper2:#fbf8ef;--ink:#1d1a16;--red:#9b1c1c;--manila:#d9b97a;--muted:#8a7f6c;--accent:#c79b3b}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:#e9e2d0;font-family:Inter,system-ui,sans-serif;-webkit-text-size-adjust:100%}
+body{background:radial-gradient(ellipse at top,#2a2119 0%,#141210 60%) fixed}
+button{font:inherit;cursor:pointer}
+header.top{position:sticky;top:0;z-index:20;background:rgba(15,13,11,.94);backdrop-filter:blur(6px);border-bottom:1px solid #3a3128}
+.bar{display:flex;align-items:center;gap:12px;padding:10px 16px;max-width:1200px;margin:0 auto}
+.seal{width:38px;height:38px;flex:none}
+.ttl{font-family:'Special Elite',monospace;font-size:15px;line-height:1.2;letter-spacing:.5px}
+.ttl small{display:block;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:11px}
+.score-pill{margin-left:auto;font:600 12px 'IBM Plex Mono';color:var(--accent);border:1px solid #4a3d2c;border-radius:20px;padding:4px 10px;white-space:nowrap}
+.sound{background:none;border:1px solid #4a3d2c;color:#cbbf9f;border-radius:20px;padding:4px 10px;font-size:12px}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;max-width:1200px;margin:0 auto;padding:0 12px;scrollbar-width:none}
+nav.tabs button{background:none;border:none;color:#a99d84;padding:10px 12px;border-bottom:2px solid transparent;font-weight:600;font-size:14px;white-space:nowrap}
+nav.tabs button.on{color:#f3e7c6;border-color:var(--accent)}
+main{max-width:1200px;margin:0 auto;padding:18px 14px 80px}
+.view{display:none}.view.on{display:block;animation:fade .3s}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+h2.sec{font-family:'Special Elite';font-weight:400;font-size:22px;margin:6px 0 14px;color:#f3e7c6}
+.lede{color:#c8bea7;max-width:760px;line-height:1.55}
+/* briefing */
+.brief{display:grid;grid-template-columns:1.3fr 1fr;gap:18px}
+@media(max-width:820px){.brief{grid-template-columns:1fr}}
+.memo{background:var(--paper);color:var(--ink);padding:26px 24px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;line-height:1.6;box-shadow:0 10px 30px rgba(0,0,0,.5);position:relative;transform:rotate(-.4deg)}
+.memo h3{font-family:'Special Elite';font-size:20px;margin:0 0 8px;font-weight:400}
+.stamp{position:absolute;right:18px;top:18px;border:3px solid var(--red);color:var(--red);font:700 13px 'IBM Plex Mono';padding:4px 8px;transform:rotate(8deg);opacity:.85;letter-spacing:2px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.suspect{background:#f6f0e0;color:var(--ink);padding:10px;box-shadow:0 6px 18px rgba(0,0,0,.45);font-size:13px;line-height:1.35}
+.suspect svg{width:100%;height:auto;display:block;background:#cfc6b3;margin-bottom:8px}
+.suspect b{font-family:'Libre Baskerville',serif;font-size:15px;display:block}
+.suspect i{color:#5b5245;font-style:normal;font-size:12px}
+/* files */
+.groups h4{font-family:'Special Elite';font-weight:400;color:var(--manila);margin:22px 0 8px;font-size:16px;letter-spacing:.5px}
+.files{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.folder{position:relative;background:linear-gradient(#e2c487,#d4b06b);color:#2a2116;border:none;text-align:left;padding:16px 12px 12px;border-radius:2px 8px 4px 4px;box-shadow:0 4px 12px rgba(0,0,0,.4);min-height:86px;transition:transform .15s}
+.folder:before{content:"";position:absolute;top:-9px;left:10px;width:70px;height:12px;background:#e2c487;border-radius:5px 5px 0 0}
+.folder:hover{transform:translateY(-2px)}
+.folder .id{font:600 11px 'IBM Plex Mono';opacity:.7}
+.folder .nm{font-weight:600;font-size:14px;margin-top:3px;line-height:1.25}
+.folder .seen{position:absolute;right:8px;top:8px;font-size:11px;font-family:'IBM Plex Mono';color:#5d4a20}
+.folder.pinned{outline:2px solid var(--red)}
+/* viewer */
+.viewer{position:fixed;inset:0;z-index:50;background:rgba(9,8,6,.97);display:none;overflow:auto;-webkit-overflow-scrolling:touch}
+.viewer.on{display:block}
+.vtools{position:sticky;top:0;display:flex;gap:8px;justify-content:space-between;align-items:center;padding:10px 14px;background:#0e0c0a;border-bottom:1px solid #332a20;z-index:2}
+.vtools button{background:#2a231b;border:1px solid #4a3d2c;color:#eadfc4;border-radius:6px;padding:7px 12px;font-size:13px}
+.vtools .vt{font:600 13px 'IBM Plex Mono';color:#d8c8a0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vbody{max-width:860px;margin:20px auto 60px;padding:0 10px}
+/* documents */
+.doc{background:var(--paper2);color:var(--ink);padding:28px 30px;box-shadow:0 12px 40px rgba(0,0,0,.6);font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.55;position:relative;overflow-x:auto}
+@media(max-width:600px){.doc{padding:18px 14px;font-size:12px}}
+.doc h3{font-family:'Libre Baskerville',serif;font-size:17px;margin:0 0 4px}
+.doc .hd{display:flex;justify-content:space-between;gap:10px;border-bottom:2px solid #222;padding-bottom:8px;margin-bottom:12px;flex-wrap:wrap}
+.doc .agency{font-family:'Libre Baskerville',serif;font-weight:700;font-size:14px;letter-spacing:.5px}
+.doc table{border-collapse:collapse;width:100%;margin:8px 0;font-size:12px}
+.doc th,.doc td{border:1px solid #9d9583;padding:4px 6px;text-align:left;vertical-align:top}
+.doc th{background:#e8e0cc;font-weight:600}
+.doc .fld{display:grid;grid-template-columns:170px 1fr;gap:2px 10px;margin:6px 0}
+@media(max-width:600px){.doc .fld{grid-template-columns:1fr}}
+.doc .fld div:nth-child(odd){color:#5f574a;font-size:11px;text-transform:uppercase;padding-top:2px}
+.doc p{margin:8px 0}
+.doc .q{margin:9px 0}.doc .q b{display:inline-block;min-width:92px}
+.doc .redact{background:#111;color:#111;user-select:none;padding:0 3px}
+.doc .hand{font-family:Caveat,cursive;font-size:20px;color:#1d3f8f;line-height:1.1}
+.doc .rstamp{display:inline-block;border:2px solid var(--red);color:var(--red);padding:2px 8px;transform:rotate(-4deg);font-weight:700;letter-spacing:1px;font-size:11px}
+.doc .foot{margin-top:16px;padding-top:8px;border-top:1px dashed #999;font-size:11px;color:#655c4e}
+.photo{background:#0d0d0d;padding:10px;color:#ddd}
+.photo svg{width:100%;height:auto;display:block}
+.photo .cap{font:12px 'IBM Plex Mono';color:#bbb;padding:8px 2px 0;line-height:1.5}
+.receipt{background:#fbfbf7;width:min(300px,100%);margin:0 auto 18px;padding:16px 14px 26px;font:12px/1.35 'IBM Plex Mono',monospace;color:#222;box-shadow:0 6px 18px rgba(0,0,0,.4);-webkit-mask:linear-gradient(#000 0 0);clip-path:polygon(0 0,100% 0,100% 97%,95% 100%,90% 97%,85% 100%,80% 97%,75% 100%,70% 97%,65% 100%,60% 97%,55% 100%,50% 97%,45% 100%,40% 97%,35% 100%,30% 97%,25% 100%,20% 97%,15% 100%,10% 97%,5% 100%,0 97%)}
+.receipt .c{text-align:center}.receipt .r{display:flex;justify-content:space-between}
+.email{background:#fff;color:#202124;font-family:Inter,Arial,sans-serif;font-size:14px;line-height:1.5;padding:22px 24px;box-shadow:0 12px 40px rgba(0,0,0,.6)}
+.email .subj{font-size:20px;margin:0 0 12px}
+.email .meta{font-size:12.5px;color:#5f6368;border-bottom:1px solid #e3e3e3;padding-bottom:10px;margin-bottom:14px}
+.email .meta b{color:#202124}
+.phone{background:#000;border-radius:28px;padding:14px;max-width:420px;margin:0 auto;box-shadow:0 12px 40px rgba(0,0,0,.6)}
+.phone .scr{background:#fff;border-radius:18px;padding:12px;font-family:Inter,sans-serif;color:#111;font-size:13.5px}
+.bub{max-width:80%;padding:7px 11px;border-radius:16px;margin:4px 0;line-height:1.35}
+.bub.in{background:#e9e9eb}.bub.out{background:#0a84ff;color:#fff;margin-left:auto}
+.ts{font-size:10.5px;color:#888;text-align:center;margin:8px 0 2px;font-family:'IBM Plex Mono'}
+.clip{background:#efe6cf;color:#222;font-family:'Libre Baskerville',serif;padding:22px;columns:2 240px;column-gap:22px;font-size:13px;line-height:1.55;box-shadow:0 12px 40px rgba(0,0,0,.6)}
+.clip h3{column-span:all;font-size:24px;margin:0 0 6px;line-height:1.15}
+.mono{font-family:'IBM Plex Mono',monospace}
+/* board */
+.board{background:var(--cork) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .2 0 0 0 0 .13 0 0 0 0 .07 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");padding:16px;border:10px solid #5b3f26;box-shadow:inset 0 0 40px rgba(0,0,0,.6)}
+.grid{width:100%;border-collapse:separate;border-spacing:4px;font-size:13px}
+.grid th{color:#f2e5c4;font-weight:600;text-align:left;padding:4px}
+.grid td.nm{background:#f6f0e0;color:#222;padding:8px;font-weight:600;font-family:'Libre Baskerville';font-size:13px}
+.cell{width:100%;min-width:64px;height:40px;border:none;border-radius:3px;background:#efe6cf;color:#222;font:700 18px Inter}
+.cell[data-s="1"]{background:#cfe8c4;color:#1d5a12}.cell[data-s="2"]{background:#f1c8c0;color:#8f1b0f}.cell[data-s="3"]{background:#f3e3a8;color:#6b5207}
+.pins{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.pin{background:#fbf6e6;color:#222;padding:10px 12px 8px;font-size:12.5px;box-shadow:0 4px 10px rgba(0,0,0,.5);position:relative;transform:rotate(var(--r,-1deg));max-width:200px;border:none;text-align:left}
+.pin:before{content:"";position:absolute;top:-6px;left:50%;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ff6b6b,#9b1c1c);box-shadow:0 2px 3px rgba(0,0,0,.5)}
+.legend{color:#e8dcbc;font-size:12px;margin-top:8px}
+textarea.notes{width:100%;min-height:55vh;background:#fdfaf0 repeating-linear-gradient(#fdfaf0 0 27px,#c9d8ef 27px 28px);color:#1d2a4a;border:none;padding:10px 14px 10px 46px;font:20px/28px Caveat,cursive;box-shadow:0 10px 30px rgba(0,0,0,.5);background-attachment:local;border-left:2px solid #e7a3a3;outline:none}
+.panel{background:#1d1915;border:1px solid #3a3128;border-radius:8px;padding:16px;margin-bottom:14px}
+.btn{background:var(--accent);color:#1a1209;border:none;border-radius:6px;padding:10px 16px;font-weight:700}
+.btn.ghost{background:none;color:#e6d7b0;border:1px solid #5a4a33}
+.btn.red{background:#9b1c1c;color:#fff}
+.hint{border-left:3px solid var(--accent);padding:8px 12px;margin:10px 0;background:#25201a;color:#eadfc4;line-height:1.5}
+form.acc label.opt{display:block;background:#f6f0e0;color:#222;margin:6px 0;padding:9px 11px;border-radius:4px;font-size:14px;line-height:1.35;cursor:pointer}
+form.acc label.opt input{margin-right:8px}
+form.acc fieldset{border:1px solid #3a3128;border-radius:8px;margin:0 0 16px;padding:12px}
+form.acc legend{font-family:'Special Elite';color:#f3e7c6;font-size:17px;padding:0 6px}
+.evpick{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:4px;margin-top:8px}
+.evpick label{font-size:12.5px;background:#2a231b;padding:6px 8px;border-radius:4px;color:#e6dcc3;cursor:pointer}
+.small{font-size:12px;color:#a99d84}
+.reveal{background:var(--paper);color:var(--ink);padding:24px;line-height:1.6;font-size:14.5px;box-shadow:0 12px 40px rgba(0,0,0,.6)}
+.reveal h3{font-family:'Special Elite';font-weight:400;font-size:22px;margin:16px 0 6px}
+.scoretbl td{padding:4px 10px;border-bottom:1px solid #ddd}
+.big{font:800 46px Inter;color:var(--red)}
+.mag{position:absolute;pointer-events:none;border:3px solid #ccc;border-radius:50%;width:170px;height:170px;box-shadow:0 6px 18px rgba(0,0,0,.6);display:none;background-repeat:no-repeat;z-index:5}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#2b241b;color:#f3e7c6;padding:10px 16px;border-radius:8px;border:1px solid #5a4a33;z-index:99;display:none;font-size:14px}
+@media(max-width:600px){.ttl small{display:none}.ttl{font-size:12px}.seal{width:30px;height:30px}.sound{padding:4px 8px;font-size:11px}.score-pill{font-size:11px;padding:3px 8px}.vtools{padding:8px}.vtools .vt{font-size:11px}.vtools button{padding:6px 9px}}
+</style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='14' font-size='14'%3E%F0%9F%95%B5%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+<header class="top">
+ <div class="bar">
+  <svg class="seal" viewBox="0 0 40 40"><path d="M20 2l5 6 8-1-1 8 6 5-6 5 1 8-8-1-5 6-5-6-8 1 1-8-6-5 6-5-1-8 8 1z" fill="#b8902f"/><circle cx="20" cy="20" r="8" fill="#1a1510"/><text x="20" y="23.5" font-size="8" text-anchor="middle" fill="#e2c479" font-family="Georgia">SB</text></svg>
+  <div class="ttl">CASE 25-1102-0417 · “THE EXTRA HOUR”<small>WHITCOMBE, HARLAN · Lake Arrowhead, CA · Unattended death</small></div>
+  <span class="score-pill" id="pill">Files read 0/30</span>
+  <button class="sound" id="snd" aria-pressed="false">🔇 Ambience</button>
+ </div>
+ <nav class="tabs" id="tabs">
+  <button data-v="brief" class="on">Briefing</button><button data-v="files">Case Files</button><button data-v="board">Evidence Board</button><button data-v="notes">Notes</button><button data-v="hints">Hints</button><button data-v="accuse">Accuse</button>
+ </nav>
+</header>
+<main>
+<section class="view on" id="v-brief">
+ <div class="brief">
+  <div class="memo">
+   <div class="stamp">CONFIDENTIAL</div>
+   <h3>MEMORANDUM</h3>
+   TO: &nbsp;&nbsp;Investigating Detective (you)<br>
+   FROM: Lt. D. Haverford, Specialized Investigations<br>
+   DATE: Mon 11/03/2025 &nbsp; RE: Whitcombe, Harlan — 25-1102-0417<br><br>
+   Harlan Whitcombe, 68, founder of Whitcombe Confections (the “Snowcap” peppermint-bark people), was found dead in the locked study of his Lake Arrowhead lodge Sunday morning after his family's annual <b>Fall Back Party</b>, the night the clocks went back an hour.<br><br>
+   Coroner says anaphylaxis. Harlan had a severe peanut allergy. He built a peanut-free company around it. The family wants it to be a tragic accident. <b>I don't.</b><br><br>
+   Five people at that party had a reason to want him gone. Everything Det. Okafor collected over the weekend is in this file: reports, photos, logs, receipts, phones, statements.<br><br>
+   The D.A. won't file on a hunch. Bring me one name, and prove all three:<br>
+   &nbsp;&nbsp;<b>MOTIVE</b>: why they wanted him dead<br>
+   &nbsp;&nbsp;<b>MEANS</b>: exactly how it was done, and how they could do it<br>
+   &nbsp;&nbsp;<b>OPPORTUNITY</b>: when they did it, and why nobody else could have<br><br>
+   Read carefully. Times lie. People lie more. Documents don't, but they don't explain themselves either.<br><br>
+   You get <b>one</b> accusation. — D.H.
+  </div>
+  <div>
+   <div class="panel" style="line-height:1.55;font-size:14px">
+    <b style="color:#f3e7c6">How to play</b><br>
+    1. Open <b>Case Files</b>. Every file is fair game. Pin the important ones to the <b>Evidence Board</b>.<br>
+    2. Use the board's Motive / Means / Opportunity grid to rule suspects in and out. Tap a cell: ✓ has it · ✗ provably lacks it · ? unsure.<br>
+    3. Your <b>Notes</b> save on this device automatically.<br>
+    4. Stuck? <b>Hints</b> come in three levels, and each one costs points.<br>
+    5. When you're sure, <b>Accuse</b>. You must name the culprit, the motive, the means, and the opportunity, and cite evidence for each. That's one shot, then the full solution is revealed.<br>
+    <span class="small">Played as a group? One device on the TV, phones for browsing. A printable worksheet is <a href="worksheet.html" target="_blank" style="color:var(--accent)">here</a>. Typical solve time is 60–120 minutes.</span>
+   </div>
+   <div class="panel small">Every document was built for this game. All persons, companies, and events are fictional. Rated PG-13 (no gore).</div>
+  </div>
+ </div>
+ <h2 class="sec" style="margin-top:26px">Persons of interest</h2>
+ <div class="cards" id="suspects"></div>
+</section>
+
+<section class="view" id="v-files">
+ <h2 class="sec">Case files</h2>
+ <p class="lede">Tap a folder to open it, and tap any photo to zoom in. Folders you've opened are ticked. Use ‹ › to flip through the files.</p>
+ <div class="groups" id="groups"></div>
+</section>
+
+<section class="view" id="v-board">
+ <h2 class="sec">Evidence board</h2>
+ <div class="board">
+  <table class="grid" id="mmo"><thead><tr><th>Suspect</th><th>Motive</th><th>Means</th><th>Opportunity</th></tr></thead><tbody></tbody></table>
+  <div class="legend">Tap to cycle: <b>·</b> unknown → <b>✓</b> has it → <b>✗</b> provably lacks it → <b>?</b> suspicious</div>
+  <div class="pins" id="pins"></div>
+  <div class="legend" id="pinhelp">Pin files from the file viewer (📌) and they'll appear here.</div>
+ </div>
+</section>
+
+<section class="view" id="v-notes">
+ <h2 class="sec">Detective's notebook</h2>
+ <textarea class="notes" id="notes" placeholder="Timeline, contradictions, who was where..."></textarea>
+ <p class="small">Saved automatically on this device. <button class="btn ghost" id="clearnotes" style="padding:4px 10px;font-size:12px">Clear notes</button></p>
+</section>
+
+<section class="view" id="v-hints">
+ <h2 class="sec">Hints from Det. Okafor</h2>
+ <p class="lede">Each hint costs points off your final score. Unlock them in order.</p>
+ <div id="hintbox"></div>
+</section>
+
+<section class="view" id="v-accuse">
+ <h2 class="sec">File charges</h2>
+ <div id="accwrap"></div>
+</section>
+</main>
+
+<div class="viewer" id="viewer"><div class="vtools"><button id="vprev">‹</button><span class="vt" id="vtitle"></span><span><button id="vpin">📌 Pin</button> <button id="vnext">›</button> <button id="vclose">✕</button></span></div><div class="vbody" id="vbody"></div></div>
+<div class="toast" id="toast"></div>
+<template id="d-R1" data-g="Official reports" data-t="Incident / Crime Report">
+<div class="doc">
+<div class="hd"><div><div class="agency">SAN BERNARDINO COUNTY SHERIFF'S DEPARTMENT</div>Twin Peaks Station · Incident / Crime Report</div><div>DR# 25-1102-0417<br>Page 1 of 2</div></div>
+<div class="fld">
+<div>Incident type</div><div>Death investigation (unattended), reclassified 11/02 1430 hrs: Suspicious</div>
+<div>Location</div><div>“Larkspur Lodge,” 2770 Cedar Crest Rd, Lake Arrowhead CA 92352</div>
+<div>Reported</div><div>Sun 11/02/2025 0712 hrs PST (911, R. Delgado)</div>
+<div>Arrived</div><div>0731 hrs: Dep. M. Castellanos #4471, Dep. J. Ruiz #3905</div>
+<div>Decedent</div><div>WHITCOMBE, Harlan James · M/W · DOB 04/09/1957 (68)</div>
+<div>Investigator</div><div>Det. Renée Okafor #2218, Specialized Investigations</div>
+</div>
+<p><b>⚠ TIME NOTE:</b> Pacific Daylight Time ended at 0200 hrs on 11/02/2025, and clocks were set back to 0100 hrs. <b>The hour 0100–0159 occurred twice that night</b> (first as PDT = UTC−7, then as PST = UTC−8). This report uses PST unless marked otherwise. Device records were collected as kept: some in UTC, some in local time. Investigators should confirm which “1 o'clock” any time refers to.</p>
+<p><b>NARRATIVE:</b> On arrival, R/P Rosa DELGADO (housekeeper) met deputies at the front door. She stated she had unlocked the decedent's study at approx. 0710 hrs with her keypad code to bring coffee, and found the decedent unresponsive on the floor beside his desk chair. The study door was closed and locked. The study's only other opening, a window, was latched from inside with undisturbed frost on the exterior sill. Medic 91 pronounced death at 0738 hrs.</p>
+<p>Decedent was lying supine between the desk and the hearth. A grey-and-green plastic device (Item 3) was on the rug near his right hand. The top-right desk drawer (Item 2) was open. A ceramic mug containing a small amount of cocoa residue (Item 1) was on the desk, on a coaster. No signs of struggle. Minor abrasion on the decedent's forehead, consistent with a fall against the hearth edge.</p>
+<p>Family members stated the decedent had a severe peanut allergy and “always” kept an epinephrine auto-injector (EpiPen) in the top-right desk drawer. No functional auto-injector was located in the study.</p>
+<p>At 1105 hrs, during a search of the exterior refuse area beside the mudroom door, Dep. Ruiz located a white plastic store bag (Item 9) in the left (trash) bin, on top of household refuse. It contained an adult EpiPen auto-injector bearing the decedent's pharmacy label (Item 11) and a near-empty jar of powdered peanut butter (Item 10). Items were photographed and booked.</p>
+<p><b>PERSONS AT RESIDENCE, night of 11/01–11/02:</b> Margo WHITCOMBE (wife); Delia WHITCOMBE-PARK (daughter); Owen WHITCOMBE (son); Kira WHITCOMBE (Owen's wife); Milo WHITCOMBE (6, son of Owen/Kira); Theodore “Teddy” ALCOTT (employee, guest; left after midnight); Rosa DELGADO (housekeeper, resides on site).</p>
+<p><b>EVIDENCE BOOKED:</b> 1 Mug w/ residue (desk) · 2 Desk drawer contents · 3 Plastic device (rug) · 4 Reading glasses (floor) · 5 Decedent's smartwatch · 6 Study keypad lock (data download) · 7 Doorbell camera export · 8 Study printer (log) · 9 Store bag (exterior bin) · 10 Powdered peanut butter jar · 11 Adult EpiPen (decedent's) · 12 “Hartwell PeanutCrunch” tin (garage refrigerator)</p>
+<div class="foot">Reporting deputy: M. Castellanos #4471 · Approved: Sgt. L. Pruitt #1880 · 11/02/2025</div>
+</div>
+</template>
+
+<template id="d-R2" data-g="Official reports" data-t="Coroner: Autopsy Summary">
+<div class="doc">
+<div class="hd"><div><div class="agency">SAN BERNARDINO COUNTY SHERIFF-CORONER</div>Division of Forensic Pathology · Autopsy Summary</div><div>Case C-25-08812<br>Ref DR# 25-1102-0417</div></div>
+<div class="fld">
+<div>Decedent</div><div>Harlan James Whitcombe, 68 y/o male · 183 cm · 88 kg</div>
+<div>Exam date</div><div>11/02/2025 1600 hrs · Pathologist: A. Lindqvist, MD</div>
+<div>Medical history</div><div>Severe IgE-mediated peanut allergy (documented anaphylaxis 1979, 2011). Rx: epinephrine auto-injector 0.3 mg (adult, EpiPen®), atorvastatin 20 mg.</div>
+</div>
+<p><b>EXTERNAL:</b> 2.1 cm abrasion, right forehead, consistent with a terminal fall. Periorbital and lip swelling. <b>No injection site identified on either thigh or elsewhere.</b> No defense injuries.</p>
+<p><b>INTERNAL:</b> Marked laryngeal and epiglottic edema with near-total airway occlusion. Hyperinflated lungs with mucus plugging. Heart: mild coronary atherosclerosis, not significant.</p>
+<table><tr><th>Laboratory</th><th>Result</th><th>Comment</th></tr>
+<tr><td>Serum mast-cell tryptase</td><td>94 ng/mL</td><td>Markedly elevated (ref &lt; 11.4). Consistent with anaphylaxis.</td></tr>
+<tr><td>Peanut-specific IgE (Ara h 2)</td><td>&gt; 100 kU/L</td><td>Class 6, highest sensitization.</td></tr>
+<tr><td>Gastric contents</td><td>~120 mL brown fluid</td><td>Cocoa/milk. Peanut protein (Ara h 2) <b>detected</b>.</td></tr>
+<tr><td>Ethanol (blood)</td><td>0.05 g/dL</td><td>—</td></tr>
+<tr><td>Comprehensive drug screen</td><td>Negative</td><td>No sedatives, opioids, or digoxin.</td></tr>
+<tr><td>Epinephrine (post-mortem)</td><td>Not elevated</td><td>No evidence that epinephrine was administered.</td></tr></table>
+<p><b>CAUSE OF DEATH:</b> Anaphylaxis due to peanut ingestion.<br><b>MANNER:</b> Pending (investigation).<br><b>ESTIMATED INTERVAL:</b> Ingestion likely within 5–30 minutes before symptom onset. Death most consistent with the timeline from the decedent's wearable device (see Item 5 export).</p>
+<div class="foot">A. Lindqvist, MD, Deputy Medical Examiner · 11/03/2025</div>
+</div>
+</template>
+
+<template id="d-R3" data-g="Official reports" data-t="Crime Lab Report: Items 1, 3, 9–12">
+<div class="doc">
+<div class="hd"><div><div class="agency">SBSD SCIENTIFIC INVESTIGATIONS DIVISION</div>Criminalistics · Laboratory Report</div><div>Lab #L25-30117<br>DR# 25-1102-0417</div></div>
+<table>
+<tr><th style="width:70px">Item</th><th>Description</th><th>Findings</th></tr>
+<tr><td>1</td><td>White ceramic mug, “WORLD'S OKAYEST GRANDPA,” ~15 mL dried brown residue</td><td>Cocoa solids, milk fat, marshmallow (gelatin/sucrose). ELISA: <b>peanut protein Ara h 2 strongly positive</b>, estimated ≥ 1.5 g peanut protein in original drink. Microscopy: very fine, uniform tan particles consistent with <b>defatted peanut flour / powdered peanut butter</b>. <b>No</b> chocolate coating, caramelized-sugar fragments, nut pieces, or candy matrix observed.</td></tr>
+<tr><td>3</td><td>Plastic auto-injector-shaped device recovered from rug</td><td><b>Training device. Contains no needle and no medication.</b> Label printed green: “EpiPen Jr® TRAINER.” Lot/exp panel abraded. Latent prints: smudged partials, insufficient for comparison. Decedent's DNA on barrel (handling).</td></tr>
+<tr><td>9</td><td>White plastic carry-out bag, red print “RIM FUEL &amp; MARKET · Running Springs”</td><td>No receipt inside. Recycled-content bag of the kind sold for a 10¢ fee under CA law.</td></tr>
+<tr><td>10</td><td>Plastic jar, “PB Powder · Original · 6.5 oz,” ~10% contents remaining</td><td>Ara h 2 positive. Particle morphology <b>consistent with Item 1 residue</b>. Exterior wiped. No usable prints.</td></tr>
+<tr><td>11</td><td>EpiPen® 0.3 mg auto-injector (yellow label), Rx label “WHITCOMBE, HARLAN”</td><td><b>Unused. Fully functional.</b> Safety cap intact. Exterior wiped. No usable prints.</td></tr>
+<tr><td>12</td><td>“Hartwell PeanutCrunch Holiday Tin,” 14 oz (from garage refrigerator)</td><td>Factory cellophane wrap and lid seal <b>intact and unbroken</b>. Contents not accessed.</td></tr>
+</table>
+<p><b>CONCLUSION:</b> The peanut source in Item 1 is consistent with Item 10 (powdered peanut butter). It is <b>not</b> consistent with Item 12 (chocolate-coated peanut candy), which was never opened.</p>
+<div class="foot">Criminalist: S. Moreau · Reviewed: K. Baptiste · 11/04/2025</div>
+</div>
+</template>
+
+<template id="d-R4" data-g="Official reports" data-t="Property Inventory: Desk Drawer &amp; Consent Searches">
+<div class="doc">
+<div class="hd"><div><div class="agency">SBSD · PROPERTY / CONSENT SEARCH INVENTORY</div>DR# 25-1102-0417</div><div>Det. R. Okafor #2218<br>11/02/2025</div></div>
+<p><b>A. Item 2: decedent's desk, top-right drawer (open on arrival)</b></p>
+<table><tr><th>#</th><th>Contents</th></tr>
+<tr><td>2a</td><td>Rx bottle, atorvastatin 20 mg, Whitcombe, Harlan</td></tr>
+<tr><td>2b</td><td>Empty EpiPen® plastic carrier tube (yellow cap), label “WHITCOMBE, HARLAN · 0.3 mg”. <b>No auto-injector inside.</b></td></tr>
+<tr><td>2c</td><td>Cigar cutter, matches, 3 pens, Snowcap notepad</td></tr></table>
+<p><b>B. Handbag, KIRA WHITCOMBE</b> (consent obtained 1340 hrs, in presence of Owen Whitcombe)</p>
+<table><tr><th>#</th><th>Contents</th></tr>
+<tr><td>B1</td><td>Wallet: CA driver license (Kira A. Whitcombe), <b>Visa ending 4417</b> (KIRA WHITCOMBE), Costco card, $41 cash</td></tr>
+<tr><td>B2</td><td>Subaru key fob</td></tr>
+<tr><td>B3</td><td>Blue zip pouch “MILO ♥ MEDS” containing: <b>EpiPen Jr® 2-Pak carton</b> (green), pharmacy label “WHITCOMBE, MILO · epinephrine 0.15 mg · Fred Meyer Pharmacy #212 Portland OR · filled 08/14/2025.” Carton holds <b>2 auto-injectors (both present, unused)</b>. The <b>trainer slot is empty.</b></td></tr>
+<tr><td>B4</td><td>Children's acetaminophen, grape, 4 fl oz, seal broken, one dose used (approx.)</td></tr>
+<tr><td>B5</td><td>Lip balm, phone charger, Foundation checkbook (Whitcombe Snowcap Foundation)</td></tr></table>
+<p><b>C. Duffel / coat, OWEN WHITCOMBE</b> (consent): clothing, wallet, phone (imaged, see phone extraction), bakery keys. No medications.</p>
+<p><b>D. Luggage, MARGO WHITCOMBE</b> (consent): clothing, cosmetics, earplugs, a retired California RN license card (expired 2021). No medications other than OTC ibuprofen.</p>
+<p><b>E. Room, DELIA WHITCOMBE-PARK</b> (consent): laptop (MacBook Pro), printed “Project Juniper” term sheet (6 pp.), clothing. No medications.</p>
+<div class="foot">Note: EpiPen® and EpiPen Jr® 2-Paks are dispensed with one non-needle “trainer” device per carton for practice. Adult trainers have yellow-accented labels. Jr trainers have green.</div>
+</div>
+</template>
+<template id="d-P1" data-g="Scene &amp; physical evidence" data-t="Photo: Study, desk area (#07)">
+<div class="photo"><svg viewBox="0 0 800 560" xmlns="http://www.w3.org/2000/svg">
+<defs><filter id="g1"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .22 0"/><feComposite in2="SourceGraphic" operator="in"/></filter>
+<linearGradient id="wood1" x1="0" x2="1" y1="0" y2=".3"><stop offset="0" stop-color="#5a3420"/><stop offset=".5" stop-color="#6e4128"/><stop offset="1" stop-color="#4a2a18"/></linearGradient>
+<radialGradient id="lamp1" cx=".25" cy=".2" r=".7"><stop offset="0" stop-color="#ffe9b0" stop-opacity=".35"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<pattern id="rug1" width="40" height="40" patternUnits="userSpaceOnUse"><rect width="40" height="40" fill="#5b1f1f"/><path d="M0 20L20 0 40 20 20 40z" fill="none" stroke="#8a5a2a" stroke-width="2"/><circle cx="20" cy="20" r="4" fill="#1f3b4a"/></pattern></defs>
+<rect width="800" height="560" fill="#2b2420"/>
+<rect x="0" y="330" width="800" height="230" fill="url(#rug1)"/>
+<rect x="0" y="330" width="800" height="230" fill="#000" opacity=".25"/>
+<!-- hearth -->
+<rect x="620" y="250" width="180" height="120" fill="#6f6a63"/><rect x="640" y="268" width="140" height="80" fill="#151210"/><rect x="610" y="360" width="190" height="22" fill="#8b857c"/>
+<!-- desk -->
+<polygon points="60,160 560,160 600,300 20,300" fill="url(#wood1)"/>
+<rect x="20" y="300" width="580" height="26" fill="#3d2214"/>
+<rect x="430" y="326" width="150" height="20" fill="#2e1a10"/>
+<!-- drawer open -->
+<rect x="440" y="326" width="140" height="44" fill="#4f2e1b" stroke="#2a170c"/><rect x="450" y="334" width="120" height="30" fill="#24150c"/>
+<rect x="470" y="340" width="12" height="20" fill="#c87b2b" rx="2"/><rect x="495" y="345" width="60" height="9" fill="#d9d2b8" rx="4"/><rect x="547" y="345" width="10" height="9" fill="#e6c22b" rx="2"/>
+<!-- lamp -->
+<rect x="95" y="205" width="12" height="40" fill="#b8902f"/><ellipse cx="101" cy="248" rx="30" ry="7" fill="#9c7a28"/><path d="M60 190 Q101 160 142 190 L132 205 L70 205z" fill="#1f5b3a"/>
+<!-- papers -->
+<polygon points="170,190 300,182 312,262 180,272" fill="#efe9da"/><g stroke="#888" stroke-width="2"><line x1="190" y1="205" x2="290" y2="199"/><line x1="192" y1="220" x2="292" y2="214"/><line x1="194" y1="235" x2="294" y2="229"/><line x1="196" y1="250" x2="270" y2="246"/></g>
+<text x="200" y="196" font-size="9" fill="#b22" font-family="Arial" transform="rotate(-3 200 196)">SNOWCAP 2026 PLAN</text>
+<!-- coaster + mug -->
+<ellipse cx="400" cy="232" rx="44" ry="17" fill="#2d2d2d"/><ellipse cx="400" cy="226" rx="30" ry="11" fill="#f2f0ea"/><rect x="370" y="190" width="60" height="36" fill="#f2f0ea"/><ellipse cx="400" cy="190" rx="30" ry="11" fill="#e9e6de"/><ellipse cx="400" cy="191" rx="25" ry="8" fill="#4a2a17"/><path d="M430 198 q22 4 0 22" fill="none" stroke="#f2f0ea" stroke-width="7"/>
+<text x="400" y="212" text-anchor="middle" font-size="6.5" font-family="Arial" fill="#333">WORLD'S OKAYEST</text><text x="400" y="220" text-anchor="middle" font-size="6.5" font-family="Arial" fill="#333">GRANDPA</text>
+<!-- chair -->
+<polygon points="250,380 360,380 380,470 230,470" fill="#3b2016" opacity=".9"/>
+<!-- glasses -->
+<g transform="translate(160 470) rotate(-18)"><circle r="13" fill="none" stroke="#222" stroke-width="3"/><circle cx="34" r="13" fill="none" stroke="#222" stroke-width="3"/><line x1="13" y1="0" x2="21" y2="0" stroke="#222" stroke-width="3"/></g>
+<!-- device on rug -->
+<g transform="translate(410 455) rotate(-24)"><rect x="0" y="0" width="120" height="22" rx="9" fill="#d8dad6"/><rect x="28" y="2" width="58" height="18" fill="#3e9a4a"/><rect x="100" y="0" width="20" height="22" rx="8" fill="#2b5fa8"/><text x="57" y="14.5" text-anchor="middle" font-size="7" font-family="Arial" font-weight="bold" fill="#fff">EpiPen Jr® TRAINER</text></g>
+<!-- body outline area (tape) -->
+<path d="M120 520 Q300 495 560 520" fill="none" stroke="#e8e0c8" stroke-dasharray="10 6" stroke-width="3" opacity=".7"/>
+<!-- markers -->
+<g font-family="Arial" font-weight="bold" font-size="18">
+<g transform="translate(330 150)"><polygon points="0,30 14,0 28,30" fill="#f2c200"/><text x="14" y="26" text-anchor="middle">1</text></g>
+<g transform="translate(590 330)"><polygon points="0,30 14,0 28,30" fill="#f2c200"/><text x="14" y="26" text-anchor="middle">2</text></g>
+<g transform="translate(540 420)"><polygon points="0,30 14,0 28,30" fill="#f2c200"/><text x="14" y="26" text-anchor="middle">3</text></g>
+<g transform="translate(120 430)"><polygon points="0,30 14,0 28,30" fill="#f2c200"/><text x="14" y="26" text-anchor="middle">4</text></g></g>
+<rect width="800" height="560" fill="url(#lamp1)"/>
+<rect width="800" height="560" fill="#888" filter="url(#g1)"/>
+<text x="16" y="546" font-family="monospace" font-size="13" fill="#ffb347">SBSD 25-1102-0417 #07 · 11/02/2025 08:14</text>
+</svg>
+<div class="cap">Study, looking east from the doorway. Markers: (1) mug on coaster · (2) top-right drawer, found open · (3) device on rug near the decedent's right hand · (4) reading glasses. The dashed tape marks where the decedent was found; the body was removed before this photo. Hearth at right.</div></div>
+</template>
+
+<template id="d-P2" data-g="Scene &amp; physical evidence" data-t="Photo: Item 3 close-up w/ scale (#11)">
+<div class="photo"><svg viewBox="0 0 800 420" xmlns="http://www.w3.org/2000/svg">
+<defs><filter id="g2"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2"/><feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .2 0"/><feComposite in2="SourceGraphic" operator="in"/></filter>
+<pattern id="rug2" width="80" height="80" patternUnits="userSpaceOnUse"><rect width="80" height="80" fill="#5b1f1f"/><path d="M0 40L40 0 80 40 40 80z" fill="none" stroke="#8a5a2a" stroke-width="4"/><circle cx="40" cy="40" r="8" fill="#1f3b4a"/></pattern>
+<linearGradient id="bar2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eceeea"/><stop offset=".5" stop-color="#cfd2cd"/><stop offset="1" stop-color="#a9ada7"/></linearGradient></defs>
+<rect width="800" height="420" fill="url(#rug2)"/><rect width="800" height="420" fill="#000" opacity=".2"/>
+<g transform="translate(110 150) rotate(-6)">
+<rect x="0" y="0" width="560" height="90" rx="36" fill="url(#bar2)"/>
+<rect x="455" y="0" width="105" height="90" rx="36" fill="#2b5fa8"/><rect x="455" y="0" width="40" height="90" fill="#2b5fa8"/>
+<rect x="-20" y="18" width="40" height="54" rx="10" fill="#e3e5e1"/>
+<rect x="120" y="8" width="300" height="74" fill="#3e9a4a"/>
+<text x="270" y="38" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="26" fill="#fff">EpiPen Jr<tspan font-size="14" dy="-10">®</tspan></text>
+<text x="270" y="64" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="20" fill="#fff" letter-spacing="3">TRAINER</text>
+<text x="270" y="78" text-anchor="middle" font-family="Arial" font-size="8.5" fill="#e8ffe8">Contains no drug and no needle · For training only</text>
+<rect x="130" y="70" width="36" height="9" fill="#2f7a3a"/><text x="148" y="77" text-anchor="middle" font-size="6" fill="#cde">LOT ▒▒▒</text>
+<text x="505" y="52" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold" fill="#fff">BLUE TO SKY</text>
+</g>
+<g transform="translate(110 330)"><rect width="500" height="38" fill="#f4f0e3"/><g stroke="#111">
+<line x1="0" y1="0" x2="0" y2="20"/><line x1="50" y1="0" x2="50" y2="16"/><line x1="100" y1="0" x2="100" y2="20"/><line x1="150" y1="0" x2="150" y2="16"/><line x1="200" y1="0" x2="200" y2="20"/><line x1="250" y1="0" x2="250" y2="16"/><line x1="300" y1="0" x2="300" y2="20"/><line x1="350" y1="0" x2="350" y2="16"/><line x1="400" y1="0" x2="400" y2="20"/><line x1="450" y1="0" x2="450" y2="16"/><line x1="500" y1="0" x2="500" y2="20"/></g>
+<text x="4" y="33" font-family="Arial" font-size="11">0</text><text x="96" y="33" font-family="Arial" font-size="11">2</text><text x="196" y="33" font-family="Arial" font-size="11">4</text><text x="296" y="33" font-family="Arial" font-size="11">6</text><text x="396" y="33" font-family="Arial" font-size="11">8</text><text x="440" y="33" font-family="Arial" font-size="11">10 cm</text></g>
+<g transform="translate(690 40)" font-family="Arial" font-weight="bold" font-size="26"><polygon points="0,44 21,0 42,44" fill="#f2c200"/><text x="21" y="39" text-anchor="middle">3</text></g>
+<rect width="800" height="420" fill="#888" filter="url(#g2)"/>
+<text x="16" y="408" font-family="monospace" font-size="13" fill="#ffb347">SBSD 25-1102-0417 #11 · 11/02/2025 08:22</text>
+</svg>
+<div class="cap">Item 3 in place on the study rug, with an ABFO scale (cm). Orange needle end absent. Photographed before collection.</div></div>
+</template>
+
+<template id="d-P3" data-g="Scene &amp; physical evidence" data-t="Photo: Exterior bins by mudroom (#23)">
+<div class="photo"><svg viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg">
+<defs><filter id="g3"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2"/><feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .25 0"/><feComposite in2="SourceGraphic" operator="in"/></filter>
+<linearGradient id="snow3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfd6de"/><stop offset="1" stop-color="#9aa3ad"/></linearGradient></defs>
+<rect width="800" height="520" fill="#5d4c3b"/><g stroke="#4a3b2c" stroke-width="3">
+<line x1="0" y1="60" x2="800" y2="60"/><line x1="0" y1="120" x2="800" y2="120"/><line x1="0" y1="180" x2="800" y2="180"/><line x1="0" y1="240" x2="800" y2="240"/></g>
+<rect x="0" y="300" width="800" height="220" fill="url(#snow3)"/>
+<!-- door -->
+<rect x="620" y="20" width="150" height="300" fill="#3a2b20"/><circle cx="640" cy="180" r="6" fill="#b8902f"/><text x="695" y="60" text-anchor="middle" font-family="Arial" font-size="13" fill="#d9c9a8">MUDROOM</text>
+<!-- bins -->
+<g><rect x="90" y="140" width="190" height="250" rx="8" fill="#2f3a30"/><rect x="80" y="125" width="210" height="26" rx="6" fill="#26302a" transform="rotate(-30 80 138)"/>
+<text x="185" y="300" text-anchor="middle" font-family="Arial" font-weight="bold" fill="#8fa292" font-size="18">TRASH</text></g>
+<g><rect x="330" y="140" width="190" height="250" rx="8" fill="#20406b"/><rect x="320" y="125" width="210" height="22" rx="6" fill="#1a3358"/><text x="425" y="300" text-anchor="middle" font-family="Arial" font-weight="bold" fill="#8fb0d6" font-size="16">RECYCLE</text></g>
+<!-- bag in trash, on top -->
+<path d="M105 150 Q185 95 265 150 L255 175 L115 175z" fill="#f4f4f1"/><text x="185" y="148" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="13" fill="#c0262d">RIM FUEL &amp; MARKET</text><text x="185" y="163" text-anchor="middle" font-family="Arial" font-size="9" fill="#c0262d">Running Springs · Thank You!</text>
+<!-- pen & jar laid out on evidence paper -->
+<rect x="80" y="410" width="520" height="90" fill="#f1ede2"/>
+<g transform="translate(110 438)"><rect width="190" height="30" rx="12" fill="#d8dad6"/><rect x="45" y="3" width="95" height="24" fill="#f2c200"/><rect x="160" y="0" width="30" height="30" rx="12" fill="#2b5fa8"/><rect x="-14" y="6" width="18" height="18" rx="5" fill="#f37321"/><text x="92" y="19" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="10" fill="#222">EpiPen® 0.3 mg</text></g>
+<g transform="translate(360 425)"><rect width="70" height="16" rx="3" fill="#7b5a2f"/><rect y="14" width="70" height="52" rx="6" fill="#e9d4ab"/><rect x="6" y="24" width="58" height="30" fill="#b52b27"/><text x="35" y="37" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="9" fill="#fff">PB Powder</text><text x="35" y="49" text-anchor="middle" font-family="Arial" font-size="7" fill="#fff">ORIGINAL 6.5oz</text></g>
+<g font-family="Arial" font-weight="bold" font-size="18">
+<g transform="translate(290 80)"><polygon points="0,30 14,0 28,30" fill="#f2c200"/><text x="14" y="26" text-anchor="middle">9</text></g>
+<g transform="translate(450 435)"><polygon points="0,30 14,0 28,30" fill="#f2c200"/><text x="14" y="26" text-anchor="middle">10</text></g>
+<g transform="translate(320 440)"><polygon points="0,30 14,0 28,30" fill="#f2c200"/><text x="14" y="26" text-anchor="middle">11</text></g></g>
+<rect width="800" height="520" fill="#888" filter="url(#g3)"/>
+<text x="16" y="512" font-family="monospace" font-size="13" fill="#ffb347">SBSD 25-1102-0417 #23 · 11/02/2025 11:09</text>
+</svg>
+<div class="cap">Refuse area beside the mudroom door (west side of the lodge). (9) store bag on top of the trash bin's contents. Its contents, laid out on evidence paper below: (10) powdered peanut butter jar, (11) adult EpiPen with the decedent's pharmacy label. Light snow had fallen 0300–0500 hrs. Bag lid area dusted.</div></div>
+</template>
+
+<template id="d-P4" data-g="Scene &amp; physical evidence" data-t="Photo: Garage refrigerator, Item 12 (#29)">
+<div class="photo"><svg viewBox="0 0 800 480" xmlns="http://www.w3.org/2000/svg">
+<defs><filter id="g4"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2"/><feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .22 0"/><feComposite in2="SourceGraphic" operator="in"/></filter>
+<linearGradient id="cello" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".0"/><stop offset=".45" stop-color="#fff" stop-opacity=".55"/><stop offset=".55" stop-color="#fff" stop-opacity=".0"/></linearGradient></defs>
+<rect width="800" height="480" fill="#dfe3e4"/><rect x="0" y="300" width="800" height="12" fill="#b7bfc2"/><rect x="0" y="120" width="800" height="10" fill="#b7bfc2"/>
+<rect x="40" y="200" width="80" height="100" fill="#3f6f3a"/><rect x="140" y="230" width="60" height="70" fill="#f0e6c8"/><text x="170" y="270" text-anchor="middle" font-size="10" font-family="Arial">BUTTER</text>
+<rect x="600" y="160" width="60" height="140" rx="10" fill="#7a1c1c"/><rect x="680" y="170" width="60" height="130" rx="10" fill="#c49a2c"/>
+<g transform="translate(250 150)"><ellipse cx="150" cy="140" rx="160" ry="22" fill="#8a1c1c"/><rect x="-10" y="20" width="320" height="120" fill="#a32020"/><ellipse cx="150" cy="20" rx="160" ry="22" fill="#c53030"/>
+<text x="150" y="70" text-anchor="middle" font-family="Georgia" font-weight="bold" font-size="30" fill="#f6e2a8">HARTWELL</text><text x="150" y="100" text-anchor="middle" font-family="Georgia" font-style="italic" font-size="24" fill="#fff">PeanutCrunch</text><text x="150" y="124" text-anchor="middle" font-family="Arial" font-size="12" fill="#f6e2a8">Holiday Tin · Milk Chocolate Covered Peanut Brittle · 14 oz</text>
+<ellipse cx="150" cy="20" rx="160" ry="22" fill="url(#cello)"/><rect x="-10" y="20" width="320" height="120" fill="url(#cello)"/>
+<rect x="-12" y="15" width="324" height="10" fill="#e6d070" opacity=".7"/><text x="270" y="18" font-size="7" font-family="Arial" fill="#433">SEALED FOR FRESHNESS</text>
+<rect x="210" y="-30" width="96" height="34" fill="#fff" stroke="#333" transform="rotate(8 250 -10)"/><text x="258" y="-14" text-anchor="middle" font-family="Caveat,cursive" font-size="16" fill="#123b8a" transform="rotate(8 250 -10)">Bribe accepted</text><text x="258" y="0" text-anchor="middle" font-family="Caveat,cursive" font-size="14" fill="#123b8a" transform="rotate(8 250 -10)">— T.A. ;)</text></g>
+<g transform="translate(560 80)" font-family="Arial" font-weight="bold" font-size="18"><polygon points="0,30 14,0 28,30" fill="#f2c200"/><text x="14" y="26" text-anchor="middle">12</text></g>
+<rect width="800" height="480" fill="#888" filter="url(#g4)"/>
+<text x="16" y="470" font-family="monospace" font-size="13" fill="#333">SBSD 25-1102-0417 #29 · 11/02/2025 11:47</text>
+</svg>
+<div class="cap">Garage refrigerator, middle shelf. (12) Hartwell PeanutCrunch Holiday Tin with gift tag, a gag gift brought by T. Alcott. Cellophane overwrap intact.</div></div>
+</template>
+
+<template id="d-P5" data-g="Scene &amp; physical evidence" data-t="Photo: “Extra Hour” toast (Margo's phone) + EXIF">
+<div class="photo"><svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+<defs><radialGradient id="fire5" cx=".5" cy=".9" r=".6"><stop offset="0" stop-color="#ffb347"/><stop offset=".5" stop-color="#e2541b"/><stop offset="1" stop-color="#1b0c06"/></radialGradient><radialGradient id="warm5" cx=".5" cy=".5" r=".8"><stop offset="0" stop-color="#ffcf8a" stop-opacity=".25"/><stop offset="1" stop-color="#000" stop-opacity=".5"/></radialGradient>
+<filter id="g5"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2"/><feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .18 0"/><feComposite in2="SourceGraphic" operator="in"/></filter></defs>
+<rect width="800" height="500" fill="#4a3528"/><rect y="380" width="800" height="120" fill="#3a2a1f"/>
+<rect x="300" y="110" width="200" height="200" fill="#7b746b"/><rect x="330" y="190" width="140" height="120" fill="url(#fire5)"/><rect x="280" y="100" width="240" height="18" fill="#5a4030"/>
+<g transform="translate(400 70)"><rect x="-26" y="-6" width="52" height="38" rx="4" fill="#6b4a2a"/><circle r="15" cy="12" fill="#f5efdc"/><line x1="0" y1="12" x2="0" y2="1" stroke="#111" stroke-width="2"/><line x1="0" y1="12" x2="8" y2="10" stroke="#111" stroke-width="1.5"/></g>
+<path d="M60 40 Q400 90 740 40" fill="none" stroke="#c9a23a" stroke-width="2"/>
+<g font-family="Georgia" font-weight="bold" font-size="22" fill="#c9302c"><text x="150" y="60">F</text><text x="190" y="66">A</text><text x="230" y="70">L</text><text x="268" y="73">L</text><text x="520" y="73">B</text><text x="560" y="70">A</text><text x="600" y="66">C</text><text x="640" y="60">K</text><text x="680" y="56">!</text></g>
+<g fill="#1e1712">
+<g transform="translate(110 250)"><circle r="30" cy="-10"/><rect x="-42" y="20" width="84" height="230" rx="30"/></g>
+<g transform="translate(215 260)"><circle r="27" cy="-10"/><rect x="-38" y="18" width="76" height="222" rx="28"/><path d="M-30 -30 q30 -25 60 0 l5 40 -70 0z"/></g>
+<g transform="translate(320 270)"><circle r="31" cy="-10"/><rect x="-44" y="22" width="88" height="210" rx="30"/></g>
+<g transform="translate(480 262)"><circle r="31" cy="-10"/><rect x="-46" y="22" width="92" height="220" rx="30"/><rect x="-28" y="-46" width="56" height="14" fill="#d8d8d8" opacity=".35"/></g>
+<g transform="translate(590 258)"><circle r="28" cy="-10"/><path d="M-30 -24 q30 -30 60 0 l8 60 -76 0z"/><rect x="-48" y="18" width="96" height="226" rx="22" fill="#2b2b33"/></g>
+<g transform="translate(695 262)"><circle r="29" cy="-10"/><rect x="-42" y="20" width="84" height="225" rx="30"/></g></g>
+<g fill="#f0e7d0" opacity=".8"><path d="M140 205 l6 -22 6 22z"/><path d="M243 215 l6 -22 6 22z"/><path d="M350 222 l6 -22 6 22z"/><path d="M506 216 l6 -22 6 22z"/><path d="M620 212 l6 -22 6 22z"/><path d="M722 216 l6 -22 6 22z"/></g>
+<g transform="translate(612 300)"><rect width="18" height="8" rx="2" fill="#4a7bd0"/><circle cx="24" cy="4" r="5" fill="none" stroke="#bbb" stroke-width="2"/></g>
+<rect width="800" height="500" fill="url(#warm5)"/><rect width="800" height="500" fill="#888" filter="url(#g5)"/>
+</svg>
+<div class="cap">IMG_4471.HEIC, recovered from Margo Whitcombe's phone. Shot by R. Delgado at Margo's request. Mantel clock visible at about 2:00.<br>Identified L→R by R. Delgado: <b>Owen</b>, <b>Delia</b>, <b>Harlan</b>, <b>Teddy Alcott</b>, <b>Kira</b> (puffer coat still on, key fob in hand), <b>Margo</b>.</div>
+<div class="doc" style="margin-top:10px;font-size:12px"><b>EXIF (exiftool 12.76)</b><table>
+<tr><td>Make / Model</td><td>Apple / iPhone 15</td></tr><tr><td>Date/Time Original</td><td>2025:11:02 01:59:48</td></tr><tr><td>Offset Time Original</td><td><b>−07:00</b></td></tr><tr><td>Sub Sec Time Original</td><td>412</td></tr><tr><td>GPS Position</td><td>34°14'N 117°11'W (Lake Arrowhead)</td></tr><tr><td>Flash</td><td>Off, Did not fire</td></tr></table></div></div>
+</template>
+
+<template id="d-P6" data-g="Scene &amp; physical evidence" data-t="Floor plan: Larkspur Lodge (main level)">
+<div class="doc" style="background:#f4f6f8"><div class="hd"><div><div class="agency">LARKSPUR LODGE · MAIN LEVEL</div>Sketch by Dep. J. Ruiz · not to scale</div><div>DR# 25-1102-0417</div></div>
+<svg viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg" font-family="Arial" font-size="13">
+<rect x="20" y="20" width="760" height="440" fill="#fff" stroke="#1a2a4a" stroke-width="5"/>
+<g fill="none" stroke="#1a2a4a" stroke-width="3">
+<rect x="20" y="20" width="230" height="190"/><rect x="250" y="20" width="200" height="190"/><rect x="450" y="20" width="330" height="190"/>
+<rect x="20" y="270" width="200" height="190"/><rect x="220" y="270" width="320" height="190"/><rect x="540" y="270" width="240" height="190"/>
+<rect x="20" y="210" width="760" height="60"/></g>
+<rect x="780" y="300" width="0" height="0"/>
+<text x="135" y="100" text-anchor="middle" font-weight="bold">STUDY</text><text x="135" y="118" text-anchor="middle" font-size="11">desk · printer · hearth</text>
+<rect x="60" y="130" width="110" height="40" fill="#e5d6bb"/><text x="115" y="155" text-anchor="middle" font-size="10">desk</text><rect x="22" y="60" width="12" height="70" fill="#b0b0b0"/><text x="40" y="52" font-size="10">window</text>
+<text x="350" y="100" text-anchor="middle" font-weight="bold">LIBRARY</text><text x="350" y="118" text-anchor="middle" font-size="11">bookshelves</text>
+<text x="615" y="100" text-anchor="middle" font-weight="bold">GREAT ROOM</text><text x="615" y="118" text-anchor="middle" font-size="11">fireplace · toast here</text>
+<text x="400" y="245" text-anchor="middle" font-weight="bold">HALLWAY</text>
+<text x="120" y="360" text-anchor="middle" font-weight="bold">MUDROOM</text><text x="120" y="378" text-anchor="middle" font-size="11">→ garage &amp; side yard</text>
+<text x="380" y="360" text-anchor="middle" font-weight="bold">KITCHEN</text><text x="380" y="378" text-anchor="middle" font-size="11">window faces deck</text>
+<text x="660" y="360" text-anchor="middle" font-weight="bold">ENTRY / FOYER</text><text x="660" y="378" text-anchor="middle" font-size="11">stairs to bedrooms ↑</text>
+<rect x="450" y="-0" width="330" height="20" fill="none"/>
+<g fill="#c62828"><rect x="180" y="206" width="40" height="8"/><text x="200" y="232" text-anchor="middle" font-size="10">study door</text><text x="200" y="198" text-anchor="middle" font-size="10">🔒 keypad</text></g>
+<rect x="300" y="206" width="40" height="8" fill="#555"/><rect x="620" y="206" width="60" height="8" fill="#555"/><rect x="100" y="266" width="40" height="8" fill="#555"/><rect x="340" y="266" width="40" height="8" fill="#555"/><rect x="620" y="266" width="40" height="8" fill="#555"/>
+<rect x="16" y="330" width="8" height="40" fill="#555"/><text x="10" y="320" font-size="10">ext. door</text>
+<rect x="776" y="330" width="8" height="40" fill="#555"/>
+<rect x="450" y="-6" width="330" height="0"/>
+<rect x="450" y="460" width="0" height="0"/>
+<g><rect x="790" y="300" width="0" height="0"/></g>
+<rect x="540" y="460" width="240" height="50" fill="#e9e3d6" stroke="#1a2a4a" stroke-width="2"/><text x="660" y="490" text-anchor="middle" font-weight="bold">FRONT PORCH</text>
+<circle cx="770" cy="470" r="7" fill="#1e88e5"/><text x="760" y="505" text-anchor="end" font-size="10">📷 doorbell cam (faces porch &amp; steps)</text>
+<rect x="230" y="460" width="300" height="50" fill="#e9e3d6" stroke="#1a2a4a" stroke-width="2"/><text x="380" y="490" text-anchor="middle" font-weight="bold">DECK (off kitchen)</text>
+<rect x="-0" y="460" width="0" height="0"/>
+<g><rect x="25" y="470" width="40" height="30" fill="#2f3a30"/><rect x="70" y="470" width="40" height="30" fill="#20406b"/><text x="120" y="490" font-size="10">bins (outside mudroom)</text></g>
+</svg>
+<p style="font-size:12px">Study: one door (keypad deadbolt with 1-Touch locking), one window (latched, frost undisturbed). Deck reachable from the kitchen only. Bedrooms upstairs. Garage and lower parking turnout are reached via the mudroom. The doorbell camera does not cover the mudroom, garage, or deck.</p></div>
+</template>
+<template id="d-X1" data-g="Digital records" data-t="Study keypad lock: Activity log (Item 6)">
+<div class="doc">
+<div class="hd"><div><div class="agency">SCHLAGE HOME · ACTIVITY HISTORY EXPORT</div>Lock: “Study” · Model BE489WB · FW 4.2.11</div><div>Exported 11/02/2025 13:52<br>by Det. R. Okafor</div></div>
+<p style="font-size:11px">Range: 11/01/2025 18:00 to 11/02/2025 12:00 · <b>Sorted by: Time (ascending)</b> · Times shown in the lock's local time.</p>
+<table><tr><th>Date</th><th>Time</th><th>Event</th><th>User</th><th>Seq #</th></tr>
+<tr><td>11/01</td><td>11:41 PM</td><td>Unlocked · Keypad</td><td>User 1 (Harlan)</td><td>201</td></tr>
+<tr><td>11/01</td><td>11:58 PM</td><td>Locked · 1-Touch</td><td>—</td><td>202</td></tr>
+<tr><td>11/02</td><td>12:47 AM</td><td>Unlocked · Keypad</td><td>User 1 (Harlan)</td><td>203</td></tr>
+<tr><td>11/02</td><td>12:52 AM</td><td>Locked · 1-Touch</td><td>—</td><td>204</td></tr>
+<tr><td>11/02</td><td>1:08 AM</td><td>Unlocked · Keypad</td><td>User 1 (Harlan)</td><td>209</td></tr>
+<tr><td>11/02</td><td>1:10 AM</td><td>Locked · 1-Touch</td><td>—</td><td>210</td></tr>
+<tr><td>11/02</td><td>1:12 AM</td><td>Unlocked · Keypad</td><td>User 4 (Family)</td><td>211</td></tr>
+<tr><td>11/02</td><td>1:15 AM</td><td>Locked · 1-Touch</td><td>—</td><td>212</td></tr>
+<tr><td>11/02</td><td>1:25 AM</td><td>Unlocked · Keypad</td><td>User 1 (Harlan)</td><td>213</td></tr>
+<tr><td>11/02</td><td>1:30 AM</td><td>Unlocked · Keypad</td><td>User 4 (Family)</td><td>205</td></tr>
+<tr><td>11/02</td><td>1:36 AM</td><td>Locked · 1-Touch</td><td>—</td><td>206</td></tr>
+<tr><td>11/02</td><td>1:47 AM</td><td>Unlocked · Keypad</td><td>User 1 (Harlan)</td><td>207</td></tr>
+<tr><td>11/02</td><td>1:56 AM</td><td>Locked · 1-Touch</td><td>—</td><td>208</td></tr>
+<tr><td>11/02</td><td>7:10 AM</td><td>Unlocked · Keypad</td><td>User 3 (Rosa)</td><td>214</td></tr>
+</table>
+<div class="foot">Sequence numbers are assigned by the lock in the order events occur and are never reused. “1-Touch” = door locked from outside by pressing the Schlage button, with no code required and no user recorded. The lock's clock follows automatic daylight-saving adjustment. The lock was not unlocked from inside (thumbturn) at any time in this range. No failed code attempts recorded.</div>
+</div>
+</template>
+
+<template id="d-X2" data-g="Digital records" data-t="Study keypad lock: User codes (admin)">
+<div class="doc">
+<div class="hd"><div><div class="agency">SCHLAGE HOME · LOCK USERS</div>Lock: “Study” · Admin account: h.whitcombe@whitcombe.com</div><div>Captured 11/02/2025</div></div>
+<table><tr><th>Slot</th><th>Name</th><th>Access</th><th>Created / changed</th><th>Admin notes (typed by H.W.)</th></tr>
+<tr><td>User 1</td><td>Harlan</td><td>Always</td><td>06/2019</td><td>me</td></tr>
+<tr><td>User 2</td><td>Margo</td><td>Always</td><td>06/2019</td><td>M.</td></tr>
+<tr><td>User 3</td><td>Rosa</td><td>Always</td><td>06/2019</td><td>housekeeping / coffee</td></tr>
+<tr><td>User 4</td><td>Family</td><td>Always</td><td>06/2019 · <b>code changed 03/14/2023</b></td><td>D + O. New code 3/23, also gave to Kira (Foundation files are in the credenza)</td></tr>
+<tr><td>User 5</td><td>Cleaners</td><td><i>Disabled</i></td><td>disabled 01/2024</td><td>switched services</td></tr></table>
+<p>Codes are masked in the app (••••). Each code is unique to its slot. Lock firmware rejects duplicate codes.</p>
+<div class="foot">Det. note: Margo W. and Rosa D. each state they do not know the User 4 code. T. Alcott has no code.</div>
+</div>
+</template>
+
+<template id="d-X3" data-g="Digital records" data-t="Decedent's smartwatch: Health export (Item 5)">
+<div class="doc">
+<div class="hd"><div><div class="agency">WEARABLE DATA EXTRACTION · Item 5</div>Device: Apple Watch Series 9 (45mm) · paired to H. Whitcombe iPhone</div><div>Examiner: SBSD Digital Forensics<br>Tool: health-export v2</div></div>
+<p style="font-size:11px"><b>All timestamps are UTC (Z).</b> Excerpt, 11/02/2025.</p>
+<table><tr><th>Timestamp (UTC)</th><th>Heart rate (bpm)</th><th>Steps (interval)</th><th>Event</th></tr>
+<tr><td>08:59:40Z</td><td>92</td><td>4</td><td></td></tr>
+<tr><td>09:05:02Z</td><td>78</td><td>31</td><td></td></tr>
+<tr><td>09:08:30Z</td><td>80</td><td>26</td><td></td></tr>
+<tr><td>09:11:15Z</td><td>83</td><td>48</td><td></td></tr>
+<tr><td>09:16:10Z</td><td>74</td><td>0</td><td></td></tr>
+<tr><td>09:21:44Z</td><td>72</td><td>3</td><td></td></tr>
+<tr><td>09:25:20Z</td><td>86</td><td>57</td><td></td></tr>
+<tr><td>09:30:05Z</td><td>76</td><td>0</td><td></td></tr>
+<tr><td>09:34:12Z</td><td>91</td><td>0</td><td></td></tr>
+<tr><td>09:36:40Z</td><td>121</td><td>0</td><td>High Heart Rate notification</td></tr>
+<tr><td>09:38:10Z</td><td>139</td><td>11</td><td>Irregular rhythm flagged</td></tr>
+<tr><td>09:39:05Z</td><td>142</td><td>9</td><td></td></tr>
+<tr><td>09:41:12Z</td><td>—</td><td>—</td><td><b>Hard fall detected</b> · no response to prompt</td></tr>
+<tr><td>09:42:13Z</td><td>—</td><td>—</td><td>Emergency SOS attempted · <b>call failed: No service</b> (Wi-Fi Calling off)</td></tr>
+<tr><td>09:44:30Z</td><td>48</td><td>0</td><td></td></tr>
+<tr><td>09:52:00Z</td><td>—</td><td>0</td><td>No reading</td></tr></table>
+<div class="foot">Examiner note: the watch clock is network-synced. Health records are stored natively in UTC. The phone's emergency contacts were not reached because the SOS call did not connect.</div>
+</div>
+</template>
+
+<template id="d-X4" data-g="Digital records" data-t="Doorbell camera: Front porch events (Item 7)">
+<div class="doc">
+<div class="hd"><div><div class="agency">RING · EVENT HISTORY · “Front Door”</div>Account: Margo Whitcombe · shared w/ SBSD by consent</div><div>DR# 25-1102-0417</div></div>
+<table><tr><th>Time (as shown in app)</th><th>Type</th><th>Det. Okafor: who/what</th></tr>
+<tr><td>12:41:10 AM PDT</td><td>Motion</td><td>T. Alcott smoking on porch steps, ~4 min, goes back inside</td></tr>
+<tr><td>1:01:37 AM PST</td><td>Person</td><td><b>T. Alcott</b> exits wearing coat, walks down steps toward lower turnout, doesn't return</td></tr>
+<tr><td>1:03:05 AM PST</td><td>Person</td><td><b>O. Whitcombe</b> exits, sits on porch swing, phone to ear</td></tr>
+<tr><td>1:09:44 AM PST</td><td>Motion</td><td>O. Whitcombe on swing, on phone</td></tr>
+<tr><td>1:16:20 AM PST</td><td>Motion</td><td>O. Whitcombe on swing, on phone</td></tr>
+<tr><td>1:22:51 AM PST</td><td>Motion</td><td>O. Whitcombe pacing porch, on phone</td></tr>
+<tr><td>1:29:13 AM PST</td><td>Motion</td><td>O. Whitcombe on swing, on phone</td></tr>
+<tr><td>1:35:02 AM PST</td><td>Motion</td><td>O. Whitcombe on swing, on phone</td></tr>
+<tr><td>1:39:20 AM PST</td><td>Person</td><td><b>O. Whitcombe</b> re-enters house through front door</td></tr>
+<tr><td>7:41:55 AM PST</td><td>Person</td><td>Deputies arrive</td></tr></table>
+<p style="font-size:11px">Motion zone: porch, steps, and front walk only. Cooldown 60 s between events. Continuous video is not recorded between events.</p>
+<div class="photo" style="margin-top:8px"><svg viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="fe" cx=".5" cy=".5" r=".75"><stop offset=".6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".9"/></radialGradient><filter id="g7"><feTurbulence baseFrequency=".9"/><feColorMatrix values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .12 0"/><feComposite in2="SourceGraphic" operator="in"/></filter></defs>
+<g><rect width="395" height="300" fill="#555"/><rect y="200" width="395" height="100" fill="#777"/><rect x="40" y="210" width="320" height="16" fill="#8a8a8a"/><rect x="40" y="240" width="320" height="16" fill="#8a8a8a"/><g fill="#1b1b1b" transform="translate(240 120)"><circle r="20"/><rect x="-24" y="20" width="48" height="110" rx="16"/><rect x="-36" y="40" width="20" height="60" rx="8" fill="#2a2a2a"/></g><rect width="395" height="300" fill="url(#fe)"/><text x="10" y="20" font-family="monospace" font-size="13" fill="#fff">Front Door  11/02/2025</text><text x="10" y="290" font-family="monospace" font-size="13" fill="#fff">1:01:37 AM PST</text></g>
+<g transform="translate(405 0)"><rect width="395" height="300" fill="#555"/><rect y="200" width="395" height="100" fill="#777"/><g stroke="#333" stroke-width="3"><line x1="80" y1="40" x2="80" y2="150"/><line x1="240" y1="40" x2="240" y2="150"/></g><rect x="70" y="150" width="180" height="22" fill="#3a3a3a"/><g fill="#1b1b1b" transform="translate(150 105)"><circle r="20"/><rect x="-24" y="20" width="48" height="46" rx="14"/><rect x="14" y="-12" width="10" height="24" rx="3" fill="#ddd"/></g><rect width="395" height="300" fill="url(#fe)"/><text x="10" y="20" font-family="monospace" font-size="13" fill="#fff">Front Door  11/02/2025</text><text x="10" y="290" font-family="monospace" font-size="13" fill="#fff">1:16:20 AM PST</text></g>
+<rect width="800" height="300" fill="#888" filter="url(#g7)"/></svg><div class="cap">Stills from the 1:01:37 and 1:16:20 AM PST events (night mode).</div></div>
+</div>
+</template>
+
+<template id="d-X5" data-g="Digital records" data-t="Phone extraction: Owen W. (texts &amp; calls)">
+<div class="doc">
+<div class="hd"><div><div class="agency">MOBILE DEVICE EXTRACTION · SUMMARY EXCERPT</div>Device: iPhone 14 · Owner: Owen Whitcombe · consent</div><div>Tool: UFED 7.6 · Examiner T. Huang<br><b>All times UTC</b></div></div>
+<p><b>Messages</b> (iMessage / SMS), 11/02/2025</p>
+<table><tr><th>UTC</th><th>From → To</th><th>Body</th></tr>
+<tr><td>07:58:12Z</td><td>Delia → Owen</td><td>where's the good champagne. dad hid it again</td></tr>
+<tr><td>07:58:40Z</td><td>Owen → Delia</td><td>garage wine fridge bottom shelf</td></tr>
+<tr><td>08:04:51Z</td><td>Kira → Owen</td><td>running to rim fuel for kids tylenol, milo feels warm. back soon</td></tr>
+<tr><td>09:19:58Z</td><td>Kira → Owen</td><td>ugh long line at rim fuel. almost done</td></tr>
+<tr><td>09:20:33Z</td><td>Delia → Owen</td><td>singapore wants dad's signature by friday. he will never sign. 🙃</td></tr>
+<tr><td>09:38:02Z</td><td>Owen → Kira</td><td>off the phone. you back?</td></tr>
+<tr><td>09:40:15Z</td><td>Kira → Owen</td><td>yeah upstairs w milo. come to bed</td></tr></table>
+<p><b>Call log</b></p>
+<table><tr><th>Start (UTC)</th><th>Direction</th><th>Contact</th><th>Duration</th></tr>
+<tr><td>09:04:02Z</td><td>Outgoing</td><td>Javi (Crumb night shift) +1 503-•••-0188</td><td>33:10</td></tr></table>
+<div class="foot">Bakery employee J. Morales confirms a call with Owen about a proofing-room alarm, “a little after 1 a.m. my time, maybe half an hour.” Portland and Lake Arrowhead share the same time zone.</div>
+</div>
+</template>
+
+<template id="d-X6" data-g="Digital records" data-t="Zoom participant report + email (Hartwell APAC)">
+<div class="doc">
+<div class="hd"><div><div class="agency">ZOOM · MEETING PARTICIPANTS REPORT</div>Topic: Project Juniper | Whitcombe x Hartwell APAC · ID 842 •••• 3310</div><div>Host: Wei Ling Tan<br><b>Times in UTC</b></div></div>
+<table><tr><th>Name</th><th>Join</th><th>Leave</th><th>Duration</th><th>Video</th><th>Location</th></tr>
+<tr><td>Wei Ling Tan (Hartwell)</td><td>2025-11-02 09:01:50</td><td>09:48:02</td><td>47 min</td><td>On</td><td>SG</td></tr>
+<tr><td>Marcus Goh (Hartwell)</td><td>09:02:33</td><td>09:48:01</td><td>46 min</td><td>On</td><td>SG</td></tr>
+<tr><td>Delia Whitcombe-Park</td><td>09:04:11</td><td>09:47:30</td><td>44 min</td><td>On</td><td>US</td></tr></table>
+</div>
+<div class="email" style="margin-top:14px">
+<div class="subj">RE: Sunday call w/ Delia: your questions</div>
+<div class="meta"><b>Wei Ling Tan</b> &lt;wl.tan@hartwellfoods.sg&gt; to <b>renee.okafor@sbcsd.org</b><br>Tue, 4 Nov 2025, 10:12 (SGT, UTC+8)</div>
+Detective Okafor,<br><br>Yes, Delia joined our Sunday-afternoon call (Singapore time) and had her camera on throughout. She was seated in a wood-panelled room with floor-to-ceiling bookshelves behind her. She left the frame once, briefly, about 30 seconds around <b>5:31 pm our time</b>, when a dog was barking. She came straight back, apologising. Otherwise she was visible and speaking regularly until we closed at about 5:48 pm.<br><br>For the avoidance of doubt, Hartwell's offer remains subject to the consent of Whitcombe Confections' majority shareholder.<br><br>Kind regards,<br>Wei Ling Tan · Director, Corporate Development, Hartwell Foods APAC
+</div>
+</template>
+
+<template id="d-X7" data-g="Digital records" data-t="Study printer: Job log (Item 8)">
+<div class="doc">
+<div class="hd"><div><div class="agency">HP OfficeJet Pro 9015e · EMBEDDED WEB SERVER · JOB LOG</div>Location: Study · S/N TH0B4K•••</div><div>Device clock: <b>UTC</b> (time zone never configured)</div></div>
+<table><tr><th>Job #</th><th>Date</th><th>Time</th><th>Document</th><th>Source</th><th>Pages</th></tr>
+<tr><td>1187</td><td>2025-11-01</td><td>19:02:44</td><td>Snowcap_2026_Plan.docx</td><td>HARLAN-IMAC</td><td>3</td></tr>
+<tr><td>1188</td><td>2025-11-02</td><td>08:31:07</td><td>Hartwell_TermSheet_v7.pdf</td><td>DELIAS-MBP</td><td>6</td></tr>
+<tr><td>1189</td><td>2025-11-02</td><td>08:33:40</td><td>Juniper_CapTable.xlsx</td><td>DELIAS-MBP</td><td>1</td></tr>
+<tr><td>1190</td><td>2025-11-03</td><td>17:20:15</td><td>(test page)</td><td>Front panel</td><td>1</td></tr></table>
+<div class="foot">Job 1190 printed by SBSD technician during collection.</div>
+</div>
+</template>
+<template id="d-F1" data-g="Receipts &amp; financial" data-t="Rim Fuel &amp; Market: two receipts">
+<div style="display:flex;flex-wrap:wrap;gap:18px;justify-content:center">
+<div><div class="small" style="text-align:center;margin-bottom:6px;color:#ccc">Exhibit F1-a · customer copy, from T. Alcott's coat pocket</div>
+<div class="receipt"><div class="c"><b>RIM FUEL &amp; MARKET</b><br>31540 HWY 18<br>RUNNING SPRINGS CA 92382<br>(909) 555-0147</div><br>
+<div class="r"><span>11/02/25</span><span>01:19:44 AM</span></div><div class="r"><span>REG 01</span><span>TRAN# 00415</span></div><div>CSHR: DANIEL</div>------------------------------
+<div class="r"><span>PUMP 04 REG UNL</span><span></span></div><div class="r"><span>&nbsp; 9.112 G @ 4.989</span><span>45.46</span></div><div class="r"><span>COFFEE 20OZ</span><span>2.49</span></div><div class="r"><span>JACK LINKS ORIG 3.25</span><span>3.99</span></div>------------------------------
+<div class="r"><span>SUBTOTAL</span><span>51.94</span></div><div class="r"><span>TAX</span><span>0.00</span></div><div class="r"><b>TOTAL</b><b>51.94</b></div><div class="r"><span>MC ****0912</span><span>CHIP</span></div><div>AUTH 044817</div><br><div class="c">THANK YOU · DRIVE SAFE<br>ON THE MOUNTAIN!</div></div></div>
+<div><div class="small" style="text-align:center;margin-bottom:6px;color:#ccc">Exhibit F1-b · store journal reprint, requested by SBSD (card ****4417)</div>
+<div class="receipt"><div class="c">*** JOURNAL REPRINT ***<br><b>RIM FUEL &amp; MARKET</b><br>31540 HWY 18<br>RUNNING SPRINGS CA 92382</div><br>
+<div class="r"><span>11/02/25</span><span>01:22:09 AM</span></div><div class="r"><span>REG 01</span><span>TRAN# 00407</span></div><div>CSHR: DANIEL</div>------------------------------
+<div class="r"><span>CHLD ACETAMIN GRP 4OZ</span><span>9.99</span></div><div class="r"><span>PB POWDER ORIG 6.5OZ</span><span>6.49</span></div><div class="r"><span>BAG FEE</span><span>0.10</span></div>------------------------------
+<div class="r"><span>SUBTOTAL</span><span>16.58</span></div><div class="r"><span>TAX</span><span>0.00</span></div><div class="r"><b>TOTAL</b><b>16.58</b></div><div class="r"><span>VISA ****4417</span><span>CHIP</span></div><div>AUTH 731902</div><br>
+<div class="c">REPRINTED 11/03/25 10:14 AM<br>FOR: SBSD DET OKAFOR</div>
+<div class="hand" style="margin-top:10px;font-size:17px">Detective: TRAN#s are sequential on each register, no gaps, never reset overnight. Only Reg 01 was open (overnight shift). Register clock is automatic (network time). Daniel says it was dead after midnight, 1 customer at a time. — Gary P., Mgr</div></div></div>
+</div>
+</template>
+
+<template id="d-F2" data-g="Receipts &amp; financial" data-t="Snowcap Foundation statement + business record">
+<div class="doc">
+<div class="hd"><div><div class="agency">SIERRA FIRST BANK · BUSINESS CHECKING</div>WHITCOMBE SNOWCAP FOUNDATION (501(c)(3)) · acct ••••6620</div><div>Excerpt: Jun–Oct 2025<br>Authorized signer: K. Whitcombe, Treasurer</div></div>
+<table><tr><th>Date</th><th>Description</th><th>Debit</th><th>Credit</th></tr>
+<tr><td>06/03</td><td>ACH CR · Whitcombe Confections annual gift</td><td></td><td>250,000.00</td></tr>
+<tr><td>06/18</td><td>ACH DR · KW ADVISORY LLC · INV 1041</td><td>6,400.00</td><td></td></tr>
+<tr><td>07/02</td><td>CHK 3318 · Inland Empire Food Bank</td><td>25,000.00</td><td></td></tr>
+<tr><td>07/21</td><td>ACH DR · KW ADVISORY LLC · INV 1042</td><td>7,800.00</td><td></td></tr>
+<tr><td>08/19</td><td>ACH DR · KW ADVISORY LLC · INV 1046</td><td>7,800.00</td><td></td></tr>
+<tr><td>09/22</td><td>ACH DR · KW ADVISORY LLC · INV 1049</td><td>8,200.00</td><td></td></tr>
+<tr><td>10/06</td><td>CHK 3324 · Arrowhead Kids Ski Program</td><td>12,500.00</td><td></td></tr>
+<tr><td>10/20</td><td>ACH DR · KW ADVISORY LLC · INV 1052</td><td>8,200.00</td><td></td></tr></table>
+<p class="hand">KW Advisory = ??? Never approved by board. $38,400. — H</p>
+</div>
+<div class="doc" style="margin-top:14px">
+<div class="hd"><div><div class="agency">OREGON SECRETARY OF STATE · BUSINESS REGISTRY</div>Business Entity Data (printed 10/29/2025, found in H.W. briefcase)</div></div>
+<div class="fld"><div>Entity</div><div>KW ADVISORY LLC</div><div>Registry #</div><div>2219•••-94</div><div>Status</div><div>Active · registered 05/02/2025</div><div>Principal office</div><div>4410 SE Taggart St, Portland OR 97206</div><div>Member/Manager</div><div><b>KIRA A. WHITCOMBE</b></div></div>
+</div>
+</template>
+<template id="d-S1" data-g="Witness statements" data-t="Interview: Rosa Delgado (housekeeper)">
+<div class="doc">
+<div class="hd"><div><div class="agency">SBSD · RECORDED INTERVIEW TRANSCRIPT</div>Interviewee: DELGADO, Rosa M. (57), housekeeper, 19 yrs · Witness</div><div>11/02/2025 0905 hrs<br>Kitchen, Larkspur Lodge<br>Det. R. Okafor</div></div>
+<div class="q"><b>OKAFOR:</b> Take me through the end of the party.</div>
+<div class="q"><b>DELGADO:</b> Every year the same. They count down to two o'clock, the “extra hour” toast, and Mr. Harlan says it's the only night you get an hour back. After the toast I set the microwave clock back to one myself, then I make his cocoa. One packet, the good marshmallows. Nothing else in it, never, not in this house.</div>
+<div class="q"><b>OKAFOR:</b> What time was that?</div>
+<div class="q"><b>DELGADO:</b> The cocoa? Five after one, new time. I carried it to the study. He punched his code and let me in, and I put the mug on his coaster. Maybe 1:08. He took a cigar out of the box and said, “Let it cool, Rosa, I'll have my smoke first.” We walked out together and he pushed the button to lock it. He always locks it, even for one minute. Company papers.</div>
+<div class="q"><b>OKAFOR:</b> Then?</div>
+<div class="q"><b>DELGADO:</b> I washed the champagne glasses. The kitchen window looks at the deck. He was out there with Mrs. Margo the whole time, talking. Serious talk, I think. He came back in around 1:25 and I went to bed at 1:30. Mr. Owen was on the front porch on the phone. I could hear him through the window, something about an oven alarm.</div>
+<div class="q"><b>OKAFOR:</b> Anyone else come through the kitchen?</div>
+<div class="q"><b>DELGADO:</b> After the toast, no. Before, yes. Miss Kira came in from the mudroom with her car keys and snow on her boots, cheeks red from the cold. She asked me, “Did I miss the toast?” I told her, “No, mija, it's not two yet.” The microwave said 1:41. I hadn't changed it yet.</div>
+<div class="q"><b>OKAFOR:</b> Mr. Whitcombe's EpiPen?</div>
+<div class="q"><b>DELGADO:</b> The yellow one, top right drawer. Always. I check it's there for him on the first of the month. Yesterday it was there.</div>
+<div class="q"><b>OKAFOR:</b> And the candy Mr. Alcott brought?</div>
+<div class="q"><b>DELGADO:</b> The peanut tin? Mr. Harlan laughed and said, “Put that in the garage fridge before it kills me.” I put it there still wrapped. I know only my own door code. I found him at ten after seven, when I brought his coffee.</div>
+<div class="foot">Transcript certified: R. Okafor #2218</div>
+</div>
+</template>
+
+<template id="d-S2" data-g="Witness statements" data-t="Interview: Margo Whitcombe (wife)">
+<div class="doc">
+<div class="hd"><div><div class="agency">SBSD · RECORDED INTERVIEW TRANSCRIPT</div>Interviewee: WHITCOMBE, Margo E. (61), wife · retired ER nurse</div><div>11/02/2025 1010 hrs<br>Great room<br>Det. R. Okafor</div></div>
+<div class="q"><b>OKAFOR:</b> Where were you after the toast?</div>
+<div class="q"><b>M. WHITCOMBE:</b> On the deck. I needed air. Harlan came out about ten past one, new time, with his cigar. He'd locked the study, of course. He'd lock it to go to the bathroom.</div>
+<div class="q"><b>OKAFOR:</b> What did you talk about?</div>
+<div class="q"><b>M. WHITCOMBE:</b> You'll find out anyway. Last week I found a petition for dissolution in his briefcase. Divorce. I asked him about it on the deck. He said, “Monday, Margo. We'll talk Monday.” He went in around 1:25. I stayed out a few more minutes, then went up to bed. I sleep with earplugs.</div>
+<div class="q"><b>OKAFOR:</b> You're aware of the prenuptial agreement?</div>
+<div class="q"><b>M. WHITCOMBE:</b> I signed it. I know what it says. And yes, I know what a widow gets. I spent twenty-five years in the Loma Linda ER, Detective. If I'd been in that room with him, he'd be alive. Epi in the thigh, call 911. That's all it takes.</div>
+<div class="q"><b>OKAFOR:</b> Do you know the code for User 4, the family code?</div>
+<div class="q"><b>M. WHITCOMBE:</b> No. That was for his children. I have my own.</div>
+<div class="q"><b>OKAFOR:</b> Anything else out of the ordinary this week?</div>
+<div class="q"><b>M. WHITCOMBE:</b> Thursday he was on the phone with the bank about the Foundation, absolutely furious. He wouldn't tell me why. Kira keeps those books.</div>
+<div class="foot">Transcript certified: R. Okafor #2218</div>
+</div>
+</template>
+
+<template id="d-S3" data-g="Witness statements" data-t="Interview: Delia Whitcombe-Park (daughter)">
+<div class="doc">
+<div class="hd"><div><div class="agency">SBSD · RECORDED INTERVIEW TRANSCRIPT</div>Interviewee: WHITCOMBE-PARK, Delia J. (42), daughter · COO, Whitcombe Confections</div><div>11/02/2025 1115 hrs<br>Library<br>Det. R. Okafor</div></div>
+<div class="q"><b>OKAFOR:</b> Tell me about Hartwell.</div>
+<div class="q"><b>WHITCOMBE-PARK:</b> They offered $310 million for the company. Dad owns 51% and he said no. I think he was wrong. It's not a secret. I told him so at dinner, loudly.</div>
+<div class="q"><b>OKAFOR:</b> And now?</div>
+<div class="q"><b>WHITCOMBE-PARK:</b> Now his shares go to Owen and me, equally, and yes, we could approve it. Do you honestly think I'd kill my father over a term sheet?</div>
+<div class="q"><b>OKAFOR:</b> Were you in the study last night?</div>
+<div class="q"><b>WHITCOMBE-PARK:</b> Yes, before the toast. I used Dad's printer for the term sheet. Around 1:30, the <i>first</i> 1:30. I used the family code. In and out in five minutes.</div>
+<div class="q"><b>OKAFOR:</b> After the toast?</div>
+<div class="q"><b>WHITCOMBE-PARK:</b> I went straight into the library for a Zoom with Hartwell Singapore. It was Sunday afternoon for them. Camera on the whole time. Ask them. About ten minutes in I heard the study lock chirp across the hall. It does a little beep-beep when someone enters a code. I assumed it was Dad.</div>
+<div class="q"><b>OKAFOR:</b> Did you leave the library during the call?</div>
+<div class="q"><b>WHITCOMBE-PARK:</b> For thirty seconds, to shush Biscuit. He was barking at the hallway. Then I came back.</div>
+<div class="foot">Transcript certified: R. Okafor #2218</div>
+</div>
+</template>
+
+<template id="d-S4" data-g="Witness statements" data-t="Interview: Owen Whitcombe (son)">
+<div class="doc">
+<div class="hd"><div><div class="agency">SBSD · RECORDED INTERVIEW TRANSCRIPT</div>Interviewee: WHITCOMBE, Owen H. (38), son · owner, Crumb &amp; Co. Bakery, Portland OR</div><div>11/02/2025 1220 hrs<br>Dining room<br>Det. R. Okafor</div></div>
+<div class="q"><b>OKAFOR:</b> How were things between you and your father?</div>
+<div class="q"><b>O. WHITCOMBE:</b> Bad. The bakery's underwater. I asked him for a loan and he said no. Thursday he told me he was moving my share of everything into a trust, “to protect it from you.” His words.</div>
+<div class="q"><b>OKAFOR:</b> After the toast?</div>
+<div class="q"><b>O. WHITCOMBE:</b> My night baker called about the proofing-room alarm, so I went out front and called him back. I was on the porch swing for half an hour, maybe more. Then I came in, texted Kira, and went to bed.</div>
+<div class="q"><b>OKAFOR:</b> Where was Kira?</div>
+<div class="q"><b>O. WHITCOMBE:</b> She'd texted me she was running out for kids' Tylenol. Milo felt warm, she said. He seemed fine to me, honestly. I didn't see the text until I got off the phone.</div>
+<div class="q"><b>OKAFOR:</b> Your son has a peanut allergy?</div>
+<div class="q"><b>O. WHITCOMBE:</b> Like his grandpa, yeah. Kira handles all of Milo's medical stuff. The pens, the action plan, all of it. I couldn't tell you which pocket of which bag they're in.</div>
+<div class="q"><b>OKAFOR:</b> Do you know the study code?</div>
+<div class="q"><b>O. WHITCOMBE:</b> The family one, sure. Delia and I have had it since we were teenagers.</div>
+<div class="foot">Transcript certified: R. Okafor #2218</div>
+</div>
+</template>
+
+<template id="d-S5" data-g="Witness statements" data-t="Interview: Kira Whitcombe (daughter-in-law)">
+<div class="doc">
+<div class="hd"><div><div class="agency">SBSD · RECORDED INTERVIEW TRANSCRIPT</div>Interviewee: WHITCOMBE, Kira A. (36), daughter-in-law · Treasurer, Whitcombe Snowcap Foundation</div><div>11/02/2025 1300 hrs<br>Sunroom<br>Det. R. Okafor</div></div>
+<div class="q"><b>OKAFOR:</b> Walk me through your night after the toast.</div>
+<div class="q"><b>K. WHITCOMBE:</b> Right after the toast, Milo felt warm, so I texted Owen and drove down to the Rim Fuel in Running Springs. Children's Tylenol. I got there around 1:20, the new 1:20, after the toast. There was a line. I was back about 1:40 and went straight upstairs to Milo.</div>
+<div class="q"><b>OKAFOR:</b> What did you buy?</div>
+<div class="q"><b>K. WHITCOMBE:</b> The Tylenol. That's it. Paid with my card, so check.</div>
+<div class="q"><b>OKAFOR:</b> Milo's epinephrine. Where is it kept?</div>
+<div class="q"><b>K. WHITCOMBE:</b> In my purse. Always. It never leaves my purse. I'm militant about it. You have to be, with a peanut kid. Nobody else touches that pouch, not even Owen.</div>
+<div class="q"><b>OKAFOR:</b> Have you been in Harlan's study this weekend?</div>
+<div class="q"><b>K. WHITCOMBE:</b> I've never been inside it. I don't know the code. That's an Owen-and-Delia thing.</div>
+<div class="q"><b>OKAFOR:</b> You're treasurer of the Foundation. What's KW Advisory?</div>
+<div class="q"><b>K. WHITCOMBE:</b> A compliance consultant. Grant reporting. It's all legitimate. Harlan liked to micromanage.</div>
+<div class="q"><b>OKAFOR:</b> Did Harlan email you about it on Friday?</div>
+<div class="q"><b>K. WHITCOMBE:</b> I don't know what email you mean. I'd like to stop here, please.</div>
+<div class="foot">Interview concluded at 1312 hrs at interviewee's request. Consent search of handbag conducted 1340 hrs (see Property Inventory).</div>
+</div>
+</template>
+
+<template id="d-S6" data-g="Witness statements" data-t="Interview: Teddy Alcott (chocolatier)">
+<div class="doc">
+<div class="hd"><div><div class="agency">SBSD · RECORDED INTERVIEW TRANSCRIPT</div>Interviewee: ALCOTT, Theodore R. (54) · Master Chocolatier / VP Product, 26 yrs</div><div>11/02/2025 1530 hrs<br>Arrowhead Pines Motel, Rm 6<br>Det. R. Okafor</div></div>
+<div class="q"><b>OKAFOR:</b> You were fired on Friday.</div>
+<div class="q"><b>ALCOTT:</b> Effective Monday. He says I gave our formulas to Hartwell. What I sent Wei Ling was a 1992 recipe card that's literally printed on the side of our own tins. Twenty-six years, Detective. I was furious. I won't pretend otherwise.</div>
+<div class="q"><b>OKAFOR:</b> But you came to his party.</div>
+<div class="q"><b>ALCOTT:</b> Invitation said “all Snowcap family.” I brought him a tin of Hartwell PeanutCrunch. Gallows humor. He laughed, too. Rosa put it in the garage fridge. Still sealed, as far as I know. I can't stand the stuff.</div>
+<div class="q"><b>OKAFOR:</b> When did you leave?</div>
+<div class="q"><b>ALCOTT:</b> I stayed for the toast. He raised his glass to “the extra hour” and didn't look at me. I left straight after, got gas and coffee at the Rim Fuel, and came here to the motel.</div>
+<div class="q"><b>OKAFOR:</b> Was it busy at the Rim Fuel?</div>
+<div class="q"><b>ALCOTT:</b> At one in the morning? Dead empty. Me and the kid behind the counter. Nobody in line, nobody at the pumps.</div>
+<div class="q"><b>OKAFOR:</b> Do you have a code for the study?</div>
+<div class="q"><b>ALCOTT:</b> I've never even been allowed in the study.</div>
+<div class="foot">Motel night clerk confirms Alcott checked back in at approx. 1:35 AM. Transcript certified: R. Okafor #2218</div>
+</div>
+</template>
+<template id="d-C1" data-g="Correspondence &amp; background" data-t="Email: Harlan → Kira (Fri 10/31)">
+<div class="email">
+<div class="subj">Foundation</div>
+<div class="meta"><b>Harlan Whitcombe</b> &lt;h.whitcombe@whitcombe.com&gt;<br>to <b>Kira Whitcombe</b> &lt;kira@snowcapfoundation.org&gt;<br>Fri, Oct 31, 2025, 4:52 PM · <span style="color:#188038">recovered from Harlan's Sent folder</span></div>
+Kira,<br><br>I spent Thursday on the phone with Sierra First. Five payments since June to something called KW Advisory LLC. That's $38,400 of money meant for kids' ski lessons and food banks. I looked up who KW Advisory is. So did my lawyer.<br><br>I'm not going to make a scene at the party. Margo has been planning it for weeks and Milo is excited about staying up for the toast. But you will tell Owen yourself by Monday, or I will. Priya has auditors coming in Monday morning, and after that it's out of my hands.<br><br>I trusted you with the one part of this family that was supposed to be clean.<br><br>H.
+</div>
+</template>
+
+<template id="d-C2" data-g="Correspondence &amp; background" data-t="Email: Attorney → Harlan (Thu 10/30)">
+<div class="email">
+<div class="subj">Monday signing: petition, trust, audit</div>
+<div class="meta"><b>Priya Natarajan</b> &lt;pnatarajan@natarajanfell.com&gt; to <b>Harlan Whitcombe</b><br>Thu, Oct 30, 2025, 6:14 PM · PRIVILEGED &amp; CONFIDENTIAL</div>
+Harlan,<br><br>Confirming everything for <b>Monday, Nov 3 at 10:00</b> at our San Bernardino office:<br><br>
+<b>1. Dissolution.</b> The petition is drafted as you instructed. Under §4 of the 2014 premarital agreement, on divorce Margo receives a lump sum of $250,000 and no interest in the lodge. As surviving spouse under your current will, she would receive the lodge and $4M. The petition can be filed the week of Nov 10.<br><br>
+<b>2. Owen's share.</b> The spendthrift trust is ready. Owen's half of your estate (including half your 51% stake) will be held in trust, with distributions at the trustee's discretion and nothing outright. Delia's half is unchanged. <i>Until you sign, your existing will controls: the estate is split equally and outright between Delia and Owen.</i><br><br>
+<b>3. Foundation.</b> The forensic accountants (Brandt &amp; Ochoa) start Monday at 9. As you asked, I have not contacted Kira. Once they confirm the KW Advisory payments, we have a duty to refer the matter.<br><br>
+<b>4. Hartwell.</b> Noted that your answer remains no.<br><br>Priya
+</div>
+</template>
+
+<template id="d-C3" data-g="Correspondence &amp; background" data-t="Hartwell letter of intent (annotated)">
+<div class="doc" style="font-family:'Libre Baskerville',serif">
+<div class="hd"><div><div class="agency">HARTWELL FOODS plc</div>Corporate Development · Asia-Pacific · Singapore</div><div>17 October 2025<br>STRICTLY CONFIDENTIAL</div></div>
+<p>Mr Harlan Whitcombe, Chairman<br>Whitcombe Confections, Inc.</p>
+<p><b>Re: Non-binding indication of interest, “Project Juniper”</b></p>
+<p>Hartwell Foods is pleased to propose acquiring 100% of Whitcombe Confections for an enterprise value of <b>US$310,000,000</b>, subject to due diligence. Our proposal requires the written consent of the holders of a majority of voting shares. It expires on <b>7 November 2025</b>.</p>
+<p>We intend to keep the Snowcap brand and the Lake Elsinore plant. We note management's enthusiasm (D. Whitcombe-Park) for a transaction.</p>
+<p>Yours sincerely,<br>Wei Ling Tan, Director</p>
+<p class="hand" style="font-size:26px;color:#a01818;transform:rotate(-3deg)">NO. Not while I'm breathing. Delia, stop. — H.</p>
+</div>
+</template>
+
+<template id="d-C4" data-g="Correspondence &amp; background" data-t="HR: Termination letter, T. Alcott">
+<div class="doc" style="font-family:Inter,Arial,sans-serif">
+<div class="hd"><div><div class="agency">WHITCOMBE CONFECTIONS · HUMAN RESOURCES</div>Personnel action: hand-delivered</div><div>October 31, 2025</div></div>
+<p>Theodore Alcott<br>VP Product / Master Chocolatier</p>
+<p>Dear Teddy,</p>
+<p>This letter confirms that your employment with Whitcombe Confections ends <b>effective Monday, November 3, 2025</b>, for violating Section 7 (Confidential Information) of your employment agreement. We have learned that you shared company formulation information with a representative of Hartwell Foods (email dated October 22, 2025).</p>
+<p>Under Section 9, a termination for cause forfeits your unvested equity (approximately 0.8%) and the deferred retention bonus ($180,000). Please return your keys and badge on Monday.</p>
+<p>— Harlan Whitcombe, Chairman &amp; CEO<br>cc: D. Whitcombe-Park, COO; HR file</p>
+</div>
+</template>
+
+<template id="d-C5" data-g="Correspondence &amp; background" data-t="Party invitation: “Fall Back Party”">
+<div class="doc" style="background:#1d2b25;color:#f1e6c8;text-align:center;font-family:'Libre Baskerville',serif;padding:40px 24px">
+<div style="font-size:13px;letter-spacing:4px;color:#d9b45a">THE WHITCOMBES' 19TH ANNUAL</div>
+<div style="font-size:40px;margin:10px 0;font-family:'Special Elite'">Fall Back Party</div>
+<div style="font-size:15px">Saturday, November 1st · Larkspur Lodge<br>Dinner at 6:30 · Cocoa, cards &amp; carols until late</div>
+<svg viewBox="0 0 120 120" width="120" style="margin:18px auto;display:block"><circle cx="60" cy="60" r="54" fill="#f1e6c8"/><circle cx="60" cy="60" r="50" fill="none" stroke="#1d2b25" stroke-width="2"/><line x1="60" y1="60" x2="60" y2="22" stroke="#1d2b25" stroke-width="3"/><line x1="60" y1="60" x2="78" y2="49" stroke="#1d2b25" stroke-width="4"/><path d="M92 30 a40 40 0 0 0 -30 -12" fill="none" stroke="#a01818" stroke-width="3" marker-end="url(#ah)"/><defs><marker id="ah" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0 0L6 3 0 6z" fill="#a01818"/></marker></defs></svg>
+<div style="font-size:16px;line-height:1.6">Stay up for the <b>EXTRA HOUR TOAST</b> at <b>2:00 a.m.</b>,<br>when the clocks fall back to 1:00<br>and we get to live the best hour of the year <i>twice.</i></div>
+<div style="font-size:12px;margin-top:18px;color:#bfae86">Peanut-free house, as always! &nbsp;·&nbsp; RSVP Margo · All Snowcap family welcome</div>
+</div>
+</template>
+
+<template id="d-C6" data-g="Correspondence &amp; background" data-t="Clipping: Mountain News, 10/23/2025">
+<div class="clip">
+<div style="font:700 11px Inter;letter-spacing:2px;column-span:all;border-bottom:3px double #333;margin-bottom:8px">THE MOUNTAIN NEWS · BUSINESS · THURSDAY, OCTOBER 23, 2025 · A7</div>
+<h3>Snowcap's founder still says ‘no’ to a $310M suitor</h3>
+<p><b>LAKE ARROWHEAD</b> — Harlan Whitcombe, whose Snowcap Peppermint Bark has topped mountain holiday shopping lists since 1979, says his candy company is not for sale, even as British giant Hartwell Foods circles with an offer insiders put at more than $300 million.</p>
+<p>“I started this company in a garage because I couldn't eat a single candy bar in the store without risking my life,” Whitcombe, 68, said. Severely allergic to peanuts since childhood, he built Whitcombe Confections as one of the first certified peanut-free candy makers in the country. “Hartwell makes peanut brittle. Draw your own conclusions.”</p>
+<p>His daughter, chief operating officer Delia Whitcombe-Park, has reportedly pushed for a deal. “Every family business reaches a crossroads,” she told The Mountain News. Whitcombe controls 51% of voting shares. His son Owen runs a bakery in Portland, Ore. Owen's wife, Kira, a former bank compliance analyst, became treasurer of the family's Snowcap Foundation in 2023.</p>
+<p>The lodge's annual Fall Back Party, a local legend, is set for Nov. 1. “The only night of the year you get an hour back,” Whitcombe said. “I intend to enjoy it.”</p>
+</div>
+</template>
+<script>window.__CASE__={"salt":"fb25-2nexzw73tq","k":"extra-hour-PFGKZXFJX","key":{"who":"406d2056de8f06e6872b7525","mot":"56c65288385de948eb415fe8","mea":"bb038489c0e3647d8fb268c4","opp":"264194a95d9184e49da7fa05","ev":{"mot":{"groups":[[6,["b06c13ffb7d6d6a8edb1212f"]],[4,["609b96e1dd60a66cd9051851","0390d5ef65dad3f38938a840"]]],"extra":["5596e06fcb4adbf7de912358","1926956c3b1b97464b64a3b7","79125a9010e0e8356a0b832a"]},"mea":{"groups":[[5,["d14004da022134b3a2a3fdad","89647dd9e52d46feaa9f9ec0"]],[5,["02cd125a728d1af669a6d8b2"]],[5,["b0500513b22f996f9e324c57","d5a826b41b6ab711a72d2bd0"]]],"extra":["5eb2bcaeecacb50e96d51591","5abe5a719666febd54e8284a","4063c80adf1de410d0fcda2c","8bfd016e2277e15a9295ae30","b9a08a069560afb861a00489","dd9d0cba91ee5915bc4e7e44"]},"opp":{"groups":[[8,["6d99041f0077135d61379957"]],[5,["9707b694e9e89643431d935d"]],[7,["1af703e95e005c66f69ba3e1","21638bd0d479a3a3740ad08c","fd603ee4987199d57cc7613f","46251392b39503bd201a5ae3"]]],"extra":["671668b2cc27967a93b6c711","09883356c2fb2a3c4f47db5e","a441ff642e320e1d5a51a724","a95f99b0508e84c73ba45591","0c9b4cdfe3e412b77bf303e3","cb663fe5eb015aa50360b225","d2eb52c4b2739a76d83fc5d8","00e01848266c3f20608d4b3a","03186d09bdc522d9f3a24b0b","8a0d8270e1aa123cf922ce6e","1e21dd162145abf9ab1fba85"]}}},"hints":["IRkNHghKABtVAUwmLykseiwvJz1FHRoWBElIDgFSH2p2d2sbFWpqKwpYSBBfSB4KBwsNMyooKDF4MiM1AFgSAA5ASF5PQh1wMihra2Jzc3gNGQQCBEMNC1UGWjklInd1OnhqLA0ZAFIPRA8HAVwNEiMhJCg9ZjM3EFgAABReHE8UHFRwpMfXa3U1JTUADBwbD0qK7+hSWTkrImd6Lyk4M0UXAQZBWgAGFhoNICc0OHoxMmo6ABQbHAZeSBsaXA0CIyQkKDw1ajELWCEmIg1AGx0XDScnMygydGY+MABYBAAIQxwKB14NCikoJnZ4MiI9RQgcHQ9ISAoNBl8xJTMiNTZvajkXHVQHD0wFDRwVWD8zNHF6CAIeeFhYISYiz+D9QlJMPiJnGwkMZnd4MCw3kOm/UEFVMFg5KiNrO3g1IzYCFBFSFUQFChkbQzVmLiV6DRIJdg==","MRARUhJZHQsMUkE/JSxrPyA2JSoRWB0BQREKUQYdXyQjI2s4IWYpNAobH1IVRAUKWVJDPzJnKSN4MiI9RRcGFgRfSBsdG0M3NWcjOyg2LzYAHEhdAxNGTycXACMpNT96MTJqOhxYSBBffg0eVVERfyR5ZXoMLi82RRkHGUFaAABVGkI8IjRrLjAjag0WHQZSVQ0LABEXDXglLy45M2Y+MABYFRYMRAZPBRNKNWpnJTUsZj0wBAxUAgRCGAMQUhE5eDQqI2RpI2ZMVFQTD0lIGB0XXzVmIio5MGYlPkUMHBcMDR8OBlJJJTQuJT14MiI9RQsREQ5DDE9ESBxgpMfYa2J0f3RFDxwbDUhIGx0XDTMpJCQ7eDUrLEURGlIVRQ1PGR1OOyMjayksMy4hSw==","JhcZAgBfDU8BGkhweiV1DgoHBHtZVxZMQUIGTwEaSHAyMCR6Ci8neCMNER5BXw0MEBtdJDVnPDMsLmosDR0dAEFdGgYbBkg0ZjMiNz01ZHgxHRAWGAobTwEbQDVmLjh6OSgpMAoKERZBTxFPARpIcCIoJCg6IyY0RRsVHwRfCUFVJkU1KGcoMj0lIXgREBFSNHkrTwEbQDVmKCV6LC4veAMRBgEVDRwKDQYNHzEiJXo/KT54AwobH0FmAR0UXA0WLykqNjQ/ZngJFxsZQU4EAAYXQSlmJj96LC4veAkZFhcNDQcBVQZFNWYjLiwxJS94AxcBHAUNChZVOkwiKiYlfStmIjkLHFRaJFUABhcbWXAWdWJ6OSgueAQMVAUJTBxIBlJEPmYMIig5YTl4FQ0GAQQNQD1BWwM="],"reveal":"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","opts":{"who":[["nv68","Delia Whitcombe-Park"],["gx19","Owen Whitcombe"],["ft46","Margo Whitcombe"],["bs23","Kira Whitcombe"],["tw14","Teddy Alcott"]],"mot":[["qt78","To stop Monday's audit and exposure of $38,400 diverted from the Snowcap Foundation"],["pv69","Revenge for being fired, plus losing equity and a $180,000 bonus"],["bj74","To avoid a divorce that would cut their payout from the lodge + $4M to $250,000"],["sb75","To unblock the $310M Hartwell sale by removing his majority veto"],["lx14","To stop his share of the estate being locked in a trust on Monday"]],"mea":[["hw63","Powdered peanut butter stirred into his cocoa, and his EpiPen simply hidden in the study"],["tg49","Peanut candy from the Hartwell tin crushed into his cocoa"],["gv21","A blow to the head, staged to look like an allergic collapse and fall"],["jd28","Powdered peanut butter stirred into his cocoa, and his EpiPen swapped for a needle-free trainer"],["jr80","Sedatives in his drink, so he could not reach his EpiPen in time"]],"opp":[["hf69","Slipped through the study window while Harlan was on the deck, 1:10 to 1:25 AM PST"],["fd98","Entered the study at 1:12 AM PST, the second hour after the toast, using the family code while Harlan was on the deck"],["yh10","Entered the study at 1:30 AM PDT, the first 1:30 before the toast, using the family code"],["gj96","Alone with the cocoa in the kitchen at about 1:05 AM PST, before it went to the study"],["ft61","Went into the study after Harlan returned at 1:25 AM PST, on some pretext"]]}};</script>
+<script>(function(){
+const S=window.__CASE__;
+const LS='extrahour-case-v1';
+let st={};try{st=JSON.parse(localStorage.getItem(LS)||'{}')}catch(e){}
+st.seen=st.seen||{};st.pins=st.pins||{};st.mmo=st.mmo||{};st.hints=st.hints||0;
+const save=()=>localStorage.setItem(LS,JSON.stringify(st));
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const dec=b=>{const k=S.k,bin=atob(b),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i)^k.charCodeAt(i%k.length);return new TextDecoder().decode(u)};
+async function H(s){const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(S.salt+'|'+s));return [...new Uint8Array(d)].map(x=>x.toString(16).padStart(2,'0')).join('').slice(0,24)}
+function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>t.style.display='none',2200)}
+// tabs
+function show(v){$$('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.v==v));$$('.view').forEach(x=>x.classList.toggle('on',x.id=='v-'+v));window.scrollTo(0,0);if(v=='board')renderBoard();if(v=='accuse')renderAccuse();if(v=='hints')renderHints();}
+$('#tabs').onclick=e=>{if(e.target.dataset.v)show(e.target.dataset.v)};
+// suspects
+const SUS=[
+ ['delia','Delia Whitcombe-Park','42 · daughter · COO, Whitcombe Confections','Pushing to sell the company to Hartwell Foods. Dad said no.',{hair:'#3b2a1a',bob:1}],
+ ['owen','Owen Whitcombe','38 · son · bakery owner, Portland','Bakery failing. Father refused a loan. Father of Milo, 6.',{hair:'#6b4a2a',beard:1}],
+ ['margo','Margo Whitcombe','61 · wife (married 2014) · retired ER nurse','Second wife. Signed a prenup. Hosts the party every year.',{hair:'#c9c3b8',bob:1}],
+ ['kira','Kira Whitcombe','36 · Owen\'s wife · Foundation treasurer','Former bank compliance analyst. Mother of Milo, who has a peanut allergy.',{hair:'#1f1712',long:1}],
+ ['teddy','Teddy Alcott','54 · master chocolatier, 26 yrs','Fired Friday, effective Monday. Brought a joke gift.',{hair:'#8a8378',bald:1,beard:1}]];
+function face(o,i){const sk=['#e8c4a0','#d9a87e','#f0d2b6','#c98e66','#e2b893'][i];return `<svg viewBox="0 0 160 170"><rect width="160" height="170" fill="#cfc6b3"/><g stroke="#9a907c" stroke-width="1">${[30,60,90,120,150].map(y=>`<line x1="0" y1="${y}" x2="160" y2="${y}"/>`).join('')}</g><g font-family="monospace" font-size="8" fill="#6d6455">${['6\'','5\'6','5\'','4\'6'].map((t,j)=>`<text x="4" y="${30+j*30-2}">${t}</text>`).join('')}</g>
+${o.long?`<path d="M42 70 q38-60 76 0 v70 h-76z" fill="${o.hair}"/>`:''}<rect x="52" y="120" width="56" height="60" rx="20" fill="#3d4652"/><rect x="70" y="105" width="20" height="20" fill="${sk}"/><ellipse cx="80" cy="80" rx="30" ry="36" fill="${sk}"/>
+${o.bald?`<path d="M50 74 q-2-20 8-22 M110 74 q2-20-8-22" stroke="${o.hair}" stroke-width="7" fill="none"/>`:o.bob?`<path d="M48 84 q-4-46 32-48 q36 2 32 48 q-6-30-32-30 q-26 0-32 30z" fill="${o.hair}"/>`:`<path d="M50 72 q4-34 30-34 q28 0 30 34 q-12-14-30-14 q-18 0-30 14z" fill="${o.hair}"/>`}
+${o.beard?`<path d="M54 90 q26 40 52 0 q-4 22-26 24 q-22-2-26-24z" fill="${o.hair}" opacity=".85"/>`:''}<circle cx="69" cy="80" r="2.6" fill="#222"/><circle cx="91" cy="80" r="2.6" fill="#222"/><path d="M72 100 q8 3 16 0" stroke="#7a4a3a" stroke-width="2" fill="none"/>
+<rect x="48" y="146" width="64" height="18" fill="#111"/><text x="80" y="159" text-anchor="middle" fill="#eee" font-family="monospace" font-size="9">SBSD 1102-0${417+i}</text></svg>`}
+$('#suspects').innerHTML=SUS.map((s,i)=>`<div class="suspect">${face(s[4],i)}<b>${s[1]}</b><i>${s[2]}</i><div style="margin-top:6px">${s[3]}</div></div>`).join('')+`<div class="suspect" style="background:#e9e2cf"><b>Also present</b><div style="margin-top:6px"><b style="font-size:13px;display:inline">Rosa Delgado</b>, 57, live-in housekeeper (19 yrs). She found the body.<br><br><b style="font-size:13px;display:inline">Milo</b>, 6, Owen &amp; Kira's son. Asleep upstairs.<br><br><b style="font-size:13px;display:inline">Harlan Whitcombe</b>, 68, the victim.</div></div>`;
+// files
+const T=$$('template[id^="d-"]');const DOCS=T.map(t=>({id:t.id.slice(2),g:t.dataset.g,t:t.dataset.t,el:t}));
+function renderFiles(){const gs=[...new Set(DOCS.map(d=>d.g))];$('#groups').innerHTML=gs.map(g=>`<h4>${g}</h4><div class="files">${DOCS.filter(d=>d.g==g).map(d=>`<button class="folder${st.pins[d.id]?' pinned':''}" data-id="${d.id}"><div class="id">EXHIBIT ${d.id}</div><div class="nm">${d.t}</div>${st.seen[d.id]?'<span class="seen">✓ read</span>':''}</button>`).join('')}</div>`).join('');updPill()}
+function updPill(){const n=Object.keys(st.seen).length;$('#pill').textContent=st.locked?`Score ${st.score}/100`:`Files read ${n}/${DOCS.length}`}
+$('#groups').onclick=e=>{const f=e.target.closest('.folder');if(f)openDoc(DOCS.findIndex(d=>d.id==f.dataset.id))};
+let cur=0;
+function openDoc(i){cur=(i+DOCS.length)%DOCS.length;const d=DOCS[cur];$('#vtitle').textContent=`${d.id} · ${d.el.dataset.t.replace(/&amp;/g,'&')}`;$('#vbody').innerHTML='';$('#vbody').appendChild(d.el.content.cloneNode(true));$('#vbody').insertAdjacentHTML('beforeend','<p class="small" style="text-align:center;margin-top:14px">Tap a photo to zoom in.</p>');$('#vbody').querySelectorAll('.photo svg').forEach(s=>{s.style.cursor='zoom-in';s.onclick=()=>{const z=s.dataset.z!='1';s.dataset.z=z?'1':'0';s.style.width=z?'250%':'100%';s.style.cursor=z?'zoom-out':'zoom-in';s.parentElement.style.overflow='auto'}});$('#vpin').textContent=st.pins[d.id]?'📌 Unpin':'📌 Pin';$('#viewer').classList.add('on');$('#viewer').scrollTop=0;document.body.style.overflow='hidden';st.seen[d.id]=1;save();clickSnd()}
+function closeDoc(){$('#viewer').classList.remove('on');document.body.style.overflow='';renderFiles()}
+$('#vclose').onclick=closeDoc;$('#vprev').onclick=()=>openDoc(cur-1);$('#vnext').onclick=()=>openDoc(cur+1);
+$('#vpin').onclick=()=>{const id=DOCS[cur].id;if(st.pins[id])delete st.pins[id];else st.pins[id]=1;save();$('#vpin').textContent=st.pins[id]?'📌 Unpin':'📌 Pin';toast(st.pins[id]?'Pinned to board':'Unpinned')};
+document.addEventListener('keydown',e=>{if(!$('#viewer').classList.contains('on'))return;if(e.key=='Escape')closeDoc();if(e.key=='ArrowRight')openDoc(cur+1);if(e.key=='ArrowLeft')openDoc(cur-1)});
+// board
+function renderBoard(){const sym=['·','✓','✗','?'];$('#mmo tbody').innerHTML=SUS.map(s=>`<tr><td class="nm">${s[1]}</td>${['mo','me','op'].map(c=>{const v=st.mmo[s[0]+c]||0;return `<td><button class="cell" data-k="${s[0]+c}" data-s="${v}">${sym[v]}</button></td>`}).join('')}</tr>`).join('');
+ const p=Object.keys(st.pins);$('#pinhelp').style.display=p.length?'none':'block';$('#pins').innerHTML=p.map((id,i)=>{const d=DOCS.find(x=>x.id==id);return d?`<button class="pin" style="--r:${(i%5-2)*1.2}deg" data-id="${id}"><b>${id}</b><br>${d.t}</button>`:''}).join('')}
+$('#mmo').onclick=e=>{const b=e.target.closest('.cell');if(!b)return;const v=((st.mmo[b.dataset.k]||0)+1)%4;st.mmo[b.dataset.k]=v;save();renderBoard()};
+$('#pins').onclick=e=>{const b=e.target.closest('.pin');if(b)openDoc(DOCS.findIndex(d=>d.id==b.dataset.id))};
+// notes
+$('#notes').value=st.notes||'';$('#notes').oninput=e=>{st.notes=e.target.value;save()};
+$('#clearnotes').onclick=()=>{if(confirm('Erase all notes?')){st.notes='';$('#notes').value='';save()}};
+// hints
+const PEN=[5,10,15];
+function renderHints(){let h='';for(let i=0;i<3;i++){if(i<st.hints)h+=`<div class="hint"><b>Hint ${i+1}</b> <span class="small">(−${PEN[i]})</span><br>${dec(S.hints[i])}</div>`;else if(i==st.hints&&!st.locked)h+=`<button class="btn ghost" id="hbtn">Unlock hint ${i+1} (−${PEN[i]} points)</button>`}
+ if(st.locked&&st.hints<3)h+='<p class="small">The case is closed. See the Accuse tab for the full solution.</p>';$('#hintbox').innerHTML=h||'';const b=$('#hbtn');if(b)b.onclick=()=>{if(confirm(`Unlock hint ${st.hints+1}? This costs ${PEN[st.hints]} points.`)){st.hints++;save();renderHints()}}}
+// accuse
+const OPT=S.opts;
+function renderAccuse(){const w=$('#accwrap');if(st.locked){w.innerHTML=st.result+`<div class="reveal" style="margin-top:16px">${dec(S.reveal)}</div><p style="margin-top:18px"><button class="btn ghost" id="reset">Reset game on this device (for a new group)</button></p>`;$('#reset').onclick=()=>{if(confirm('Erase all progress, notes, and the accusation on this device?')){localStorage.removeItem(LS);location.reload()}};return}
+ const radio=(n,arr)=>arr.map(o=>`<label class="opt"><input type="radio" name="${n}" value="${o[0]}">${o[1]}</label>`).join('');
+ const ev=n=>`<div class="small" style="margin-top:10px">Key evidence: pick up to 4 exhibits that prove it. Wrong picks cost points.</div><div class="evpick" data-n="${n}">${DOCS.map(d=>`<label><input type="checkbox" value="${d.id}"> ${d.id} · ${d.t}</label>`).join('')}</div>`;
+ w.innerHTML=`<p class="lede">One shot. You must name the killer <b>and</b> prove motive, means, and opportunity. Each part is scored separately, out of 100 total${st.hints?`, minus ${[0,5,15,30][st.hints]} for hints used`:''}.</p>
+ <form class="acc" id="acc"><fieldset><legend>1 · The killer</legend>${radio('who',OPT.who)}</fieldset>
+ <fieldset><legend>2 · Motive</legend>${radio('mot',OPT.mot)}${ev('mot')}</fieldset>
+ <fieldset><legend>3 · Means</legend>${radio('mea',OPT.mea)}${ev('mea')}</fieldset>
+ <fieldset><legend>4 · Opportunity</legend>${radio('opp',OPT.opp)}${ev('opp')}</fieldset>
+ <button class="btn red" type="submit" style="font-size:16px;padding:14px 22px">Lock in accusation</button></form>`;
+ $$('.evpick').forEach(p=>p.onchange=e=>{const c=p.querySelectorAll('input:checked');if(c.length>4){e.target.checked=false;toast('Max 4 exhibits per category')}});
+ $('#acc').onsubmit=async e=>{e.preventDefault();const f=new FormData(e.target);const a={who:f.get('who'),mot:f.get('mot'),mea:f.get('mea'),opp:f.get('opp')};if(!a.who||!a.mot||!a.mea||!a.opp){toast('Answer all four parts first');return}
+  const evs={};$$('.evpick').forEach(p=>evs[p.dataset.n]=[...p.querySelectorAll('input:checked')].map(i=>i.value));
+  if(Object.values(evs).some(v=>!v.length)){toast('Cite at least one exhibit for each of motive, means, opportunity');return}
+  if(!confirm('Lock in this accusation? You cannot change it.'))return;
+  const K=S.key;let rows=[],tot=0;
+  const lab=(k,v)=>(OPT[k].find(o=>o[0]==v)||[,''])[1];
+  const okWho=(await H('who|'+a.who))==K.who;const pw=okWho?25:0;tot+=pw;rows.push(['Killer',lab('who',a.who),okWho,pw,25]);
+  for(const c of ['mot','mea','opp']){const ok=(await H(c+'|'+a[c]))==K[c];const p1=ok?10:0;
+   let p2=0;const g=K.ev[c];const hs=await Promise.all(evs[c].map(id=>H('ev|'+c+'|'+id)));const hit=new Set();let wrong=0;
+   hs.forEach(h=>{let inG=false;g.groups.forEach((gr,gi)=>{if(gr[1].includes(h)){inG=true;hit.add(gi)}});if(!inG&&!g.extra.includes(h))wrong++});
+   hit.forEach(gi=>p2+=g.groups[gi][0]);p2=Math.max(0,p2-3*wrong);const mx=g.groups.reduce((s,x)=>s+x[0],0);
+   const nm={mot:'Motive',mea:'Means',opp:'Opportunity'}[c];rows.push([nm,lab(c,a[c]),ok,p1,10]);rows.push([nm+': evidence',evs[c].join(', '),p2==mx?true:(p2>0?null:false),p2,mx]);tot+=p1+p2}
+  const pen=[0,5,15,30][st.hints];const final=Math.max(0,tot-pen);
+  const rank=final>=90?'Chief of Detectives':final>=75?'Lead Detective':final>=55?'Detective, Second Grade':final>=35?'Rookie Investigator':'Back to Traffic Duty';
+  st.score=final;st.locked=1;
+  st.result=`<div class="reveal"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><div><div class="small" style="color:#665">FINAL SCORE</div><div class="big">${final}<span style="font-size:20px;color:#555">/100</span></div><div style="font-family:'Special Elite';font-size:20px">${rank}</div></div><div class="stamp" style="position:static;transform:rotate(-6deg)">${okWho?'CHARGES FILED':'WRONG SUSPECT'}</div></div>
+  <table class="scoretbl" style="margin-top:12px;width:100%;font-size:13.5px">${rows.map(r=>`<tr><td><b>${r[0]}</b></td><td>${r[1]}</td><td>${r[2]===true?'✅':r[2]===null?'🟡':'❌'}</td><td style="text-align:right">${r[3]}/${r[4]}</td></tr>`).join('')}${pen?`<tr><td><b>Hints used</b></td><td>${st.hints}</td><td></td><td style="text-align:right">−${pen}</td></tr>`:''}</table></div>`;
+  save();updPill();renderAccuse();window.scrollTo(0,0);if(snd.on)fanfare(okWho)}}
+// sound
+const snd={on:false,ctx:null};
+function ensure(){if(snd.ctx)return;const C=new (window.AudioContext||window.webkitAudioContext)();snd.ctx=C;const len=C.sampleRate*4,b=C.createBuffer(1,len,C.sampleRate),d=b.getChannelData(0);let l=0;for(let i=0;i<len;i++){const w=Math.random()*2-1;l=(l+0.02*w)/1.02;d[i]=l*3.2}
+ const src=C.createBufferSource();src.buffer=b;src.loop=true;const lp=C.createBiquadFilter();lp.type='lowpass';lp.frequency.value=500;const g=C.createGain();g.gain.value=0;const lfo=C.createOscillator();lfo.frequency.value=.07;const lg=C.createGain();lg.gain.value=260;lfo.connect(lg).connect(lp.frequency);src.connect(lp).connect(g).connect(C.destination);src.start();lfo.start();snd.g=g;
+ setInterval(()=>{if(!snd.on)return;const t=C.currentTime;for(let k=0;k<1+Math.random()*3;k++){const o=C.createBufferSource();o.buffer=b;const bp=C.createBiquadFilter();bp.type='highpass';bp.frequency.value=2500;const cg=C.createGain();const s=t+Math.random()*.4;cg.gain.setValueAtTime(0,s);cg.gain.linearRampToValueAtTime(.25*Math.random(),s+.005);cg.gain.exponentialRampToValueAtTime(.001,s+.06);o.connect(bp).connect(cg).connect(C.destination);o.start(s,Math.random()*3,.08)}},700)}
+function clickSnd(){if(!snd.on)return;const C=snd.ctx,t=C.currentTime,o=C.createOscillator(),g=C.createGain();o.type='square';o.frequency.value=180;g.gain.setValueAtTime(.05,t);g.gain.exponentialRampToValueAtTime(.001,t+.08);o.connect(g).connect(C.destination);o.start(t);o.stop(t+.1)}
+function fanfare(ok){const C=snd.ctx,t=C.currentTime;(ok?[392,523,659,784]:[392,370,349,262]).forEach((f,i)=>{const o=C.createOscillator(),g=C.createGain();o.type='triangle';o.frequency.value=f;g.gain.setValueAtTime(0,t+i*.18);g.gain.linearRampToValueAtTime(.15,t+i*.18+.02);g.gain.exponentialRampToValueAtTime(.001,t+i*.18+.5);o.connect(g).connect(C.destination);o.start(t+i*.18);o.stop(t+i*.18+.6)})}
+$('#snd').onclick=()=>{ensure();snd.on=!snd.on;snd.ctx.resume();snd.g.gain.setTargetAtTime(snd.on?.18:0,snd.ctx.currentTime,.5);$('#snd').textContent=snd.on?'🔊 Ambience':'🔇 Ambience';$('#snd').setAttribute('aria-pressed',snd.on)};
+renderFiles();updPill();
+})();
+</script>
+</body></html>
