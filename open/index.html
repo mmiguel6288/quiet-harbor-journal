@@ -325,7 +325,7 @@
   <canvas class="confetti" id="confetti"></canvas>
   <div class="wrap">
     <div class="topbar">
-      <button class="sound" id="soundBtn" type="button" aria-pressed="false">Sound: off</button>
+      <button class="sound" id="soundBtn" type="button" aria-pressed="true">Sound: on</button>
     </div>
     <header>
       <h1>Secret Santa 2026</h1>
@@ -488,11 +488,14 @@
     }
     riddleForm.addEventListener("submit", function (ev) {
       ev.preventDefault();
+      unlockAudio();
       if (unlocked || !currentRiddle) return;
       if (answersMatch(riddleInput.value, currentRiddle)) {
+        chime();
         unlockGift("You got it!");
         return;
       }
+      bonk();
       wrongs += 1;
       riddleEl.classList.remove("shake");
       void riddleEl.offsetWidth;
@@ -504,9 +507,12 @@
       if (wrongs >= 3) riddleGiveUp.classList.add("show");
     });
     riddleGiveUp.addEventListener("click", function () {
+      unlockAudio();
       if (unlocked) return;
       unlockGift("On to the gift!");
     });
+    riddleInput.addEventListener("pointerdown", unlockAudio);
+    riddleInput.addEventListener("keydown", unlockAudio);
 
 
     const paper = document.getElementById("paper");
@@ -515,7 +521,7 @@
         const hint = document.getElementById("hint");
     const details = document.getElementById("details");
     const soundBtn = document.getElementById("soundBtn");
-    let opened = false, soundOn = false, audioCtx = null, taps = 0;
+    let opened = false, soundOn = true, audioCtx = null, taps = 0;
 
     function sizeCanvas() {
       const r = paper.getBoundingClientRect();
@@ -564,6 +570,7 @@
     let drawing = false;
     paper.addEventListener("pointerdown", ev => {
       ev.preventDefault();
+      unlockAudio();
       paper.setPointerCapture(ev.pointerId);
       drawing = true; taps++; scratch(ev.clientX, ev.clientY);
       if (taps >= 2 || scratchedRatio() > 0.28) openGift();
@@ -660,12 +667,64 @@
     }
 
     function ensureAudio() {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;
+      if (!audioCtx) audioCtx = new AC();
       if (audioCtx.state === "suspended") audioCtx.resume();
       return audioCtx;
     }
-    function jingle() {
+    function unlockAudio() {
       const ctx = ensureAudio();
+      if (!ctx) return null;
+      // A tiny silent buffer helps unlock audio on iOS after the first gesture.
+      try {
+        const buf = ctx.createBuffer(1, 1, 22050);
+        const src = ctx.createBufferSource();
+        src.buffer = buf;
+        src.connect(ctx.destination);
+        src.start(0);
+      } catch (e) {}
+      return ctx;
+    }
+    function tone(ctx, freq, start, dur, type, peak) {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = type || "sine";
+      if (Array.isArray(freq)) {
+        o.frequency.setValueAtTime(freq[0], start);
+        o.frequency.exponentialRampToValueAtTime(Math.max(1, freq[1]), start + dur);
+      } else {
+        o.frequency.value = freq;
+      }
+      g.gain.setValueAtTime(0, start);
+      g.gain.linearRampToValueAtTime(peak || 0.07, start + 0.015);
+      g.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+      o.connect(g).connect(ctx.destination);
+      o.start(start);
+      o.stop(start + dur + 0.05);
+    }
+    function chime() {
+      if (!soundOn) return;
+      const ctx = unlockAudio();
+      if (!ctx) return;
+      const now = ctx.currentTime + 0.02;
+      // Soft rising bell
+      tone(ctx, 783.99, now, 0.35, "sine", 0.06);
+      tone(ctx, 1046.5, now + 0.11, 0.45, "sine", 0.07);
+      tone(ctx, 1318.51, now + 0.22, 0.7, "triangle", 0.05);
+    }
+    function bonk() {
+      if (!soundOn) return;
+      const ctx = unlockAudio();
+      if (!ctx) return;
+      const now = ctx.currentTime + 0.01;
+      // Gentle low "bonk"
+      tone(ctx, [240, 110], now, 0.2, "sine", 0.07);
+    }
+    function jingle() {
+      if (!soundOn) return;
+      const ctx = unlockAudio();
+      if (!ctx) return;
       const now = ctx.currentTime + 0.05;
       const notes = [
         [523.25,0,0.22],[659.25,0.22,0.22],[783.99,0.44,0.22],[1046.5,0.66,0.4],
@@ -673,23 +732,23 @@
         [1046.5,2.15,0.22],[783.99,2.37,0.22],[659.25,2.59,0.22],[523.25,2.81,0.6]
       ];
       notes.forEach(([f,s,d]) => {
-        const o = ctx.createOscillator();
-        const g = ctx.createGain();
-        o.type = "triangle";
-        o.frequency.value = f;
-        g.gain.setValueAtTime(0, now+s);
-        g.gain.linearRampToValueAtTime(0.07, now+s+0.03);
-        g.gain.exponentialRampToValueAtTime(0.0001, now+s+d);
-        o.connect(g).connect(ctx.destination);
-        o.start(now+s); o.stop(now+s+d+0.05);
+        tone(ctx, f, now+s, d, "triangle", 0.07);
       });
+    }
+    function syncSoundBtn() {
+      soundBtn.textContent = soundOn ? "Sound: on" : "Sound: off";
+      soundBtn.setAttribute("aria-pressed", soundOn ? "true" : "false");
     }
     soundBtn.addEventListener("click", () => {
       soundOn = !soundOn;
-      soundBtn.textContent = soundOn ? "Sound: on" : "Sound: off";
-      soundBtn.setAttribute("aria-pressed", soundOn ? "true" : "false");
-      if (soundOn) ensureAudio();
-      if (soundOn && opened) jingle();
+      syncSoundBtn();
+      if (soundOn) {
+        unlockAudio();
+        if (opened) jingle();
+      }
+    });
+    ["pointerdown","keydown","touchstart"].forEach(function (n) {
+      document.addEventListener(n, unlockAudio, { capture: true, passive: true });
     });
 
     function showBadLink(msg) {
