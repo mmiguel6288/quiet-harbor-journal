@@ -1018,9 +1018,9 @@ function push(e){(st.iv[ivCur]=st.iv[ivCur]||[]).push(e);save();renderIV();click
 const LIVE='https://predator.tail66b1e9.ts.net/s/whitcombe';let liveOK=false,liveChecking=false;
 if(!st.sid){st.sid=Array.from(crypto.getRandomValues(new Uint8Array(12)),b=>b.toString(16).padStart(2,'0')).join('');save()}
 const escH=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])).replace(/\*([^*]+)\*/g,'<i>$1</i>');
-async function liveCheck(){liveChecking=true;const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),4000);
+async function liveCheck(){liveChecking=true;toast('Connecting to the live interview server… if your browser asks to access devices on your local network, choose Allow.');const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),30000);
  try{const r=await fetch(LIVE+'/health',{signal:ctl.signal});liveOK=r.ok}catch(e){liveOK=false}clearTimeout(tm);liveChecking=false;
- if(!liveOK&&st.live){st.live=false;save();toast('Live interrogation server isn\'t reachable from this device (it runs on a private network). Using scripted answers.')}
+ if(!liveOK&&st.live){st.live=false;save();toast('Live interrogation server isn\'t reachable from this device (it runs on a private network). Using scripted answers. (It needs a device on the host\'s private network, and local-network access allowed.)')}
  if(ivCur)renderIV()}
 async function liveAsk(q,msg,ex,title,fallback,kind){const k=ivCur;(st.iv[k]=st.iv[k]||[]).push([q,'<i class="typing">…</i>',kind,1]);const idx=st.iv[k].length-1;renderIV();
  let a;try{const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),35000);
