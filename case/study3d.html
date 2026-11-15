@@ -180,6 +180,7 @@ const DX=-0.35,DZ=-0.35;
  const rx=add(new THREE.Mesh(new THREE.CylinderGeometry(.018,.018,.07,14),M({color:0xd8771c,transparent:true,opacity:.85,roughness:.2})),g);rx.position.set(-0.08,-0.015,0.12);
  const tube=add(new THREE.Mesh(new THREE.CylinderGeometry(.016,.016,.17,14),M({color:0xf4f4f2,roughness:.3})),g);tube.rotation.z=Math.PI/2;tube.position.set(0.05,-0.034,0.1);
  const cap=add(new THREE.Mesh(new THREE.CylinderGeometry(.018,.018,.03,14),M({color:0xf2c81e,roughness:.4})),g);cap.rotation.z=Math.PI/2;cap.position.set(0.15,-0.034,0.1);
+ {const fm=M({color:0xfbfbf6,roughness:1,emissive:0x333333,emissiveIntensity:.4});const pl=new THREE.Group();pl.position.set(0.19,0.066,0.05);pl.scale.setScalar(2.4);g.add(pl);add(new THREE.Mesh(new THREE.SphereGeometry(.0018,8,6),fm),pl,false,false);for(let i=0;i<14;i++){const b=add(new THREE.Mesh(new THREE.CylinderGeometry(.00035,.0002,.006,3),fm),pl,false,false);const a1=i/14*Math.PI*2,a2=rnd(-.9,.9);b.position.set(Math.cos(a1)*.003*Math.cos(a2),Math.sin(a2)*.003+.001,Math.sin(a1)*.003*Math.cos(a2));b.lookAt(b.position.clone().multiplyScalar(3));b.rotateX(Math.PI/2)}}
 }
 // index card taped under the shallow center drawer (visible from low angles)
 {const g=group('card',DX-0.08,0.663,DZ+0.2);const c=label(256,160,'#f6f3ea',(x,w,h)=>{x.strokeStyle='#9ec1e6';for(let y=40;y<h;y+=22){x.beginPath();x.moveTo(0,y);x.lineTo(w,y);x.stroke()}x.fillStyle='#1d3f8f';x.font='italic 26px Georgia';x.fillText('PHONE —',20,32);x.font='italic 18px Georgia';x.fillText('the year the garage…',20,74)});
@@ -234,7 +235,7 @@ const INFO={
  printer:{t:'Printer',d:'HP OfficeJet on the credenza end. Its job log runs on UTC (time zone never configured).',ex:['X7']},
  clock:{t:'Wall clock (east wall)',d:'A battery quartz clock. In the crime-scene photo series (taken from 08:14 PST) its hands read about 9:14.',ex:[],obs:'V3'},
  desk:{t:'Desk',d:'Walnut partners desk with a green leather inlay. The chair has been pushed back toward the hearth.',ex:['P1']},
- drawer:{t:'Top-right drawer (open)',d:'An orange prescription bottle and an empty white carrier tube with a yellow cap. The tube is the right size for an adult auto-injector. It is empty.',ex:['P1','R4']},
+ drawer:{t:'Top-right drawer (open)',d:'An orange prescription bottle and an empty white carrier tube with a yellow cap. The tube is the right size for an adult auto-injector. It is empty. Look along the top edge of the drawer side, near the back.',ex:['P1','R4'],obs:'V4'},
  card:{t:'Under the desk drawer',d:'An index card is taped to the underside of the shallow center drawer (crouch to see it): “PHONE — the year the garage…”',ex:['P8']},
  lamp:{t:'Banker’s lamp',d:'Green glass shade, brass column. Harlan’s iPhone (Item 2f) lies beside it, locked.',ex:['P1']},
  papers:{t:'“Snowcap 2026 Plan”',d:'Three pages printed at 19:02 UTC on 11/01 (see printer log).',ex:['X7','P1']},
@@ -244,7 +245,7 @@ const INFO={
  trainer:{t:'Device by the right hand',d:'Grey barrel, green “EpiPen Jr® TRAINER” label, blue cap, no orange tip. The lot panel is scuffed.',ex:['P2','R3']},
  glasses:{t:'Reading glasses',d:'Fallen near the hearth corner, one arm folded.',ex:['P1']},
 };
-const OBS={V1:'Placard inside the study door: “SCHLAGE ENCODE · Auto-Lock: ON · 2 min · Inside turn: logged · 1-Touch: press ⓢ outside.”',V2:'Inside the mug, above the cocoa line: a pale, gritty, powdery film.',V3:'The study’s battery wall clock reads about 9:14 in the 08:14 PST photo series. It is one hour ahead and was never set back.'};
+const OBS={V4:'A single white down plumule (about 3 mm) is snagged on the top edge of the open drawer’s right side, near the back.',V1:'Placard inside the study door: “SCHLAGE ENCODE · Auto-Lock: ON · 2 min · Inside turn: logged · 1-Touch: press ⓢ outside.”',V2:'Inside the mug, above the cocoa line: a pale, gritty, powdery film.',V3:'The study’s battery wall clock reads about 9:14 in the 08:14 PST photo series. It is one hour ahead and was never set back.'};
 // ---------- interaction ----------
 const ray=new THREE.Raycaster(),ptr=new THREE.Vector2();let hover=null,sel=null;const P=parent!==window?parent:null;
 function keyOf(o){while(o){if(o.userData&&o.userData.key)return o.userData.key;o=o.parent}return null}
@@ -255,7 +256,7 @@ canvas.addEventListener('pointerup',e=>{if(down&&Math.hypot(e.clientX-down[0],e.
 canvas.addEventListener('pointermove',e=>{if(isMobile||e.buttons)return;const k=pick(e.clientX,e.clientY);if(k!==hover){if(hover&&hover!==sel)setGlow(hover,false);hover=k;if(k)setGlow(k,true);canvas.style.cursor=k?'pointer':'grab';need=2}});
 const tw={on:false};
 const V=(p,t)=>[new THREE.Vector3(...p),new THREE.Vector3(...t)];
-const VIEWS={desk:V([0.9,1.7,1.2],[-0.35,0.7,-0.35]),mug:V([0.5,1.12,0.2],[0.13,0.82,-0.23]),drawer:V([0.6,1.25,0.8],[0.2,0.62,0.05]),trainer:V([0.42,0.8,0.62],[-0.12,0.03,1.4]),
+const VIEWS={desk:V([0.9,1.7,1.2],[-0.35,0.7,-0.35]),mug:V([0.5,1.12,0.2],[0.13,0.82,-0.23]),drawer:V([0.62,1.08,0.5],[0.36,0.7,0.08]),trainer:V([0.42,0.8,0.62],[-0.12,0.03,1.4]),
  outline:V([0.45,2.35,0.05],[-0.3,0,1.05]),notepad:V([-0.3,1.2,0.25],[-0.53,0.8,-0.19]),papers:V([0.0,1.3,0.2],[-0.3,0.8,-0.33]),card:V([-0.43,0.14,0.22],[-0.43,0.665,-0.13]),
  lamp:V([-0.2,1.3,0.35],[-0.75,1.0,-0.45]),door:V([1.1,1.3,1.75],[1.27,1.2,2.2]),window:V([0.3,1.5,-0.8],[0.6,1.35,-2.25]),credenza:V([1.15,1.2,-0.2],[2.2,0.5,-0.7]),
  printer:V([1.35,1.45,0.35],[2.2,0.9,-0.15]),clock:V([1.25,1.75,-0.35],[2.48,1.95,-0.7]),hearth:V([0.3,1.35,0.6],[-1.0,0.5,1.9]),shelves:V([-0.5,1.5,0.7],[-2.3,1.3,-0.4]),glasses:V([-0.85,0.75,0.45],[-1.45,0.02,1.03])};
