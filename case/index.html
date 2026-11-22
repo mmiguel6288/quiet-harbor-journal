@@ -183,6 +183,15 @@ body.tv .askrow input,body.tv .askrow select{font-size:17px}
  body.tv #chat{font-size:22px;min-height:42vh;background:#0e0c0a;color:#f6efdc;box-shadow:none;border:1px solid #332a20}
  body.tv #chat .qq{color:#ffb4a6}body.tv #chat .ev{color:#9fc8ef}body.tv #chat .beat{color:#bfae8d}}
 @media(max-width:600px){.sound .sl{display:none}.sound{font-size:14px!important;padding:4px 8px}}
+/* v11: animated portraits */
+.iv .por .pv{position:relative;width:100%;aspect-ratio:3/4;overflow:hidden;background:#2b2b2b;box-shadow:0 6px 18px rgba(0,0,0,.5);flex:none}
+.iv .por .pv img,.iv .por .pv video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;box-shadow:none;display:block}
+.iv .por .pv video{opacity:0;transition:opacity .15s linear;pointer-events:none}
+.iv .por .pv video.on{opacity:1}
+.iv .por .pv.novid video{display:none}
+@media(max-width:700px){.iv .por .pv{width:128px}}
+@media(min-width:800px){body.tv .iv .por .pv{width:100%}}
+@media(max-width:799px){body.tv .iv .por .pv{width:150px}}
 </style>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='14' font-size='14'%3E%F0%9F%95%B5%3C/text%3E%3C/svg%3E">
 </head>
@@ -950,7 +959,7 @@ const dec=b=>{const k=S.k,bin=atob(b),u=new Uint8Array(bin.length);for(let i=0;i
 async function H(s){const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(S.salt+'|'+s));return [...new Uint8Array(d)].map(x=>x.toString(16).padStart(2,'0')).join('').slice(0,24)}
 function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>t.style.display='none',2200)}
 // tabs
-function show(v){if(typeof ttsStop=='function')ttsStop();$$('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.v==v));$$('.view').forEach(x=>x.classList.toggle('on',x.id=='v-'+v));window.scrollTo(0,0);if(v=='board')renderBoard();if(v=='files')renderFiles();if(v=='accuse')renderAccuse();if(v=='hints')renderHints();if(v=='interview')renderIV();if(v=='tools')renderTool();}
+function show(v){if(typeof ttsStop=='function')ttsStop();if(v!='interview'&&typeof pvPause=='function')pvPause();$$('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.v==v));$$('.view').forEach(x=>x.classList.toggle('on',x.id=='v-'+v));window.scrollTo(0,0);if(v=='board')renderBoard();if(v=='files')renderFiles();if(v=='accuse')renderAccuse();if(v=='hints')renderHints();if(v=='interview')renderIV();if(v=='tools')renderTool();}
 $('#tabs').onclick=e=>{if(e.target.dataset.v)show(e.target.dataset.v)};
 // suspects
 const SUS=[
@@ -1042,17 +1051,17 @@ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let rec=null,r
 function renderIV(){$('#ivpick').innerHTML=IVORDER.map(k=>`<button data-p="${k}" class="${k==ivCur?'on':''}"><img src="img/${IVP[k].img}.jpg" alt="">${IVP[k].name.split(' ')[0]}</button>`).join('');
  if(!ivCur){$('#ivroom').innerHTML='<p class="small" style="margin-top:12px">Choose who to interview.</p>';return}
  const p=IVP[ivCur];const log=st.iv[ivCur]||[];const onair=st.live&&liveOK;
- $('#ivroom').innerHTML=`<div class="iv"><div class="por"><img src="img/${p.img}.jpg" alt="${p.name}" class="${tts.k==ivCur?'talking':''}"><div><b style="font-family:'Libre Baskerville';font-size:16px;color:#f3e7c6">${p.name}</b><div class="small">${p.role}</div></div></div><div><div class="livebar"><label><input type="checkbox" id="livechk" ${st.live?'checked':''}> Live interrogation <span class="beta">beta</span></label>${onair?'<span class="onair" title="Live AI suspects connected">● ON AIR</span>':''}<span id="livestat" class="small">${st.live?(liveOK?'AI suspects on. Answers are improvised from the case files.'+(liveLeft!=null&&liveLeft<30?` ${liveLeft} live questions left.`:''):'Checking…'):'Scripted answers'}</span><button type="button" class="vbtn" id="voxbtn" aria-pressed="${st.voice?'true':'false'}">${st.voice?'🔊 Voices on':'🔈 Voices off'}</button></div><div class="chat" id="chat"><div class="aa"><i>${p.intro}</i></div>${log.map(l=>`<div class="${l[2]=='ev'?'ev':'qq'}">▸ ${l[0]}</div><div class="aa${l[3]?' live':''}">${l[1]}</div>`).join('')}</div>
+ $('#ivroom').innerHTML=`<div class="iv"><div class="por"><span id="pvslot"></span><div><b style="font-family:'Libre Baskerville';font-size:16px;color:#f3e7c6">${p.name}</b><div class="small">${p.role}</div></div></div><div><div class="livebar"><label><input type="checkbox" id="livechk" ${st.live?'checked':''}> Live interrogation <span class="beta">beta</span></label>${onair?'<span class="onair" title="Live AI suspects connected">● ON AIR</span>':''}<span id="livestat" class="small">${st.live?(liveOK?'AI suspects on. Answers are improvised from the case files.'+(liveLeft!=null&&liveLeft<30?` ${liveLeft} live questions left.`:''):'Checking…'):'Scripted answers'}</span><button type="button" class="vbtn" id="voxbtn" aria-pressed="${st.voice?'true':'false'}">${st.voice?'🔊 Voices on':'🔈 Voices off'}</button></div><div class="chat" id="chat"><div class="aa"><i>${p.intro}</i></div>${log.map(l=>`<div class="${l[2]=='ev'?'ev':'qq'}">▸ ${l[0]}</div><div class="aa${l[3]?' live':''}">${l[1]}</div>`).join('')}</div>
  <form class="askrow" id="askf"><input id="askq" aria-label="Your question" placeholder="Ask ${p.name.split(' ')[0]} a question…" autocomplete="off">${SR?'<button type="button" class="btn ghost mic" id="micbtn" aria-label="Hold to ask out loud" title="Hold to talk (or tap, then tap again)">🎙</button>':''}<button class="btn" type="submit">Ask</button></form>
  <div class="askrow"><select id="evsel" aria-label="Exhibit to present"><option value="">Present an exhibit…</option>${DOCS.map(d=>`<option value="${d.id}">${d.id} · ${d.t.replace(/&amp;/g,'&')}</option>`).join('')}</select><button class="btn ghost" id="evbtn">Present</button></div>
  <p class="small">Tip: ask about specific things: people, places, times, objects. Vague questions get vague answers.${SR?' Hold 🎙 to ask out loud; check the words, then tap Ask.':''}</p></div></div>`;
- const c=$('#chat');c.scrollTop=c.scrollHeight;
+ pvMount(ivCur);const c=$('#chat');c.scrollTop=c.scrollHeight;
  $('#askf').onsubmit=e=>{e.preventDefault();micStop();const q=$('#askq').value.trim();if(!q)return;ttsUnlock();ttsStop();ask(q);$('#askq').value=''};
- $('#evbtn').onclick=()=>{const id=$('#evsel').value;if(!id)return;ttsUnlock();ttsStop();const d=DOCS.find(x=>x.id==id);const t=d.t.replace(/&amp;/g,'&');const a=p.present[id]||p.npres[(log.length)%p.npres.length];const q=`You show ${p.name.split(' ')[0]} exhibit ${id} (${escH(t)}).`;if(st.live&&liveOK)liveAsk(q,'',id,t,a,'ev');else push([q,a,'ev'])};
+ $('#evbtn').onclick=()=>{const id=$('#evsel').value;if(!id)return;ttsUnlock();ttsStop();const d=DOCS.find(x=>x.id==id);const t=d.t.replace(/&amp;/g,'&');const a=p.present[id]||p.npres[(log.length)%p.npres.length];const q=`You show ${p.name.split(' ')[0]} exhibit ${id} (${escH(t)}).`;if(st.live&&liveOK)liveAsk(q,'',id,t,a,'ev');else push([q,a,'ev'],moodNoise('neutral'))};
  $('#voxbtn').onclick=()=>{st.voice=!st.voice;save();if(st.voice){ttsUnlock();toast('Suspects will speak their answers out loud')}else ttsStop();renderIV()};
  if(SR)micWire();
  $('#livechk').onchange=e=>{st.live=e.target.checked;save();if(st.live)liveCheck();else renderIV()};if(st.live&&!liveOK&&!liveChecking)liveCheck()}
-function push(e){const k=ivCur;(st.iv[k]=st.iv[k]||[]).push(e);save();renderIV();clickSnd();presentAnswer(k,e[1]);setTimeout(()=>$('#askq')&&$('#askq').focus(),0)}
+function push(e,mood){const k=ivCur;(st.iv[k]=st.iv[k]||[]).push(e);save();renderIV();clickSnd();presentAnswer(k,e[1],mood);setTimeout(()=>$('#askq')&&$('#askq').focus(),0)}
 const LIVE='https://predator.tail66b1e9.ts.net/s/whitcombe';let liveOK=false,liveChecking=false,liveLeft=null;
 if(!st.sid){st.sid=Array.from(crypto.getRandomValues(new Uint8Array(12)),b=>b.toString(16).padStart(2,'0')).join('');save()}
 const escH=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])).replace(/\*([^*]+)\*/g,'<i>$1</i>');
@@ -1073,27 +1082,28 @@ const BEATS={delia:['checks her phone, then sets it face down','taps a pen on th
 let fidT=null;
 function fidget(k){clearInterval(fidT);let i=Math.floor(Math.random()*4);const tick=()=>{if(ivCur!=k)return;const el=[...document.querySelectorAll('#chat .aa')].pop();if(el&&el.querySelector('.typing'))el.innerHTML=`<i class="typing beat">${BEATS[k][i++%BEATS[k].length]}…</i>`};setTimeout(tick,350);fidT=setInterval(tick,1800)}
 async function liveAsk(q,msg,ex,title,fallback,kind){const k=ivCur;(st.iv[k]=st.iv[k]||[]).push([q,PEND,kind,1]);const idx=st.iv[k].length-1;renderIV();fidget(k);
- let a,live=true;try{const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),80000);
+ let a,live=true,mood='neutral';try{const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),80000);
   const r=await fetch(LIVE+'/api/ask',{method:'POST',headers:{'Content-Type':'application/json'},signal:ctl.signal,body:JSON.stringify({session:st.sid,suspect:k,message:msg,present:ex||undefined,present_title:title||undefined})});clearTimeout(tm);
-  const j=await r.json();if(!r.ok)throw new Error(j.error||'error');if(j.left!=null)liveLeft=j.left;a='“'+escH(j.reply.replace(/^[“"]|[”"]$/g,''))+'”'}
- catch(e){live=false;a=fallback+` <span class="small">(<i>the recorder clicks off for a moment</i> · scripted answer${e&&e.name!='AbortError'&&e.message&&!/fetch|network/i.test(e.message)?': '+escH(e.message):''})</span>`}
+  const j=await r.json();if(!r.ok)throw new Error(j.error||'error');if(j.left!=null)liveLeft=j.left;mood=['uneasy','sad'].includes(j.mood)?j.mood:'neutral';a='“'+escH(j.reply.replace(/^[“"]|[”"]$/g,''))+'”'}
+ catch(e){live=false;mood=fallback.__mood||'neutral';a=fallback+` <span class="small">(<i>the recorder clicks off for a moment</i> · scripted answer${e&&e.name!='AbortError'&&e.message&&!/fetch|network/i.test(e.message)?': '+escH(e.message):''})</span>`}
  clearInterval(fidT);st.iv[k][idx]=[q,a,kind,1];save();
  // M6: in live mode, file Rosa's supplemental statement only when her actual reply contains it
  if(live&&k=='rosa'&&/1:41|miss the toast|mudroom/i.test(a))fileSupp('S7');
  if(!live&&fallback.__supp)fileSupp(fallback.__supp);
- if(ivCur==k){renderIV();presentAnswer(k,a)}clickSnd()}
+ if(ivCur==k){renderIV();presentAnswer(k,a,mood)}clickSnd()}
 function fileSupp(id){if(!BLOB.supp[id])return;const n=!(st.sup||{})[id];st.sup=st.sup||{};st.sup[id]=1;save();addDoc(id,BLOB.supp[id][0],BLOB.supp[id][1],'Witness statements');if(n)toast('New exhibit filed: '+id+' (supplemental statement)')}
 function ask(q){const p=IVP[ivCur];const n=' '+q.toLowerCase().replace(/[’']/g,"'").replace(/[^a-z0-9:,' ]/g,' ')+' ';let best=-1,bs=0;
  // m7: short keywords must end at a word boundary (allowing plural/-ed/-ing), so "pen" doesn't match "pending"
  p.topics.forEach((t,i)=>{let s=0;t[0].forEach(k=>{k=k.trim();const e=k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');const re=new RegExp('(^|[^a-z0-9])'+e+(k.length<=4&&/[a-z0-9]$/.test(k)?'(s|es|ed|ing)?([^a-z0-9]|$)':''));if(re.test(n))s+=k.length>3?2:1});if(s>bs){bs=s;best=i}});
  const log=st.iv[ivCur]||[];let a,supp=null;const isLive=st.live&&liveOK;
  if(best<0)a=p.evade[log.length%p.evade.length];else{a=p.topics[best][1];const sm=a.match(/§(S\d+)$/);if(sm){a=a.slice(0,-sm[0].length);supp=sm[1]}if(!isLive&&log.some(l=>l[1]==a))a='<i>(already asked)</i> '+a}
- if(isLive){const fb=new String(a);if(supp)fb.__supp=supp;liveAsk(escH(q),q,null,null,fb,'q')}else{if(supp)fileSupp(supp);push([escH(q),a,'q'])}}
+ const md=moodNoise(best<0?'neutral':(MOODMAP[p.topics[best][0][0]]||'neutral'));
+ if(isLive){const fb=new String(a);fb.__mood=md;if(supp)fb.__supp=supp;liveAsk(escH(q),q,null,null,fb,'q')}else{if(supp)fileSupp(supp);push([escH(q),a,'q'],md)}}
 // ===== voices: Creative Universe's Kokoro voices from the host server, browser voices as fallback =====
 const VOXB={delia:{p:1.05,r:1.1},owen:{p:.85,r:.93},margo:{p:.95,r:.92},kira:{p:1.15,r:1},teddy:{p:.7,r:.9},rosa:{p:1.1,r:.95}};
 if(st.voice===undefined){st.voice=true;save()}
 function ttsUnlock(){try{if(!tts.ctx){const C=window.AudioContext||window.webkitAudioContext;if(C)tts.ctx=new C()}if(tts.ctx&&tts.ctx.state=='suspended')tts.ctx.resume()}catch(e){}}
-function setTalking(k){tts.k=k;const im=document.querySelector('#ivroom .por img');if(im)im.classList.toggle('talking',!!k&&k==ivCur)}
+function setTalking(k){tts.k=k;const im=document.querySelector('#ivroom .por img');if(im)im.classList.toggle('talking',!!k&&k==ivCur);pvTalk(!!k&&k==ivCur)}
 function ttsStop(){tts.gen++;try{tts.src&&tts.src.stop()}catch(e){}tts.src=null;try{window.speechSynthesis&&speechSynthesis.cancel()}catch(e){}setTalking(null)}
 function sayText(html){const d=document.createElement('div');d.innerHTML=html;d.querySelectorAll('i,em,.small').forEach(x=>x.remove());return d.textContent.replace(/[“”"]/g,'').replace(/\s+/g,' ').trim()}
 function sents(t){const raw=t.match(/[^.!?…]+(?:[.!?…]+|$)/g)||[];const out=[];raw.forEach(x=>{x=x.trim();if(!x)return;if(out.length&&out[out.length-1].length<30)out[out.length-1]+=' '+x;else out.push(x)});return out.filter(x=>/[a-z]/i.test(x))}
@@ -1113,7 +1123,42 @@ async function speak(k,html,onStart){let started=false;const st1=()=>{if(!starte
 function typeOut(el,cps){const w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);const ns=[];while(w.nextNode())ns.push(w.currentNode);const spans=[];
  ns.forEach(n=>{const f=document.createDocumentFragment();n.textContent.split(/(\s+)/).forEach(tok=>{if(!tok)return;if(/^\s+$/.test(tok)){f.appendChild(document.createTextNode(tok));return}const sp=document.createElement('span');sp.className='tw';sp.textContent=tok;spans.push(sp);f.appendChild(sp)});n.parentNode.replaceChild(f,n)});
  let i=0;const c=$('#chat');const step=()=>{if(i>=spans.length||!spans[i].isConnected)return;spans[i].classList.add('on');const d=(spans[i].textContent.length+1)/cps*1000;i++;if(c)c.scrollTop=c.scrollHeight;setTimeout(step,d)};return step}
-function presentAnswer(k,a){const el=[...document.querySelectorAll('#chat .aa')].pop();let go=()=>{};if(el&&ivCur==k&&!matchMedia('(prefers-reduced-motion: reduce)').matches)go=typeOut(el,st.voice?15:45);speak(k,a,go)}
+function presentAnswer(k,a,mood){const el=[...document.querySelectorAll('#chat .aa')].pop();let go=()=>{};if(el&&ivCur==k&&!matchMedia('(prefers-reduced-motion: reduce)').matches)go=typeOut(el,st.voice?15:45);
+ if(ivCur==k)pvReact(mood);
+ // voices off: the face still "talks" for about as long as the subtitle takes to type out
+ if(!st.voice&&ivCur==k){const n=++PV.mute;const ms=Math.min(9000,Math.max(1500,sayText(a).length/45*1000));pvTalk(true);setTimeout(()=>{if(PV.mute==n&&!tts.k)pvTalk(false)},ms)}
+ speak(k,a,go)}
+// ===== v11: animated portraits, L.A. Noire style. Every suspect has the same four clips (listen, talk, uneasy, sad),
+// each starting and ending on the still, so we can cut between them with a short crossfade. =====
+const MOODMAP={'who did':'uneasy','epipen':'uneasy','harlan':'sad','allerg':'sad'}; // by a topic's first keyword; same rules for every suspect, default neutral
+function moodNoise(m){const r=Math.random();if(m=='uneasy'&&r<.25)return'neutral';if(m=='neutral'){if(r<.1)return'uneasy';if(r<.17)return'sad'}return m}
+const VIDOK=(()=>{try{return !!document.createElement('video').canPlayType('video/mp4; codecs="avc1.4D4015"')&&!matchMedia('(prefers-reduced-motion: reduce)').matches&&!(navigator.connection&&navigator.connection.saveData)}catch(e){return false}})();
+const PV={k:null,box:null,v:[],f:0,clip:null,talking:false,react:null,fail:!VIDOK,tok:0,mute:0,warm:{},rt:null};
+const pvURL=(k,c)=>`vid/${k}-${c}.mp4`;
+function pvBuild(k){const p=IVP[k];const b=document.createElement('div');b.className='pv'+(PV.fail?' novid':'');b.innerHTML=`<img src="img/${p.img}.jpg" alt="${p.name}">`;
+ if(!PV.fail)for(let i=0;i<2;i++){const v=document.createElement('video');v.muted=true;v.defaultMuted=true;v.playsInline=true;['playsinline','muted','disablepictureinpicture','disableremoteplayback'].forEach(a=>v.setAttribute(a,''));v.setAttribute('aria-hidden','true');v.preload='none';v.onerror=()=>{if(v.getAttribute('src'))pvFail()};b.appendChild(v)}
+ return b}
+function pvFail(){PV.fail=true;PV.tok++;if(PV.box){PV.box.classList.add('novid');const im=PV.box.querySelector('img');if(im)im.classList.toggle('talking',PV.talking)}}
+function pvMount(k){const slot=$('#pvslot');if(!slot)return;
+ if(PV.k!=k||!PV.box){pvUnload();PV.k=k;PV.box=pvBuild(k);PV.v=[...PV.box.querySelectorAll('video')];PV.f=0;PV.clip=null;PV.react=null;PV.talking=tts.k==k;PV.fail=!VIDOK}
+ slot.replaceWith(PV.box);const im=PV.box.querySelector('img');if(im)im.classList.toggle('talking',PV.fail&&PV.talking);
+ if(PV.fail)return;if(!PV.clip)pvGo(PV.talking?'talk':'listen');else{const v=PV.v[PV.f];if(v&&v.paused)v.play().catch(()=>{})}}
+function pvUnload(){PV.tok++;clearTimeout(PV.rt);PV.v.forEach(v=>{try{v.pause();v.removeAttribute('src');v.load()}catch(e){}});PV.v=[];PV.box=null;PV.clip=null}
+function pvPause(){PV.v.forEach(v=>{try{v.pause()}catch(e){}})}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)pvPause();else if(PV.box&&PV.box.isConnected&&!PV.fail){const v=PV.v[PV.f];if(v&&v.getAttribute('src'))v.play().catch(()=>{})}});
+function pvGo(c){if(PV.fail||!PV.box||PV.v.length<2)return;const loop=c=='listen'||c=='talk';if(PV.clip==c&&loop)return;PV.clip=c;
+ const k=PV.k,front=PV.v[PV.f],back=PV.v[1-PV.f],tok=++PV.tok;if(window.__pvlog)window.__pvlog.push([c,Date.now()]);
+ back.onended=null;back.loop=loop;back.preload='auto';if(back.getAttribute('src')!=pvURL(k,c))back.src=pvURL(k,c);else try{back.currentTime=0}catch(e){}
+ const swap=()=>{if(tok!=PV.tok)return;back.classList.add('on');front.classList.remove('on');PV.f=1-PV.f;setTimeout(()=>{if(tok==PV.tok&&front!==PV.v[PV.f])front.pause()},220);if(c=='listen')pvWarm(k)};
+ if(!loop)back.onended=()=>{if(tok!=PV.tok)return;PV.react=null;pvGo(PV.talking?'talk':'listen')};
+ const pr=back.play();if(pr&&pr.then)pr.then(swap).catch(e=>{if(tok==PV.tok&&!(e&&e.name=='AbortError'))pvFail()});else swap()}
+// quietly fetch the other three clips once the idle loop is running (each is ~40-110 KB)
+function pvWarm(k){if(PV.warm[k])return;PV.warm[k]=1;setTimeout(()=>['talk','uneasy','sad'].forEach(c=>{try{fetch(pvURL(k,c),{priority:'low'}).catch(()=>{})}catch(e){}}),1200)}
+function pvTalk(on){on=!!on;const was=PV.talking;PV.talking=on;if(PV.box){const im=PV.box.querySelector('img');if(im)im.classList.toggle('talking',PV.fail&&on)}
+ if(PV.fail)return;if(PV.react){if(on&&!was){clearTimeout(PV.rt);PV.rt=setTimeout(()=>{if(PV.react&&PV.talking){PV.react=null;pvGo('talk')}},1300)}return}
+ pvGo(on?'talk':'listen')}
+// a reaction plays as the answer arrives (the voice takes about a second to start), then hands off to talking or listening
+function pvReact(m){if(PV.fail||(m!='uneasy'&&m!='sad'))return;clearTimeout(PV.rt);PV.react=m;PV.clip=null;pvGo(m)}
 // ===== ask out loud: hold-to-talk speech recognition (text lands in the box; nothing is sent until you tap Ask) =====
 function micUI(){const b=$('#micbtn');if(b){b.classList.toggle('rec',recOn);b.setAttribute('aria-pressed',recOn)}}
 function micStart(){if(recOn||!SR)return;ttsStop();const q=$('#askq');const base=q&&q.value.trim()?q.value.trim()+' ':'';
