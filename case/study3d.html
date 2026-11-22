@@ -22,7 +22,8 @@ html,body{margin:0;height:100%;background:#0d0b09;color:#eee;font:14px/1.45 Inte
 #bar button.on{background:#b8862f;color:#1a1209}
 #load{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0d0b09;color:#cbbd9c;font-family:Georgia,serif;font-size:18px;z-index:9}
 #toast{position:fixed;left:50%;top:60px;transform:translateX(-50%);background:#2b2218;color:#f3e7c6;padding:8px 14px;border-radius:8px;display:none}
-</style></head><body>
+body.tv #panel{font-size:18px;width:min(560px,calc(100% - 24px))}body.tv #panel h3{font-size:24px}body.tv #panel button{font-size:16px;padding:8px 14px}body.tv #hud .t{font-size:16px}
+</style></head><body><script>if(/[?&]tv=1/.test(location.search))document.body.classList.add('tv')</script>
 <canvas id="c"></canvas>
 <div id="load">Opening the study…</div>
 <div id="hud"><div class="t"><b>The study</b> · as found 11/02, 08:14<br><span id="help">Drag to look around · scroll/pinch to zoom · tap objects to inspect</span></div><button id="close">✕ Close</button></div>
