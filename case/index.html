@@ -1154,8 +1154,8 @@ function pvGo(c){if(PV.fail||!PV.box||PV.v.length<2)return;const loop=c=='listen
  const pr=back.play();if(pr&&pr.then)pr.then(swap).catch(e=>{if(tok==PV.tok&&!(e&&e.name=='AbortError'))pvFail()});else swap()}
 // quietly fetch the other three clips once the idle loop is running (each is ~40-110 KB)
 function pvWarm(k){if(PV.warm[k])return;PV.warm[k]=1;setTimeout(()=>['talk','uneasy','sad'].forEach(c=>{try{fetch(pvURL(k,c),{priority:'low'}).catch(()=>{})}catch(e){}}),1200)}
-function pvTalk(on){on=!!on;const was=PV.talking;PV.talking=on;if(PV.box){const im=PV.box.querySelector('img');if(im)im.classList.toggle('talking',PV.fail&&on)}
- if(PV.fail)return;if(PV.react){if(on&&!was){clearTimeout(PV.rt);PV.rt=setTimeout(()=>{if(PV.react&&PV.talking){PV.react=null;pvGo('talk')}},1300)}return}
+function pvTalk(on){on=!!on;const was=PV.talking;PV.talking=on;if(on&&!was&&window.__pvlog)window.__pvlog.push(['voice',Date.now()]);if(PV.box){const im=PV.box.querySelector('img');if(im)im.classList.toggle('talking',PV.fail&&on)}
+ if(PV.fail)return;if(PV.react){if(on&&!was){clearTimeout(PV.rt);PV.rt=setTimeout(()=>{if(PV.react&&PV.talking){PV.react=null;if(window.__pvlog)window.__pvlog.push(['voice+hold',Date.now()]);pvGo('talk')}},900)}return}
  pvGo(on?'talk':'listen')}
 // a reaction plays as the answer arrives (the voice takes about a second to start), then hands off to talking or listening
 function pvReact(m){if(PV.fail||(m!='uneasy'&&m!='sad'))return;clearTimeout(PV.rt);PV.react=m;PV.clip=null;pvGo(m)}
