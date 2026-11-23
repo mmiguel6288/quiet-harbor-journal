@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Walkthrough · The Extra Hour</title>
+<style>
+html,body{margin:0;height:100%;background:#0d0b09;color:#eee;font:14px/1.45 Inter,system-ui,sans-serif;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none}
+#bgblur{position:fixed;inset:0;background:#0d0b09 center/cover no-repeat;filter:blur(28px) saturate(.9) brightness(.32);transform:scale(1.12);pointer-events:none;z-index:0}
+#stage{position:fixed;inset:0;overflow:hidden;cursor:grab;z-index:1}
+#stage.drag{cursor:grabbing}
+#scene{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform;line-height:0}
+#scene img.view{display:block;width:100%;height:auto;pointer-events:none;-webkit-user-drag:none;box-shadow:0 8px 40px rgba(0,0,0,.55)}
+#hots{position:absolute;inset:0;pointer-events:none}
+.hot{position:absolute;border:0;padding:0;background:transparent;cursor:pointer;border-radius:10px;pointer-events:auto;-webkit-tap-highlight-color:transparent}
+.hot:focus-visible{outline:2px solid #b8862f;outline-offset:2px}
+@media(hover:hover){.hot:hover{background:rgba(184,134,47,.18);box-shadow:inset 0 0 0 1px rgba(243,215,120,.45)}}
+body.hint .hot.clue{box-shadow:0 0 0 1px rgba(243,215,120,.4);background:rgba(184,134,47,.1);animation:shimmer 2.4s ease-in-out infinite}
+@keyframes shimmer{0%,100%{box-shadow:0 0 0 1px rgba(243,215,120,.28),0 0 0 0 rgba(217,164,65,0)}50%{box-shadow:0 0 0 3px rgba(243,215,120,.75),0 0 18px 3px rgba(217,164,65,.5)}}
+#hud{position:fixed;left:12px;top:10px;right:12px;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none;gap:8px;z-index:5}
+#hud .t{background:rgba(20,24,16,.82);border:1px solid #4a5a3c;padding:6px 10px;border-radius:8px;pointer-events:auto;font-size:12.5px;max-width:min(440px,calc(100% - 88px))}
+#hud .t b{color:#f3e7c6;font-family:Georgia,serif}
+#close{pointer-events:auto;background:#b8862f;color:#1a1209;border:none;border-radius:8px;padding:8px 12px;font-weight:700;cursor:pointer}
+#panel{box-sizing:border-box;position:fixed;left:12px;right:12px;bottom:108px;width:auto;max-width:380px;margin:0 auto;max-height:42vh;overflow:auto;background:rgba(246,240,224,.97);color:#1d1a16;border-radius:10px;box-shadow:0 10px 40px rgba(0,0,0,.6);padding:14px 16px;display:none;z-index:6}
+#panel.on{display:block}
+#panel h3{margin:0 0 6px;font-family:Georgia,serif;font-size:17px}
+#panel .tag{font:600 10px ui-monospace,monospace;letter-spacing:1px;color:#7a1c12}
+#panel p{margin:6px 0}
+#panel .row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+#panel button{border:1px solid #6b5a3e;background:#fff;border-radius:16px;padding:6px 12px;font-size:12.5px;cursor:pointer}
+#panel button.pri{background:#2b2218;color:#f3e7c6}
+#panel .x{position:absolute;right:8px;top:6px;border:none;background:none;font-size:18px;cursor:pointer;color:#1d1a16}
+#bar{position:fixed;left:0;right:0;bottom:0;display:flex;gap:8px;align-items:stretch;overflow-x:auto;padding:8px 12px calc(10px + env(safe-area-inset-bottom));background:linear-gradient(transparent,rgba(0,0,0,.82) 28%);scrollbar-width:none;z-index:5}
+#bar::-webkit-scrollbar{display:none}
+#bar button{flex:none;display:flex;flex-direction:column;width:112px;background:rgba(30,25,19,.92);color:#e6dcc3;border:1px solid #4a3d2c;border-radius:10px;padding:0;overflow:hidden;cursor:pointer;font:600 11px/1.2 Inter,system-ui,sans-serif}
+#bar button img{display:block;width:100%;height:56px;object-fit:cover}
+#bar button span{padding:5px 6px 6px}
+#bar button.on{border-color:#b8862f;box-shadow:0 0 0 2px #b8862f}
+#toast{position:fixed;left:50%;top:108px;transform:translateX(-50%);background:#2b2218;color:#f3e7c6;padding:10px 16px;border-radius:8px;display:none;z-index:8;max-width:min(320px,86vw);text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.55);font:600 13.5px/1.35 Inter,system-ui,sans-serif}
+#banner{display:none;position:fixed;left:12px;right:12px;bottom:108px;text-align:center;pointer-events:none;font:600 10px/1.3 ui-monospace,monospace;color:#d7c89a;text-shadow:0 1px 4px #000;letter-spacing:.04em;z-index:3}
+#nav{position:fixed;top:46%;left:0;right:0;transform:translateY(-50%);display:flex;justify-content:space-between;pointer-events:none;padding:0 6px;z-index:4}
+#nav button{pointer-events:auto;width:40px;height:40px;border:0;border-radius:50%;background:rgba(20,16,12,.62);color:#f3e7c6;font-size:22px;cursor:pointer}
+#load{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#1a1610;color:#cbbd9c;font-family:Georgia,serif;font-size:18px;z-index:9}
+#hintchip{display:none;margin-top:4px;color:#f3e7c6}
+body.hint #hintchip{display:block}
+@media(max-width:700px){
+  #hud .t{font-size:12px;padding:5px 8px;max-width:calc(100% - 80px)}
+  #bar{gap:6px;padding:8px 8px 8px;justify-content:center;bottom:auto;background:rgba(12,10,8,.88)}
+  #bar button{width:calc((100vw - 34px) / 4)}
+  #bar button img{height:46px}
+  #bar button span{font-size:10px;padding:4px 3px 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #banner{display:none;display:none}
+  #toast{top:120px}
+  #nav{transform:translateY(-50%)}
+  #panel{display:block;left:0;right:0;width:auto;max-width:none;margin:0;bottom:0;max-height:none;border-radius:16px 16px 0 0;padding:16px 18px calc(16px + env(safe-area-inset-bottom));box-shadow:0 -8px 28px rgba(0,0,0,.35)}
+  #panel.idle{background:rgba(246,240,224,.94)}
+  #panel.idle .x{display:none}
+  #panel.idle .tag{color:#6b5a3e}
+}
+@media(min-width:900px) and (orientation:landscape){
+  #bar{left:auto;width:168px;top:72px;bottom:12px;flex-direction:column;overflow-y:auto;overflow-x:hidden;padding:8px;background:rgba(12,10,8,.62);border-radius:12px 0 0 12px;right:0}
+  #bar button{width:100%}
+  #bar button img{height:72px}
+  #panel{left:auto;right:188px;bottom:24px;width:min(400px,calc(100% - 220px));margin:0;max-width:none}
+  #banner{display:none;display:block;bottom:16px;right:180px;left:12px;text-align:left}
+  #hud .t{font-size:14px}
+  #nav{display:none}
+  #toast{top:84px}
+}
+
+#hud .btns{display:flex;gap:6px;pointer-events:auto}
+#travel{white-space:nowrap;pointer-events:auto;background:rgba(30,25,19,.92);color:#f3e7c6;border:1px solid #b8862f;border-radius:8px;padding:8px 12px;font-weight:700;cursor:pointer}
+#hud .sub{color:#cbbd9c;font-size:11.5px}
+#vign{position:fixed;inset:0;pointer-events:none;z-index:2;background:radial-gradient(ellipse at 50% 45%,transparent 55%,rgba(0,0,0,.5) 100%)}
+#snow{position:fixed;inset:0;pointer-events:none;z-index:2;display:none}
+#tmenu{position:fixed;inset:0;z-index:20;background:rgba(8,7,6,.94);display:none;overflow:auto;padding:18px 14px 30px;box-sizing:border-box}
+#tmenu.on{display:block}
+#tmenu h2{font:600 20px Georgia,serif;color:#f3e7c6;margin:4px 0 2px}
+#tmenu .lede{color:#b9ab8a;font-size:13px;margin:0 0 12px}
+#tmenu .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;max-width:1100px}
+#tmenu .card{position:relative;display:block;text-align:left;background:#17130f;border:1px solid #4a3d2c;border-radius:12px;overflow:hidden;color:#eadfc4;cursor:pointer;padding:0;font:inherit}
+#tmenu .card img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;filter:saturate(.9)}
+#tmenu .card b{display:block;padding:8px 10px 0;font:600 15px Georgia,serif;color:#f3e7c6}
+#tmenu .card span{display:block;padding:2px 10px 10px;font-size:11.5px;color:#b9ab8a}
+#tmenu .card.here{border-color:#b8862f;box-shadow:0 0 0 2px #b8862f}
+#tmenu .card .badge{position:absolute;right:8px;top:8px;background:rgba(20,16,12,.85);border:1px solid #b8862f;color:#f3e7c6;border-radius:12px;padding:2px 8px;font-size:11px}
+#tmenu .x{position:fixed;right:14px;top:12px;background:#b8862f;color:#1a1209;border:0;border-radius:8px;padding:8px 12px;font-weight:700;cursor:pointer}
+#tmenu svg{max-width:1100px;width:100%;height:auto;margin:4px 0 14px;display:block}
+@media(max-width:480px){#travel{padding:7px 9px;font-size:12px}#close{padding:7px 10px}}
+#panel .rel{font-size:12px;color:#555;margin-top:6px}
+</style>
+</head>
+<body>
+<div id="load">Travelling…</div>
+<div id="bgblur"></div>
+<div id="stage"><div id="scene"><img class="view" id="photo" alt=""><div id="hots"></div></div></div>
+<div id="vign"></div><canvas id="snow"></canvas>
+<div id="hud"><div class="t"><b id="ltitle"></b> <span class="sub" id="lsub"></span><br><span id="help">Tap a spot to inspect · pinch or double-tap to zoom</span><span id="hintchip">A faint shimmer marks things worth a closer look.</span></div><div class="btns"><button id="travel" type="button">🗺 Travel</button><button id="close" type="button">✕</button></div></div>
+<div id="nav"><button id="prev" type="button" aria-label="Previous view">‹</button><button id="next" type="button" aria-label="Next view">›</button></div>
+<div id="panel"><button class="x" id="px" type="button" aria-label="Close inspect">×</button><div class="tag" id="ptag"></div><h3 id="pt"></h3><div id="pb"></div><div class="row" id="pr"></div></div>
+<div id="bar"></div>
+<div id="toast"></div>
+<div id="banner"></div>
+<div id="tmenu"><button class="x" id="tx" type="button">✕ Back</button><h2>Where to, Detective?</h2><p class="lede">Every place you can visit. Things you notice can be logged as new exhibits in your Case Files.</p><div id="tmap"></div><div class="grid" id="tgrid"></div></div>
+<script src="data.js"></script>
+<script>
+const P=parent!==window?parent:null;
+const params=new URLSearchParams(location.search);
+const D=window.PLACES; let LOC=params.get('loc'); if(!D.locs[LOC])LOC='kitchen';
+const L=D.locs[LOC], VIEWS=L.views, ORDER=L.order, INFO=L.info, META=D.meta[LOC];
+if(params.get('hint')==='1')document.body.classList.add('hint');
+function $(s){return document.querySelector(s)}
+$('#ltitle').textContent=META.t; $('#lsub').textContent='· '+META.sub; $('#load').textContent='Travelling to '+META.t+'…'; document.title=META.t+' · The Extra Hour';
+const scene=$('#scene'), photo=$('#photo'), stage=$('#stage'), hots=$('#hots'), bg=$('#bgblur');
+function desk(){return matchMedia('(min-width:900px) and (orientation:landscape)').matches}
+function vp(){if(desk())return{x:0,y:0,W:innerWidth-168,H:innerHeight};const hud=96;return{x:0,y:hud,W:innerWidth,H:Math.max(200,innerWidth*9/16+8)}}
+let view=ORDER[0], scale=1, tx=0, ty=0, baseW=0, baseH=0;
+function logged(id){try{return !!(P&&P.__whitObs&&P.__whitObs(id))}catch(e){return false}}
+function post(m){if(P)P.postMessage(Object.assign({src:'place'},m),location.origin)}
+function toast(s){const t=$('#toast');t.textContent=s;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',2400)}
+function layout(){
+  const {W,H}=vp();
+  const imgW=photo.naturalWidth||1280, imgH=photo.naturalHeight||720;
+  const fit=Math.min(W/imgW, H/imgH);
+  baseW=imgW*fit; baseH=imgH*fit;
+  scene.style.width=baseW+'px';
+  apply();
+}
+function clamp(){
+  const {x,y,W,H}=vp();
+  const w=baseW*scale, h=baseH*scale;
+  if(w<=W) tx=x+(W-w)/2; else tx=Math.min(x, Math.max(x+W-w, tx));
+  if(h<=H) ty=y+(desk()?(H-h)/2:6); else ty=Math.min(y, Math.max(y+H-h, ty));
+}
+function apply(){clamp();scene.style.transform=`translate(${tx}px,${ty}px) scale(${scale})`;placeChrome()}
+function placeChrome(){
+  const bar=$('#bar'), panel=$('#panel'), nav=$('#nav');
+  if(desk()){bar.style.top='';bar.style.bottom='';panel.style.top='';panel.style.bottom='';nav.style.top='';return}
+  const photoBottom=Math.round(ty+baseH*scale);
+  bar.style.top=(photoBottom+6)+'px';
+  bar.style.bottom='auto';
+  const barH=bar.getBoundingClientRect().height||96;
+  panel.style.top=Math.round(photoBottom+6+barH)+'px';
+  panel.style.bottom='0';
+  panel.style.maxHeight='none';
+  nav.style.top=Math.round(ty+baseH*scale/2)+'px';
+}
+function zoomAt(cx,cy,next){
+  const prev=scale; scale=Math.max(1, Math.min(4.2, next));
+  const r=scale/prev; tx=cx-(cx-tx)*r; ty=cy-(cy-ty)*r; apply();
+}
+
+function showView(id){
+  if(!VIEWS[id])return; view=id; closePanel();
+  const v=VIEWS[id];
+  scale=1; tx=0; ty=0;
+  photo.src=v.file; snowOn(!!v.snow); photo.alt=v.t;
+  bg.style.backgroundImage=`url("${v.file}")`;
+  function syncBar(){$('#bar').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.k===view))}
+  syncBar();
+  photo.onload=()=>{if(photo.getAttribute('src')!==VIEWS[view].file)return;layout();drawHots();$('#load').style.display='none'};
+  if(photo.complete&&photo.naturalWidth){layout();drawHots();$('#load').style.display='none'}
+}
+function drawHots(){
+  const v=VIEWS[view];
+  hots.innerHTML=v.hots.map(h=>`<button type="button" class="hot${h.clue?' clue':''}" data-k="${h.k}" style="left:${h.l}%;top:${h.t}%;width:${h.w}%;height:${h.h}%" aria-label="${h.label}"></button>`).join('');
+}
+function inspect(key){
+  const h=(VIEWS[view].hots.find(x=>x.k===key)||{});
+  const i=Object.assign({},INFO[key]||{}); if(h.go)i.go=h.go; if(h.obs)i.obs=h.obs;
+  if(!i.t)return;
+  $('#ptag').textContent='INSPECTING'; $('#pt').textContent=i.t; $('#pb').innerHTML='<p>'+i.d+'</p>'+((i.ex&&i.ex.length)?'<div class="rel">Related exhibits: '+i.ex.join(', ')+'</div>':'');
+  const row=$('#pr'); row.innerHTML='';
+  if(i.go&&i.go!==view){const b=document.createElement('button'); b.className='pri'; b.textContent='🔎 Look closer'; b.onclick=()=>showView(i.go); row.appendChild(b)}
+  if(i.obs){const b=document.createElement('button'); b.className='pri'; const done=logged(i.obs); b.textContent=done?'✓ Logged as '+i.obs:'📝 Log observation '+i.obs;
+    b.onclick=()=>{const was=logged(i.obs); post({t:'obs',id:i.obs}); if(!P)toast('Open this from the case file to log observations'); else toast(was?'Already logged: '+i.obs:'New exhibit '+i.obs+' logged and pinned'); b.textContent='✓ Logged as '+i.obs}; row.appendChild(b)}
+  (i.ex||[]).forEach(id=>{const b=document.createElement('button'); b.textContent='📌 Pin '+id; b.onclick=()=>post({t:'pin',id}); row.appendChild(b)});
+  $('#panel').classList.remove('idle'); $('#panel').classList.add('on');
+}
+function idleDock(){
+  $('#ptag').textContent=META.t.toUpperCase();
+  $('#pt').textContent=VIEWS[view].t;
+  $('#pb').innerHTML='<p>'+L.idle+'</p>';
+  $('#pr').innerHTML='';
+  $('#panel').classList.remove('on');
+  $('#panel').classList.add('idle');
+}
+function closePanel(){
+  if(!desk()){idleDock();return}
+  $('#panel').classList.remove('on');
+}
+function step(d){showView(ORDER[(ORDER.indexOf(view)+d+ORDER.length)%ORDER.length])}
+
+$('#bar').innerHTML=ORDER.map(k=>`<button type="button" data-k="${k}"><img src="${VIEWS[k].file}" alt=""><span>${VIEWS[k].t}</span></button>`).join('');
+$('#bar').onclick=e=>{const b=e.target.closest('button'); if(b)showView(b.dataset.k)};
+$('#prev').onclick=()=>step(-1); $('#next').onclick=()=>step(1);
+$('#px').onclick=closePanel; $('#close').onclick=()=>post({t:'close'});
+
+const pointers=new Map();
+let lastTap=0, lastTapX=0, lastTapY=0, down=null, moved=false, pinch0=null, hotKey=null;
+stage.addEventListener('pointerdown',e=>{
+  stage.setPointerCapture(e.pointerId);
+  pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  down={x:e.clientX,y:e.clientY}; moved=false; stage.classList.add('drag');
+  hotKey=e.target.classList&&e.target.classList.contains('hot')?e.target.dataset.k:null;
+  if(pointers.size===2){const [a,b]=[...pointers.values()]; pinch0={d:Math.hypot(a.x-b.x,a.y-b.y),s:scale,cx:(a.x+b.x)/2,cy:(a.y+b.y)/2}}
+});
+stage.addEventListener('pointermove',e=>{
+  if(!pointers.has(e.pointerId))return;
+  const prev=pointers.get(e.pointerId);
+  pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(pointers.size===2&&pinch0){const [a,b]=[...pointers.values()]; const d=Math.hypot(a.x-b.x,a.y-b.y); zoomAt(pinch0.cx,pinch0.cy, pinch0.s*(d/Math.max(1,pinch0.d))); moved=true; return}
+  if(down&&pointers.size===1){
+    const dx=e.clientX-down.x, dy=e.clientY-down.y;
+    if(Math.hypot(dx,dy)>8)moved=true;
+    if(moved){tx+=e.clientX-prev.x; ty+=e.clientY-prev.y; apply()}
+  }
+});
+function endPtr(e){
+  pointers.delete(e.pointerId); pinch0=null; stage.classList.remove('drag');
+  if(e.type==='pointerup'&&down&&!moved&&pointers.size===0){
+    const now=performance.now();
+    if(now-lastTap<320&&Math.hypot(e.clientX-lastTapX,e.clientY-lastTapY)<28){
+      if(scale>1.2){scale=1;tx=0;ty=0;layout()} else zoomAt(e.clientX,e.clientY,2.3);
+      lastTap=0;
+    } else {
+      lastTap=now; lastTapX=e.clientX; lastTapY=e.clientY;
+      if(hotKey) inspect(hotKey); else closePanel();
+    }
+  }
+  down=null; hotKey=null;
+}
+stage.addEventListener('pointerup',endPtr);
+stage.addEventListener('pointercancel',endPtr);
+stage.addEventListener('wheel',e=>{e.preventDefault(); zoomAt(e.clientX,e.clientY, scale*(e.deltaY>0?0.88:1.14))},{passive:false});
+addEventListener('resize',layout);
+addEventListener('keydown',e=>{if(e.key==='Escape'){if($('#tmenu').classList.contains('on'))$('#tmenu').classList.remove('on'); else if($('#panel').classList.contains('on'))closePanel(); else post({t:'close'})} if(e.key==='ArrowRight')step(1); if(e.key==='ArrowLeft')step(-1)});
+window.addEventListener('message',e=>{if(e.origin!==location.origin)return; const m=e.data; if(m&&m.t==='hint')document.body.classList.toggle('hint',!!m.on)});
+
+
+// ---- travel menu ----
+function cnt(loc){const ids=Object.keys(D.OBS).filter(id=>Object.values(D.locs[loc]?D.locs[loc].views:{}).some(v=>v.hots.some(h=>h.obs===id)));return [ids.filter(logged).length,ids.length]}
+function travelMenu(){
+  $('#tmap').innerHTML=`<svg viewBox="0 0 900 150" xmlns="http://www.w3.org/2000/svg" aria-label="Map"><rect width="900" height="150" rx="12" fill="#14110d" stroke="#3a3024"/>
+  <path d="M120 75 C 300 30, 420 120, 560 72 S 760 40, 800 80" fill="none" stroke="#6b5a3e" stroke-width="3" stroke-dasharray="7 6"/>
+  <g font-family="Georgia,serif" fill="#f3e7c6" font-size="15"><circle cx="120" cy="75" r="9" fill="#b8862f"/><text x="120" y="108" text-anchor="middle">Larkspur Lodge</text><text x="120" y="126" text-anchor="middle" font-size="11" fill="#b9ab8a">Lake Arrowhead · study, kitchen, mudroom</text>
+  <circle cx="470" cy="85" r="7" fill="#8a7350"/><text x="470" y="62" text-anchor="middle">Rim Fuel &amp; Market</text><text x="470" y="112" text-anchor="middle" font-size="11" fill="#b9ab8a">Running Springs · 15 min</text>
+  <circle cx="800" cy="80" r="7" fill="#5f7a80"/><text x="800" y="58" text-anchor="middle">Coroner</text><text x="800" y="108" text-anchor="middle" font-size="11" fill="#b9ab8a">San Bernardino · ~45 min</text></g></svg>`;
+  $('#tgrid').innerHTML=D.order.map(k=>{const m=D.meta[k];const c=m.three?null:cnt(k);return `<button class="card${k===LOC?' here':''}" data-k="${k}" type="button"><img src="${m.thumb}" alt=""><b>${m.t}${k===LOC?' · you are here':''}</b><span>${m.sub}</span>${c?`<i class="badge">${c[0]}/${c[1]} logged</i>`:''}</button>`}).join('');
+  $('#tmenu').classList.add('on');
+}
+$('#travel').onclick=travelMenu; $('#tx').onclick=()=>$('#tmenu').classList.remove('on');
+$('#tgrid').onclick=e=>{const b=e.target.closest('.card'); if(!b)return; const k=b.dataset.k; if(k===LOC){$('#tmenu').classList.remove('on');return}
+  if(D.meta[k].three){post({t:'study'}); if(!P)location.href='../study3d.html'; return}
+  const q=new URLSearchParams(location.search); q.set('loc',k); location.replace('place.html?'+q.toString())};
+// ---- light snow on outdoor views ----
+const sc=$('#snow'),sx=sc.getContext('2d');let flakes=[],snowRun=false;
+function snowOn(on){sc.style.display=on?'block':'none';if(on&&!snowRun){snowRun=true;sc.width=innerWidth;sc.height=innerHeight;flakes=Array.from({length:Math.round(innerWidth/9)},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:.6+Math.random()*1.6,s:.3+Math.random()*.8,d:Math.random()*6}));requestAnimationFrame(snowTick)} if(!on)snowRun=false}
+function snowTick(t){if(!snowRun)return;sx.clearRect(0,0,sc.width,sc.height);sx.fillStyle='rgba(235,240,245,.55)';for(const f of flakes){f.y+=f.s;f.x+=Math.sin(t/1400+f.d)*.3;if(f.y>sc.height){f.y=-4;f.x=Math.random()*sc.width}sx.beginPath();sx.arc(f.x,f.y,f.r,0,6.283);sx.fill()}requestAnimationFrame(snowTick)}
+addEventListener('resize',()=>{sc.width=innerWidth;sc.height=innerHeight});
+showView(params.get('view')&&VIEWS[params.get('view')]?params.get('view'):ORDER[0]);
+setTimeout(()=>{$('#load').style.display='none'},1500);
+window.__place={showView,inspect,VIEWS,LOC,travelMenu,ready:true};
+</script>
+</body>
+</html>

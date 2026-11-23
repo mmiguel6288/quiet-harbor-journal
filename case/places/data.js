@@ -1,0 +1,221 @@
+// Location walkthroughs for The Extra Hour. Hotspots are percentages of each plate (left, top, width, height).
+window.PLACES={
+order:['study','kitchen','mudroom','rimfuel','coroner'],
+meta:{
+ study:{t:'The study',sub:'Larkspur Lodge · the scene, as found (3D)',thumb:'img/study-thumb.jpg',three:true},
+ kitchen:{t:'Kitchen & deck',sub:'Larkspur Lodge · Sun 11/02, 6:40 PM PST',thumb:'img/kitchen-wide.jpg'},
+ mudroom:{t:'Mudroom & side yard',sub:'Larkspur Lodge · Sun 11/02, 7:05 PM PST',thumb:'img/mud-wide.jpg'},
+ rimfuel:{t:'Rim Fuel & Market',sub:'Running Springs · Sun 11/02, 9:47 PM PST',thumb:'img/rim-ext.jpg'},
+ coroner:{t:'Coroner’s autopsy suite',sub:'San Bernardino, downtown · Sun 11/02, 8:30 PM PST',thumb:'img/me-wide.jpg'}
+},
+locs:{
+kitchen:{title:'Kitchen & deck',where:'Larkspur Lodge',idle:'Look around the kitchen, out the window, and on the deck. Pinch or double-tap to zoom.',
+ order:['wide','window','deck','pantry'],
+ views:{
+  wide:{t:'The kitchen',file:'img/kitchen-wide.jpg',hots:[
+   {k:'kwin',l:1,t:8,w:28,h:50,label:'Window over the sink',go:'window'},
+   {k:'sink',l:2,t:62,w:30,h:30,label:'Farmhouse sink'},
+   {k:'rack',l:25,t:50,w:12,h:16,label:'Drying rack'},
+   {k:'micro',l:62,t:42,w:9,h:12,label:'Microwave'},
+   {k:'fridge',l:72,t:28,w:15,h:28,label:'Refrigerator door'},
+   {k:'pdoor',l:89,t:12,w:11,h:72,label:'Pantry door',go:'pantry'}]},
+  window:{t:'From the sink',file:'img/kitchen-window.jpg',hots:[
+   {k:'snow',l:8,t:55,w:62,h:15,label:'Snow on the deck'},
+   {k:'chairs',l:18,t:30,w:20,h:27,label:'Deck chairs',clue:true,obs:'V5'},
+   {k:'chairs',l:50,t:30,w:18,h:27,label:'Deck chairs',clue:true,obs:'V5'},
+   {k:'ashtray',l:37,t:40,w:10,h:14,label:'Table and ashtray',go:'deck'},
+   {k:'rack',l:66,t:62,w:34,h:38,label:'Champagne flutes'}]},
+  deck:{t:'On the deck',file:'img/kitchen-deck.jpg',snow:1,hots:[
+   {k:'chairL',l:0,t:15,w:14,h:65,label:'Adirondack chair'},
+   {k:'chairL',l:76,t:48,w:24,h:52,label:'Adirondack chair'},
+   {k:'table',l:14,t:66,w:36,h:30,label:'Side table'},
+   {k:'cigar',l:22,t:52,w:20,h:16,label:'Ashtray',clue:true,obs:'V6'},
+   {k:'lantern',l:35,t:28,w:10,h:26,label:'Lantern'},
+   {k:'prints',l:50,t:62,w:26,h:36,label:'Footprints'},
+   {k:'kwin2',l:52,t:0,w:46,h:36,label:'Kitchen window'}]},
+  pantry:{t:'The pantry',file:'img/kitchen-pantry.jpg',hots:[
+   {k:'jars',l:21,t:6,w:38,h:22,label:'Jars'},
+   {k:'cocoa',l:21,t:39,w:22,h:24,label:'Cocoa packets',clue:true,obs:'V7'},
+   {k:'mallow',l:44,t:36,w:15,h:26,label:'Marshmallows'},
+   {k:'sign',l:69,t:37,w:18,h:24,label:'Card on the door',clue:true,obs:'V7'},
+   {k:'jars',l:21,t:66,w:38,h:32,label:'Jars'}]}
+ },
+ info:{
+  kwin:{t:'Window over the sink',d:'A wide, many-paned window above the sink, looking straight out onto the deck. The deck lantern is lit tonight.',go:'window'},
+  sink:{t:'The farmhouse sink',d:'Rosa’s post for most of the night, by her own account. Standing here, you face the window and the deck.',ex:['S1']},
+  rack:{t:'Champagne flutes',d:'A rack of champagne flutes, washed and turned upside down to dry. Rosa says she washed the glasses here after the toast.',ex:['S1']},
+  micro:{t:'Microwave clock',d:'It shows the correct time tonight. Rosa says she sets this clock back herself, right after the “extra hour” toast, every year.',ex:['S1']},
+  fridge:{t:'Refrigerator door',d:'A crayon drawing signed “MILO” (a house with an enormous chimney) and a laminated card: “MILO: severe PEANUT allergy. EpiPen Jr in the blue MILO ♥ MEDS pouch. It goes where Milo goes.”',ex:['R4']},
+  pdoor:{t:'Pantry door',d:'A tall pantry, door ajar.',go:'pantry'},
+  snow:{t:'Snow on the deck',d:'Old snow from Friday’s storm, trampled flat by a lot of feet since: deputies, family, the dog. No useful prints.'},
+  chairs:{t:'The view from the sink',d:'Two Adirondack chairs pulled close at the rail, with a small table and an ashtray between them. From the sink, the whole deck is in plain view under the lantern. Someone washing dishes here could see who was sitting out there, and for how long, without leaving the sink.',ex:['S1','S2']},
+  ashtray:{t:'Table and ashtray',d:'Something is still in the ashtray. You’d have to go out on the deck to see it properly.',go:'deck'},
+  chairL:{t:'Adirondack chair',d:'Snow on the arms. Nothing in or under it.'},
+  table:{t:'Side table',d:'A weathered little table between the chairs, holding a heavy glass ashtray.'},
+  cigar:{t:'Cigar in the ashtray',d:'A fat cigar, smoked about halfway and gone out, still wearing its paper band: maybe fifteen minutes of smoking. The deputies didn’t collect it; the deck was never part of the scene. Rosa says Harlan took a cigar from the box in the study before he went out.',ex:['S1','S2']},
+  lantern:{t:'Deck lantern',d:'A battery lantern, warm and steady. It lights the chairs and the table, not much beyond the rail.'},
+  prints:{t:'Footprints',d:'The snow on the boards is tramped into a mess of overlapping prints. Nothing you could date.'},
+  kwin2:{t:'The kitchen window, from outside',d:'From out here the kitchen is lit and in plain view through the glass: the sink, the counter, the fridge. The deck and the sink can see each other.'},
+  jars:{t:'Jars',d:'Flour, sugar, oats. Nothing else.'},
+  cocoa:{t:'Cocoa packets',d:'Single-serve cocoa packets, one per mug, the kind Rosa says she uses. Smooth, ordinary cocoa mix: no grit in it. The box is half empty.',ex:['S1']},
+  mallow:{t:'Marshmallows',d:'“The good marshmallows,” as Rosa calls them.'},
+  sign:{t:'“PEANUT-FREE HOUSE”',d:'Hand-lettered in marker and taped inside the pantry door. There is nothing with peanuts on these shelves: no peanut butter, no trail mix, no candy. The only peanut product known to have been at the lodge that night was the tin in the garage refrigerator.',ex:['P4','R3']}
+ },
+ obs:{V7:'cocoa',V5:'chairs',V6:'cigar'}},
+
+mudroom:{title:'Mudroom & side yard',where:'Larkspur Lodge',idle:'Look at the hooks, then step outside. Pinch or double-tap to zoom.',
+ order:['wide','coats','bins','turnout'],
+ views:{
+  wide:{t:'The mudroom',file:'img/mud-wide.jpg',hots:[
+   {k:'puffers',l:4,t:10,w:21,h:48,label:'Two black puffers',clue:true,go:'coats'},
+   {k:'others',l:25,t:18,w:18,h:38,label:'Other coats'},
+   {k:'boots',l:8,t:60,w:34,h:32,label:'Boot tray'},
+   {k:'sdoor',l:53,t:15,w:15,h:55,label:'Door to the side yard',go:'bins'},
+   {k:'gdoor',l:74,t:10,w:20,h:62,label:'Door to the garage'},
+   {k:'floor',l:44,t:74,w:42,h:24,label:'Wet floor'}]},
+  coats:{t:'The coat hooks',file:'img/mud-coats.jpg',hots:[
+   {k:'body',l:36,t:0,w:56,h:50,label:'The puffers'},
+   {k:'cuff',l:20,t:30,w:16,h:22,label:'Torn cuff',clue:true,obs:'V8'},
+   {k:'down',l:40,t:70,w:22,h:16,label:'Down on the bench',clue:true,obs:'V8'}]},
+  bins:{t:'Outside the door',file:'img/mud-bins.jpg',snow:1,hots:[
+   {k:'mdoor',l:10,t:2,w:18,h:62,label:'Mudroom door'},
+   {k:'steps',l:10,t:66,w:22,h:30,label:'Steps'},
+   {k:'trash',l:33,t:43,w:14,h:34,label:'Trash bin'},
+   {k:'recycle',l:47,t:43,w:10,h:34,label:'Recycling bin'},
+   {k:'path',l:60,t:40,w:40,h:52,label:'Shoveled path',clue:true,go:'turnout'}]},
+  turnout:{t:'The side path',file:'img/mud-turnout.jpg',snow:1,hots:[
+   {k:'wall',l:0,t:0,w:44,h:70,label:'Side wall'},
+   {k:'cars',l:47,t:52,w:33,h:24,label:'Lower turnout',clue:true,obs:'V9'},
+   {k:'drive',l:72,t:40,w:28,h:58,label:'Service drive',clue:true,obs:'V9'},
+   {k:'pathdown',l:10,t:72,w:60,h:28,label:'The path'}]}
+ },
+ info:{
+  puffers:{t:'Two black puffers',d:'Two identical black hooded down puffers hang side by side: same make, same model. The family says Delia and Lena bought them together last winter. At a glance you couldn’t tell which is which.',go:'coats',ex:['R4']},
+  others:{t:'Other coats',d:'A red ski jacket and a tan barn coat. Nothing in the pockets but gloves and lift-ticket stubs.'},
+  boots:{t:'Boot tray',d:'Snow boots on a rubber tray. Tonight’s melt puddles come from a long day of deputies and family going in and out.'},
+  sdoor:{t:'Door to the side yard',d:'A half-glass door with frost on the panes. No keypad and no camera on this door. Through the glass: the bins.',go:'bins'},
+  gdoor:{t:'Door to the garage',d:'Through here: the garage, with the garage refrigerator where the peanut candy tin was found sealed. The side yard and the lower turnout are reached from the mudroom.',ex:['P4','P6']},
+  floor:{t:'Wet slate floor',d:'Damp footprints in every direction. Too many people today to read anything into them.'},
+  body:{t:'The puffers, up close',d:'Black ripstop shells, down fill, hoods up on the hooks. The left one has some damage at the cuff.'},
+  cuff:{t:'Torn cuff and loose down',d:'The left coat’s left cuff has a small ragged tear, and white down is wisping out of it. A couple of tiny down plumules lie on the bench below. The right coat is intact, but both are the same down-filled make, and fill like this works loose at the seams of either one.',ex:['R4']},
+  down:{t:'Down on the bench',d:'Two or three tiny white plumules, each a few millimetres across, on the dark bench under the coats.',ex:['R4']},
+  mdoor:{t:'The mudroom door',d:'Three wooden steps down from the mudroom, and you’re at the bins.'},
+  steps:{t:'Steps',d:'Shoveled, salted, and trodden all day.'},
+  trash:{t:'Trash bin (left)',d:'The green trash bin where the deputies found the store bag. Its lid is brushed clean from being opened; Rosa says she took the kitchen trash out before the toast. No new snow fell overnight, so the snow can’t tell you when anyone else opened it.',ex:['P3','R1']},
+  recycle:{t:'Recycling bin (right)',d:'Blue recycling bin, the lid still crusted with Friday’s snow. Nobody has opened this one in days.'},
+  path:{t:'The shoveled path',d:'A narrow shoveled path runs from the steps down along the side of the lodge, into the trees.',go:'turnout'},
+  wall:{t:'The side wall',d:'This stretch of the lodge has no windows, no lights, and no camera.'},
+  cars:{t:'The lower turnout',d:'The path ends at the lower parking turnout, where the family parks. From the mudroom you can walk down here, get in a car and drive away on the service drive without ever crossing the porch, the front steps, or the front walk. The doorbell camera covers only those three, so it never sees this path or the turnout.',ex:['X4','P6']},
+  drive:{t:'The service drive',d:'A plowed drive curves from the turnout down through the trees to Cedar Crest Road. Tire tracks everywhere: deputies, the coroner’s van, the family. Nothing you could date.',ex:['X4','P6']},
+  pathdown:{t:'The path',d:'Packed snow and footprints, all the way down.'}
+ }},
+
+rimfuel:{title:'Rim Fuel & Market',where:'Running Springs',idle:'Daniel, the night cashier, is on again tonight. Look around the counter and the back office. Pinch or double-tap to zoom.',
+ order:['ext','counter','aisle','office'],
+ views:{
+  ext:{t:'Outside',file:'img/rim-ext.jpg',snow:1,hots:[
+   {k:'rsign',l:84,t:8,w:10,h:18,label:'Sign'},
+   {k:'pumps',l:18,t:50,w:30,h:22,label:'Pumps'},
+   {k:'truck',l:49,t:57,w:15,h:12,label:'Pickup'},
+   {k:'front',l:60,t:48,w:27,h:18,label:'Storefront',go:'counter'}]},
+  counter:{t:'The counter',file:'img/rim-counter.jpg',hots:[
+   {k:'window',l:0,t:15,w:40,h:40,label:'Front window'},
+   {k:'rack2',l:49,t:43,w:6,h:18,label:'Candy rack'},
+   {k:'register',l:59,t:45,w:20,h:24,label:'Register',clue:true,obs:'V12'},
+   {k:'bags',l:68,t:18,w:18,h:26,label:'Carry-out bags'},
+   {k:'feesign',l:80,t:56,w:8,h:17,label:'Notice on the counter',clue:true,obs:'V10'},
+   {k:'coffee',l:82,t:33,w:17,h:22,label:'Coffee station'},
+   {k:'dome',l:60,t:0,w:8,h:8,label:'Ceiling camera'}]},
+  aisle:{t:'Aisle by the register',file:'img/rim-aisle.jpg',hots:[
+   {k:'pb',l:64,t:55,w:34,h:32,label:'Jars by the counter',clue:true,obs:'V11'},
+   {k:'counter2',l:43,t:42,w:21,h:18,label:'Counter',go:'counter'},
+   {k:'bags',l:63,t:22,w:12,h:14,label:'Carry-out bags'},
+   {k:'dome',l:58,t:0,w:7,h:8,label:'Ceiling camera'},
+   {k:'snacks',l:0,t:10,w:20,h:85,label:'Snacks'}]},
+  office:{t:'Back office',file:'img/rim-office.jpg',hots:[
+   {k:'monitor',l:40,t:33,w:22,h:34,label:'Camera monitor',clue:true,obs:'V13'},
+   {k:'dvr',l:12,t:57,w:25,h:15,label:'Recorder'},
+   {k:'cal',l:26,t:0,w:12,h:32,label:'Calendar'},
+   {k:'owin',l:70,t:0,w:28,h:58,label:'Office window'},
+   {k:'safe',l:52,t:74,w:16,h:26,label:'Safe'}]}
+ },
+ info:{
+  rsign:{t:'RIM FUEL & MARKET',d:'The only store open all night on this stretch of the mountain, about fifteen minutes down the hill from the lodge.'},
+  pumps:{t:'The pumps',d:'Pay-at-pump customers never have to come inside, but their sales still print on the register journal.',ex:['F1']},
+  truck:{t:'Pickup',d:'Daniel’s truck. He’s working nights all week.'},
+  front:{t:'Storefront',d:'Fluorescent light, one register, one cashier.',go:'counter'},
+  window:{t:'Front window',d:'From the counter you look straight out at the pumps under the canopy.'},
+  rack2:{t:'Candy rack',d:'Gum, mints, lottery scratchers.'},
+  register:{t:'Register 01',d:'The only register open overnight. Its screen shows 9:47 PM, the same as your phone. A sticker on its side reads “CLOCK SET AUTOMATICALLY · NETWORK TIME.” Daniel shrugs: “It changed itself last night at two. I didn’t touch it.”',ex:['F1']},
+  bags:{t:'Carry-out bags',d:'White plastic bags with red print, “RIM FUEL & MARKET · Running Springs,” hanging behind the counter. Same kind as the bag the deputies found.',ex:['R3','P3']},
+  feesign:{t:'Bag-fee notice',d:'“NOTICE · BAGS 10¢ EACH · CA law (SB 270) · Ask the cashier if you need one.” Daniel: “Every bag rings up as a bag fee. No bag fee on the receipt, no bag.”',ex:['F1','R3']},
+  coffee:{t:'Coffee station',d:'Twenty-ounce cups, burnt coffee, powdered creamer. Truckers and plow drivers.'},
+  dome:{t:'Ceiling camera',d:'A dome camera over the register. The manager keeps the recordings in the back office.'},
+  pb:{t:'Powdered peanut butter',d:'Small jars of powdered peanut butter, 6.5 oz, $6.49 on the tag: the same product as the jar in the bin. They’re shelved on the end cap right beside the register, so you could pick one up without leaving the counter.',ex:['R3','F1']},
+  counter2:{t:'The counter',d:'About four steps from this end cap.',go:'counter'},
+  snacks:{t:'Snacks',d:'Chips, jerky, energy drinks. Nothing here you need.'},
+  monitor:{t:'Camera monitor',d:'Four camera feeds, each stamped “22:47:13” on “SUN 11-02-2025.” Your watch says 9:47 PM. Gary, the manager: “The recorder was set to UTC minus seven when they installed it, and it never changes for daylight saving. In winter it runs an hour fast.”',ex:['F1']},
+  dvr:{t:'The recorder',d:'An old DVR box. Gary can pull stills by time and transaction number if a detective asks for them through the lab.'},
+  cal:{t:'Wall calendar',d:'The store, photographed under snow. The shift grid has Daniel on nights all week.'},
+  owin:{t:'Office window',d:'The pumps again, from the side.'},
+  safe:{t:'Drop safe',d:'Cashiers drop cash in here during the night. Each drop prints on the register as its own transaction.',ex:['F1']}
+ }},
+
+coroner:{title:'Coroner’s autopsy suite',where:'San Bernardino',idle:'Dr. Lindqvist finished the examination this afternoon. Look at the table, the light box, the clipboard and the effects tray.',
+ order:['wide','diagram','effects'],
+ views:{
+  wide:{t:'Autopsy suite',file:'img/me-wide.jpg',hots:[
+   {k:'xray',l:2,t:15,w:17,h:21,label:'Light box',clue:true,obs:'V16'},
+   {k:'table',l:30,t:46,w:30,h:22,label:'The table'},
+   {k:'clip',l:52,t:70,w:10,h:19,label:'Clipboard',go:'diagram'},
+   {k:'tray',l:84,t:46,w:15,h:14,label:'Effects tray',go:'effects'},
+   {k:'mwin',l:55,t:8,w:16,h:20,label:'Window'}]},
+  diagram:{t:'Body diagram',file:'img/me-diagram.jpg',hots:[
+   {k:'head',l:26,t:21,w:10,h:12,label:'Head and face'},
+   {k:'thighs',l:25,t:47,w:12,h:16,label:'Thighs',clue:true,obs:'V14'},
+   {k:'thighs',l:52,t:41,w:26,h:14,label:'Note ④',clue:true,obs:'V14'},
+   {k:'delts',l:52,t:34,w:24,h:6,label:'Note ③'},
+   {k:'liv',l:52,t:56,w:26,h:9,label:'Note ⑤'},
+   {k:'summ',l:23,t:71,w:56,h:9,label:'Summary',clue:true,obs:'V14'}]},
+  effects:{t:'Personal effects',file:'img/me-effects.jpg',hots:[
+   {k:'ring',l:42,t:46,w:10,h:12,label:'Ring'},
+   {k:'glasses',l:52,t:26,w:10,h:22,label:'Glasses case'},
+   {k:'cardigan',l:58,t:30,w:20,h:30,label:'Cardigan',clue:true,obs:'V15'},
+   {k:'cig2',l:79,t:34,w:9,h:24,label:'Cigar',clue:true,obs:'V15'},
+   {k:'matches',l:73,t:52,w:11,h:12,label:'Matches'},
+   {k:'tag',l:45,t:64,w:26,h:22,label:'Tag'}]}
+ },
+ info:{
+  xray:{t:'Films on the light box',d:'Skull and neck films. No fracture anywhere. Dr. Lindqvist’s note on the sleeve: “Forehead abrasion superficial, from the fall. Not a cause of death.”',ex:['R2']},
+  table:{t:'The table',d:'Harlan Whitcombe, under a sheet. You don’t need to lift it; the findings are on the clipboard.'},
+  clip:{t:'Clipboard',d:'The external-examination body diagram.',go:'diagram'},
+  tray:{t:'Effects tray',d:'What he had on him when he died, bagged.',go:'effects'},
+  mwin:{t:'Window',d:'Frosted glass, snow drifting past under the parking-lot lights.'},
+  head:{t:'① ② Head and face',d:'A 2.1 cm abrasion on the right forehead, from the fall against the hearth edge. Swelling around the eyes and lips, typical of anaphylaxis.',ex:['R2']},
+  thighs:{t:'④ Thighs: no injection site',d:'Both outer thighs, where an auto-injector is normally used, were checked under a 10× lens: no puncture. There is no injection site anywhere on the body, and post-mortem epinephrine was not elevated. No working auto-injector was ever used on him.',ex:['R2','P2']},
+  delts:{t:'③ Deltoids',d:'Both upper arms checked too: no puncture.'},
+  liv:{t:'⑤ Lividity',d:'Fixed on his back, consistent with lying face-up exactly where he was found. He was not moved after death.',ex:['R1']},
+  summ:{t:'Summary',d:'“No needle mark anywhere on the body, incl. thighs, deltoids, abdomen. Post-mortem epinephrine not elevated. Stomach ~120 mL brown fluid (cocoa/milk), little digested. No defense injuries.”',ex:['R2']},
+  ring:{t:'Wedding band',d:'Gold, worn thin.'},
+  glasses:{t:'Glasses case',d:'A spare pair of reading glasses in a leather case. (The pair on the study floor was booked at the scene.)'},
+  cardigan:{t:'His cardigan',d:'The cardigan he had on. In the pockets: one spare cigar and a box of matches. No auto-injector anywhere on him; the family says he kept it in the top-right desk drawer.',ex:['R1','R4']},
+  cig2:{t:'Spare cigar',d:'Unsmoked, from his cardigan pocket. The band matches the half-smoked cigar left in the deck ashtray at the lodge.'},
+  matches:{t:'Matches',d:'A small box of wooden matches.'},
+  tag:{t:'Evidence tag',d:'Blank. Everything here will go back to the family.'}
+ }}
+},
+OBS:{
+ V5:['Kitchen: the view from the sink','<div class="memo"><p><b>Observed at the lodge</b> (kitchen, standing at the sink, Sun 11/02 evening).</p><p>The window over the sink looks straight onto the deck. Under the deck lantern, both chairs, the table and the ashtray are in plain view from the sink. Anyone washing dishes there could see who was out on the deck, and for how long, without leaving the sink.</p></div>'],
+ V6:['Deck: cigar in the ashtray','<div class="memo"><p><b>Observed at the lodge</b> (deck, side table between the two chairs).</p><p>A cigar smoked about halfway and gone out, paper band still on: roughly fifteen minutes of smoking. Not collected; the deck was not part of the scene.</p></div>'],
+ V7:['Pantry: a peanut-free kitchen','<div class="memo"><p><b>Observed at the lodge</b> (kitchen pantry).</p><p>A hand-lettered card inside the pantry door: <b>“PEANUT-FREE HOUSE.”</b> No peanut products on any shelf. The cocoa is single-serve packets, one per mug: a smooth mix with no grit.</p></div>'],
+ V8:['Mudroom: two identical coats','<div class="memo"><p><b>Observed at the lodge</b> (mudroom coat hooks, Sun 11/02 evening).</p><p>Two identical black hooded down puffers hang side by side. One has a small tear at the left cuff with down wisping out; a few tiny white plumules lie on the bench below. Both are the same down-filled make, and both can shed at the seams.</p></div>'],
+ V9:['Side path to the lower turnout','<div class="memo"><p><b>Observed at the lodge</b> (outside the mudroom door).</p><p>From the mudroom door, three steps lead down to the bins, and a shoveled path runs along the windowless side of the lodge to the lower parking turnout and the service drive. None of it crosses the porch, the front steps or the front walk, the only areas the doorbell camera covers.</p></div>'],
+ V10:['Rim Fuel: bag-fee notice','<div class="memo"><p><b>Observed at Rim Fuel &amp; Market</b> (counter, Sun 11/02, 9:47 PM PST).</p><p style="font-family:monospace;background:#efe9dc;padding:10px;border:1px solid #bbb">NOTICE · BAGS 10¢ EACH<br>CA law (SB 270)<br>Ask the cashier if you need one</p><p>Night cashier Daniel: “Every bag rings up as a bag fee. No bag fee on the receipt, no bag.”</p></div>'],
+ V11:['Rim Fuel: powdered peanut butter by the register','<div class="memo"><p><b>Observed at Rim Fuel &amp; Market</b> (end cap beside the counter).</p><p>Powdered peanut butter, 6.5 oz, $6.49: the same product as the jar from the bin. It is shelved on the end cap right beside the register, within reach of someone standing at the counter.</p></div>'],
+ V12:['Rim Fuel: the register clock','<div class="memo"><p><b>Observed at Rim Fuel &amp; Market</b> (REG 01).</p><p>The register shows the correct time (9:47 PM, matching your phone). Sticker on its side: <b>“CLOCK SET AUTOMATICALLY · NETWORK TIME.”</b> Daniel: “It changed itself last night at two. I didn’t touch it.”</p></div>'],
+ V13:['Rim Fuel: the camera recorder clock','<div class="memo"><p><b>Observed at Rim Fuel &amp; Market</b> (back office, Sun 11/02, 9:47 PM PST by your watch).</p><p>All four camera feeds are stamped <b>22:47</b>. Manager Gary Pruett: “The recorder was set to UTC minus seven when they installed it, and it never changes for daylight saving. In winter it runs an hour fast.”</p></div>'],
+ V14:['Coroner: body diagram, no injection site','<div class="memo"><p><b>Observed at Forensic Pathology, San Bernardino</b> (external-examination body diagram, Dr. A. Lindqvist).</p><p>Both outer thighs (the usual auto-injector site), both deltoids and the abdomen were checked under a 10× lens: <b>no puncture, no injection site anywhere</b>. Forehead abrasion 2.1 cm from the fall; swelling of the eyes and lips. Lividity fixed on the back, consistent with how he was found. Stomach: about 120 mL of cocoa and milk, little digested.</p></div>'],
+ V15:['Coroner: personal effects','<div class="memo"><p><b>Observed at Forensic Pathology, San Bernardino</b> (effects tray).</p><p>Wedding band; spare reading glasses in a case; dark cardigan with one unsmoked cigar and a box of matches in the pockets. <b>No auto-injector on his person.</b> The spare cigar’s band matches the half-smoked cigar in the deck ashtray at the lodge.</p></div>'],
+ V16:['Coroner: skull and neck films','<div class="memo"><p><b>Observed at Forensic Pathology, San Bernardino</b> (light box).</p><p>Skull and cervical-spine films: no fracture. Pathologist’s note: “Forehead abrasion superficial, from the fall. Not a cause of death.”</p></div>']
+}
+};
