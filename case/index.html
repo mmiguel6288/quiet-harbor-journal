@@ -126,13 +126,32 @@ form.acc legend{font-family:'Special Elite';color:#f3e7c6;font-size:17px;padding
 .suspect img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;margin-bottom:8px;filter:saturate(.85) contrast(1.02)}
 .ivpick{display:flex;gap:10px;overflow-x:auto;padding-bottom:8px}
 .ivpick button{background:#f6f0e0;border:none;padding:6px 6px 8px;width:104px;flex:none;color:#222;font-size:12px;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,.4)}
-.ivpick button.on{outline:3px solid var(--accent)}
+.ivpick button{border-radius:8px}.ivpick button.on{outline:2px solid var(--accent);outline-offset:2px}
 .ivpick img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;margin-bottom:4px}
-.iv{display:grid;grid-template-columns:220px minmax(0,1fr);gap:16px;margin-top:14px}
-.iv .por img{width:100%;box-shadow:0 6px 18px rgba(0,0,0,.5)}
-@media(max-width:700px){.iv{grid-template-columns:minmax(0,1fr)}.iv>*{min-width:0}.iv .por{display:flex;gap:12px;align-items:center}.iv .por img{width:90px;flex:none}}
-.chat{background:#efe9d8;color:#1c1a16;padding:14px;min-height:300px;max-height:56vh;overflow:auto;font-family:'IBM Plex Mono',monospace;font-size:13.5px;line-height:1.5;box-shadow:inset 0 0 20px rgba(0,0,0,.15)}
-.chat .qq{color:#7a1d1d;margin-top:10px}.chat .aa{margin:4px 0 0 0}.chat .ev{color:#1d4f7a;margin-top:10px}
+.iv{display:grid;grid-template-columns:minmax(360px,420px) minmax(0,1fr);gap:20px;margin-top:12px;align-items:stretch}
+.iv .por{position:relative}
+.iv .por img{width:100%;box-shadow:0 10px 28px rgba(0,0,0,.45)}
+@media(max-width:700px){
+main:has(#v-interview.on){padding:0 12px;height:calc(100dvh - var(--head,9rem));max-height:calc(100dvh - var(--head,9rem));overflow:hidden;box-sizing:border-box}
+#v-interview.view.on{display:flex;flex-direction:column;flex:1;height:100%;max-height:100%;overflow:hidden;min-height:0}
+#v-interview .lede{flex:none;margin:0 0 6px;font-size:13px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+#ivpick{flex:none;padding-bottom:6px}
+#ivroom{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.iv{display:flex;flex-direction:column;gap:0;margin-top:4px;flex:1;min-height:0;overflow:hidden}
+.iv>*{min-width:0}
+.iv .por{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;flex:none;z-index:2}
+.iv .por img{width:min(90vw,100%,calc(45vh * 3 / 4));flex:none}
+.iv-main{flex:1;min-height:0;display:flex;flex-direction:column}
+.livebar{flex:none}
+.chat{flex:1;min-height:120px;max-height:none;overflow:auto}
+.dock{flex:none}
+}
+.chat{flex:1;min-height:200px;max-height:56vh;overflow:auto;padding:8px 4px 14px;display:flex;flex-direction:column;gap:10px;font:15px/1.55 Inter,system-ui,sans-serif;color:#efe6cf;background:transparent;scrollbar-width:thin}
+.chat .qq{align-self:flex-end;max-width:85%;background:#3a332b;color:#f3e7c6;border-radius:16px 16px 4px 16px;padding:8px 12px;font-size:13.5px;font-weight:500;line-height:1.45}
+.chat .qq.ev,.chat .ev{background:#2c3640;color:#d7e4f0}
+.chat .aa{align-self:flex-start;max-width:92%;padding:2px 2px 6px;font-size:15px;line-height:1.55;color:#efe6cf}
+.chat .aa i,.chat .aa i.sd,.chat .aa .beat{font-style:italic;color:#b9ad8f;font-size:13.5px;font-family:inherit}
+.chat .aa.live{border-left:2px solid var(--accent);padding-left:10px}
 .askrow{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
 .askrow input,.askrow select{flex:1;min-width:180px;background:#1d1915;border:1px solid #4a3d2c;color:#eee;padding:10px;border-radius:6px;font:14px Inter}
 .toolnav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
@@ -151,7 +170,12 @@ form.acc legend{font-family:'Special Elite';color:#f3e7c6;font-size:17px;padding
 .labform select,.labform textarea{width:100%;padding:8px;font:13px 'IBM Plex Mono';margin:4px 0 10px;border:1px solid #999;background:#fff}
 .labres{margin-top:14px}
 .scrub input[type=range]{width:100%}
-.livebar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;color:#e6dcc3;font-size:13px}.livebar label{display:flex;gap:6px;align-items:center;cursor:pointer;font-weight:600}.livebar .beta{background:var(--accent);color:#1a1209;border-radius:8px;padding:1px 6px;font-size:10px;text-transform:uppercase}.aa.live{border-left:3px solid var(--accent)}.typing{animation:blink 1s infinite}@keyframes blink{50%{opacity:.3}}
+.livebar{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;margin:0 0 6px;color:#e6dcc3;font-size:13px;min-width:0}
+.livebar .livestat{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#b9ad8f;font-size:12px}
+.livebar .pill.tight{padding-left:10px}
+.livebar label.pill{display:inline-flex;gap:6px;align-items:center;cursor:pointer;font-weight:600}
+.livebar .beta{background:var(--accent);color:#1a1209;border-radius:8px;padding:1px 6px;font-size:10px;text-transform:uppercase}
+.typing{animation:blink 1s infinite}@keyframes blink{50%{opacity:.3}}
 .ltnote{background:#fff7d1;border:1px dashed #b8a24a;padding:8px 10px;margin:6px 0 10px;font-size:13px;color:#3a3220}.timedesk p{margin:8px 0;line-height:1.5}.tdgrid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:16px;margin-top:8px}@media(max-width:700px){.tdgrid{grid-template-columns:minmax(0,1fr)}}.tdconv{background:#1d1915;border:1px solid #4a3d2c;border-radius:8px;padding:10px;margin-top:12px}.tdconv .row2{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}.tdconv input{background:#2a241d;color:#eee;border:1px solid #4a3d2c;border-radius:6px;padding:6px;width:110px;margin-left:6px}.tdout{color:#f3e7c6}
 
 /* v10: phones (m11, m12) */
@@ -174,13 +198,13 @@ body.tv .viewer{zoom:1.25}
 body.tv .top .bar{zoom:1.15}
 body.tv #tvbtn{background:#b8902f;color:#1a1209}
 body.tv #v-interview .lede{display:none}
-body.tv .chat{font-size:19px;line-height:1.5;max-height:62vh}
-body.tv .chat .qq,body.tv .chat .ev{font-size:15px}
-body.tv .askrow input,body.tv .askrow select{font-size:17px}
-@media(min-width:800px){body.tv .iv{display:grid;grid-template-columns:minmax(0,30%) minmax(0,1fr)!important;gap:22px;align-items:start}
+body.tv .chat{font-size:20px;line-height:1.5;max-height:62vh}
+body.tv .chat .qq,body.tv .chat .ev,body.tv .chat .qq.ev{font-size:16px}
+body.tv .askbar input,body.tv .askrow input,body.tv .askrow select{font-size:17px}
+@media(min-width:800px){body.tv .iv{display:grid;grid-template-columns:minmax(360px,420px) minmax(0,1fr)!important;gap:22px;align-items:start}
  body.tv .iv .por{display:block}body.tv .iv .por img{width:100%}
  body.tv #chat>div:not(:nth-last-child(-n+4)){display:none}
- body.tv #chat{font-size:22px;min-height:42vh;background:#0e0c0a;color:#f6efdc;box-shadow:none;border:1px solid #332a20}
+ body.tv #chat{font-size:22px;min-height:42vh;background:transparent;color:#f6efdc;box-shadow:none}
  body.tv #chat .qq{color:#ffb4a6}body.tv #chat .ev{color:#9fc8ef}body.tv #chat .beat{color:#bfae8d}}
 @media(max-width:600px){.sound .sl{display:none}.sound{font-size:14px!important;padding:4px 8px}}
 /* v11: animated portraits */
@@ -189,10 +213,65 @@ body.tv .askrow input,body.tv .askrow select{font-size:17px}
 .iv .por .pv video{opacity:0;transition:opacity .15s linear;pointer-events:none}
 .iv .por .pv video.on{opacity:1}
 .iv .por .pv.novid video{display:none}
-@media(max-width:700px){.iv .por .pv{width:128px}}
+/* when a suspect is open: drop the lede, shrink the picker, keep face + dock on screen */
+#v-interview:has(.iv) h2.sec,#v-interview:has(.iv) .lede{display:none}
+#v-interview:has(.iv) #ivpick button{width:72px;padding:4px 4px 6px;font-size:11px}
+#v-interview:has(.iv) #ivpick{padding-bottom:4px;gap:8px}
+@media(max-width:700px){
+  body:has(#v-interview.on) .ttl{font-size:12px;max-width:42vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  body:has(#v-interview.on) nav.tabs{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;padding:0 8px}
+  #v-interview:has(.iv) #ivpick button{width:56px;padding:3px;font-size:10px}
+  #v-interview:has(.iv) .iv .por .pv{width:min(90vw,100%,calc(36vh * 3 / 4));max-height:36vh}
+  #v-interview:has(.iv) .nameplate{width:min(90vw,100%,calc(36vh * 3 / 4))}
+}
+@media(min-width:701px){
+  #v-interview:has(.iv){display:flex;flex-direction:column;height:calc(100dvh - var(--head,6.5rem) - 12px);max-height:calc(100dvh - var(--head,6.5rem) - 12px);overflow:hidden}
+  #v-interview:has(.iv) #ivroom{flex:1;min-height:0;display:flex;flex-direction:column}
+  #v-interview:has(.iv) .iv{flex:1;min-height:0;margin-top:8px;grid-template-columns:minmax(280px,min(420px,calc((100dvh - var(--head,6.5rem) - 8rem) * 3 / 4))) minmax(0,1fr)}
+  #v-interview:has(.iv) .iv .por .pv{width:100%;max-height:calc(100dvh - var(--head,6.5rem) - 8rem)}
+  #v-interview:has(.iv) .iv-main{max-height:none;flex:1;min-height:0;height:100%;display:flex;flex-direction:column}
+  #v-interview:has(.iv) .iv-main .chat{flex:1;min-height:0}
+}
+/* v13: interview chrome — large sticky portraits, chat bubbles, docked ask bar, evidence chips */
+.iv .por .pv{border-radius:12px}
+@media(max-width:700px){.iv .por .pv{width:min(90vw,100%,calc(45vh * 3 / 4));max-height:45vh;border-radius:12px}}
+@media(min-width:701px){
+  .iv{align-items:start}
+  .iv .por{position:sticky;top:calc(var(--head,6.5rem) + 8px)}
+  .iv-main{min-height:0;display:flex;flex-direction:column;max-height:calc(100dvh - var(--head,6.5rem) - 24px)}
+  .iv-main .chat{max-height:none}
+}
 @media(min-width:800px){body.tv .iv .por .pv{width:100%}}
-@media(max-width:799px){body.tv .iv .por .pv{width:150px}}
+.nameplate{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:100%;max-width:100%;box-sizing:border-box;padding:36px 14px 12px;background:linear-gradient(transparent,rgba(0,0,0,.88));text-align:left;z-index:3;pointer-events:none;border-radius:0 0 12px 12px}
+@media(max-width:700px){.nameplate{width:min(90vw,100%,calc(45vh * 3 / 4));text-align:center}}
+.nameplate b{display:block;font:700 16px/1.25 'Libre Baskerville',serif;color:#f3e7c6;text-shadow:0 1px 6px #000}
+.nameplate span,.nameplate .role,.nameplate .small{display:block;margin-top:2px;font:12px/1.35 Inter,system-ui,sans-serif;color:#d4cbb0;text-shadow:0 1px 4px #000}
+.iv-main{min-width:0}
+.dock{flex:none;padding:6px 0 calc(8px + env(safe-area-inset-bottom,0))}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 8px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+.chip{flex:none;background:#2a251f;color:#eadfc4;border:0;border-radius:999px;padding:7px 12px;font:600 12.5px Inter,system-ui,sans-serif;white-space:nowrap;cursor:pointer}
+.chip b{color:#f3e7c6;margin-right:4px;font-weight:700}
+.chip.pinned{box-shadow:inset 0 0 0 1px var(--accent)}
+.chip:hover,.chip:focus{background:#3a332b}
+.askbar{display:flex;gap:8px;align-items:center;flex-wrap:nowrap;margin:0}
+.askbar input{flex:1;min-width:0;padding:12px 16px;border:0;border-radius:999px;background:#241f1a;color:#efe6cf;font:15px Inter,system-ui,sans-serif;outline:none}
+.askbar input:focus{box-shadow:0 0 0 2px rgba(199,155,59,.55)}
+.icon-btn{flex:none;width:44px;height:44px;border:0;border-radius:50%;background:#2a251f;color:#efe6cf;font-size:18px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.icon-btn:hover{background:#3a332b}
+.ask-btn{flex:none;border:0;border-radius:999px;padding:0 18px;height:44px;background:var(--accent);color:#1a1209;font:700 14px Inter,system-ui,sans-serif;cursor:pointer}
+.ask-btn:hover{filter:brightness(1.08)}
+.pill{display:inline-flex;align-items:center;gap:5px;background:#2a251f;color:#eadfc4;border:0;border-radius:999px;padding:6px 11px;font:600 12px Inter,system-ui,sans-serif;text-decoration:none;white-space:nowrap;cursor:pointer;line-height:1.2}
+.pill:hover{background:#3a332b}
+.pill input{accent-color:var(--accent)}
+.help-pop{background:#221e19;border-radius:12px;padding:12px 14px;margin:0 0 8px;font-size:13px;color:#d4cbb0;line-height:1.55;flex:none}
+.help-pop p{margin:0}
+.help-pop[hidden]{display:none}
+@media(max-width:420px){.livebar .lbl{display:none}.pill{padding:6px 9px}}
 .aa i.sd{font-style:italic;color:#b9ad8f;font-family:inherit}
+
+#v-interview .chat{min-height:0}
+@media(max-width:700px){#v-interview .chat{min-height:0}#v-interview .dock{padding-bottom:calc(6px + env(safe-area-inset-bottom,0))}}
+
 </style>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='14' font-size='14'%3E%F0%9F%95%B5%3C/text%3E%3C/svg%3E">
 </head>
@@ -960,7 +1039,9 @@ const dec=b=>{const k=S.k,bin=atob(b),u=new Uint8Array(bin.length);for(let i=0;i
 async function H(s){const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(S.salt+'|'+s));return [...new Uint8Array(d)].map(x=>x.toString(16).padStart(2,'0')).join('').slice(0,24)}
 function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>t.style.display='none',2200)}
 // tabs
-function show(v){if(typeof ttsStop=='function')ttsStop();if(v!='interview'&&typeof pvPause=='function')pvPause();$$('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.v==v));$$('.view').forEach(x=>x.classList.toggle('on',x.id=='v-'+v));window.scrollTo(0,0);if(v=='board')renderBoard();if(v=='files')renderFiles();if(v=='accuse')renderAccuse();if(v=='hints')renderHints();if(v=='interview')renderIV();if(v=='tools')renderTool();}
+function syncHead(){const h=$('header.top');if(h)document.documentElement.style.setProperty('--head',h.offsetHeight+'px')}
+addEventListener('resize',syncHead);addEventListener('orientationchange',syncHead);syncHead();
+function show(v){if(typeof ttsStop=='function')ttsStop();if(v!='interview'&&typeof pvPause=='function')pvPause();$$('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.v==v));$$('.view').forEach(x=>x.classList.toggle('on',x.id=='v-'+v));window.scrollTo(0,0);if(v=='board')renderBoard();if(v=='files')renderFiles();if(v=='accuse')renderAccuse();if(v=='hints')renderHints();if(v=='interview')renderIV();if(v=='tools')renderTool();syncHead();requestAnimationFrame(syncHead);}
 $('#tabs').onclick=e=>{if(e.target.dataset.v)show(e.target.dataset.v)};
 // suspects
 const SUS=[
@@ -1052,13 +1133,15 @@ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let rec=null,r
 function renderIV(){$('#ivpick').innerHTML=IVORDER.map(k=>`<button data-p="${k}" class="${k==ivCur?'on':''}"><img src="img/${IVP[k].img}.jpg" alt="">${IVP[k].name.split(' ')[0]}</button>`).join('');
  if(!ivCur){$('#ivroom').innerHTML='<p class="small" style="margin-top:12px">Choose who to interview.</p>';return}
  const p=IVP[ivCur];const log=st.iv[ivCur]||[];const onair=st.live&&liveOK;
- $('#ivroom').innerHTML=`<div class="iv"><div class="por"><span id="pvslot"></span><div><b style="font-family:'Libre Baskerville';font-size:16px;color:#f3e7c6">${p.name}</b><div class="small">${p.role}</div></div></div><div><div class="livebar"><label><input type="checkbox" id="livechk" ${st.live?'checked':''}> Live interrogation <span class="beta">beta</span></label>${onair?'<span class="onair" title="Live AI suspects connected">● ON AIR</span>':''}<span id="livestat" class="small">${st.live?(liveOK?'AI suspects on. Answers are improvised from the case files.'+(liveLeft!=null&&liveLeft<50?` ${liveLeft} live questions left for this game.`:''):'Checking…'):'Scripted answers'}</span><button type="button" class="vbtn" id="voxbtn" aria-pressed="${st.voice?'true':'false'}">${st.voice?'🔊 Voices on':'🔈 Voices off'}</button></div><div class="chat" id="chat"><div class="aa"><i>${p.intro}</i></div>${log.map(l=>`<div class="${l[2]=='ev'?'ev':'qq'}">▸ ${l[0]}</div><div class="aa${l[3]?' live':''}">${l[1]}</div>`).join('')}</div>
- <form class="askrow" id="askf"><input id="askq" aria-label="Your question" placeholder="Ask ${p.name.split(' ')[0]} a question…" autocomplete="off">${SR?'<button type="button" class="btn ghost mic" id="micbtn" aria-label="Hold to ask out loud" title="Hold to talk (or tap, then tap again)">🎙</button>':''}<button class="btn" type="submit">Ask</button></form>
- <div class="askrow"><select id="evsel" aria-label="Exhibit to present"><option value="">Present an exhibit…</option>${DOCS.map(d=>`<option value="${d.id}">${d.id} · ${d.t.replace(/&amp;/g,'&')}</option>`).join('')}</select><button class="btn ghost" id="evbtn">Present</button></div>
- <p class="small">Tip: ask about specific things: people, places, times, objects. Vague questions get vague answers.${SR?' Hold 🎙 to ask out loud; check the words, then tap Ask.':''}</p></div></div>`;
+ const livestat=st.live?(liveOK?'Live answers'+(liveLeft!=null&&liveLeft<50?` · ${liveLeft} left`:''):'Checking…'):'Scripted';
+ const evList=[...DOCS].sort((a,b)=>((st.pins[b.id]?1:0)-(st.pins[a.id]?1:0))||0);
+ const chip=d=>{const t=d.t.replace(/&amp;/g,'&');const short=t.length>28?t.slice(0,27)+'…':t;return `<button type="button" class="chip${st.pins[d.id]?' pinned':''}" data-id="${d.id}" title="${escH(t).replace(/"/g,'&quot;')}"><b>${d.id}</b> ${escH(short)}</button>`};
+ $('#ivroom').innerHTML=`<div class="iv"><div class="por"><span id="pvslot"></span><div class="nameplate"><b>${p.name}</b><span>${p.role}</span></div></div><div class="iv-main"><div class="livebar"><label class="pill tight"><input type="checkbox" id="livechk" ${st.live?'checked':''}> Live</label>${onair?'<span class="onair" title="Live AI suspects connected">● ON AIR</span>':''}<span id="livestat" class="livestat">${livestat}</span><button type="button" class="pill" id="voxbtn" aria-pressed="${st.voice?'true':'false'}">${st.voice?'🔊 <span class="lbl">Voice</span>':'🔈 <span class="lbl">Voice</span>'}</button><button type="button" class="pill help-btn" id="ivhelp" aria-expanded="false" aria-controls="ivhelp-pop" title="How interviews work">ⓘ</button></div><div class="help-pop" id="ivhelp-pop" hidden><p>Ask about specific things: people, places, times, objects. Vague questions get vague answers.${SR?' Hold 🎙 to ask out loud; check the words, then tap Ask.':''} People may dodge or fib. Showing the right evidence, or pointing out a contradiction, works better than repeating a question. A look away means something is uncomfortable, not necessarily guilty. New to live interviews? <a href="practice/">Try a practice interview</a> (a made-up neighbor, nothing to do with this case).</p></div><div class="chat" id="chat"><div class="aa"><i>${p.intro}</i></div>${log.map(l=>`<div class="qq${l[2]=='ev'?' ev':''}">${l[0]}</div><div class="aa${l[3]?' live':''}">${l[1]}</div>`).join('')}</div><div class="dock"><div class="chips" id="evchips" aria-label="Present an exhibit">${evList.map(chip).join('')}</div><form class="askbar askrow" id="askf"><input id="askq" aria-label="Your question" placeholder="Ask ${p.name.split(' ')[0]} a question…" autocomplete="off">${SR?'<button type="button" class="icon-btn mic" id="micbtn" aria-label="Hold to ask out loud" title="Hold to talk (or tap, then tap again)">🎙</button>':''}<button class="ask-btn" type="submit">Ask</button></form></div></div></div>`;
  pvMount(ivCur);const c=$('#chat');c.scrollTop=c.scrollHeight;
  $('#askf').onsubmit=e=>{e.preventDefault();micStop();const q=$('#askq').value.trim();if(!q)return;ttsUnlock();ttsStop();ask(q);$('#askq').value=''};
- $('#evbtn').onclick=()=>{const id=$('#evsel').value;if(!id)return;ttsUnlock();ttsStop();const d=DOCS.find(x=>x.id==id);const t=d.t.replace(/&amp;/g,'&');const a=p.present[id]||p.npres[(log.length)%p.npres.length];const q=`You show ${p.name.split(' ')[0]} exhibit ${id} (${escH(t)}).`;if(st.live&&liveOK)liveAsk(q,'',id,t,a,'ev');else push([q,a,'ev'],moodNoise('neutral'))};
+ const presentEv=id=>{if(!id)return;ttsUnlock();ttsStop();const d=DOCS.find(x=>x.id==id);if(!d)return;const t=d.t.replace(/&amp;/g,'&');const a=p.present[id]||p.npres[(log.length)%p.npres.length];const q=`You show ${p.name.split(' ')[0]} exhibit ${id} (${escH(t)}).`;if(st.live&&liveOK)liveAsk(q,'',id,t,a,'ev');else push([q,a,'ev'],moodNoise('neutral'))};
+ $('#evchips').onclick=e=>{const b=e.target.closest('.chip');if(b)presentEv(b.dataset.id)};
+ $('#ivhelp').onclick=()=>{const pop=$('#ivhelp-pop'),on=pop.hidden;pop.hidden=!on;$('#ivhelp').setAttribute('aria-expanded',on?'true':'false')};
  $('#voxbtn').onclick=()=>{st.voice=!st.voice;save();if(st.voice){ttsUnlock();toast('Suspects will speak their answers out loud')}else ttsStop();renderIV()};
  if(SR)micWire();
  $('#livechk').onchange=e=>{st.live=e.target.checked;save();if(st.live)liveCheck();else renderIV()};if(st.live&&!liveOK&&!liveChecking)liveCheck()}

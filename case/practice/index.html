@@ -1,49 +1,116 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Practice interview · The Case of the Missing Pie</title>
 <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Inter:wght@400;600;800&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#1c1a17;--card:#26231e;--ink:#efe6cf;--mut:#b9ad8f;--acc:#d9a441}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,sans-serif}
-header{padding:14px 16px;border-bottom:1px solid #3a352c;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
-h1{font:700 18px 'Libre Baskerville',serif;margin:0;color:#f3e7c6}.tag{font:12px 'Special Elite';color:var(--acc);letter-spacing:.06em}
-main{max-width:1000px;margin:0 auto;padding:14px;display:grid;grid-template-columns:220px 1fr;gap:16px}
-@media(max-width:700px){main{grid-template-columns:1fr}.side{display:flex;gap:12px;align-items:flex-start}.pv{width:128px!important}}
-.pv{position:relative;width:100%;aspect-ratio:3/4;overflow:hidden;background:#2b2b2b;box-shadow:0 6px 18px rgba(0,0,0,.5);border-radius:4px}
+:root{--bg:#161410;--card:#221e19;--ink:#efe6cf;--mut:#b9ad8f;--acc:#d9a441}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{min-height:100dvh;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,sans-serif;padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+header{position:sticky;top:0;z-index:20;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px 12px;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;background:var(--bg)}
+.brand{min-width:0}
+h1{font:700 16px/1.2 'Libre Baskerville',serif;margin:0;color:#f3e7c6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tag{font:11px/1.3 'Special Elite',monospace;color:var(--acc);letter-spacing:.06em;margin-bottom:2px}
+.hbar{display:flex;gap:6px;align-items:center;flex-wrap:nowrap}
+.pill{display:inline-flex;align-items:center;gap:5px;background:#2a251f;color:#eadfc4;border:0;border-radius:999px;padding:6px 11px;font:600 12px Inter,system-ui,sans-serif;text-decoration:none;white-space:nowrap;cursor:pointer;line-height:1.2}
+.pill:hover{background:#3a332b}
+main{flex:1;min-height:0;display:flex;flex-direction:column;width:100%}
+.side{flex:none;display:flex;justify-content:center;background:var(--bg);z-index:5;padding:0 12px 8px}
+.pv{position:relative;width:min(90vw,calc(45vh * 3 / 4));max-height:45vh;aspect-ratio:3/4;overflow:hidden;background:#2b2b2b;box-shadow:0 10px 28px rgba(0,0,0,.45);border-radius:12px;flex:none}
 .pv img,.pv video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.pv video{opacity:0;transition:opacity .15s linear}.pv video.on{opacity:1}.pv.talking{box-shadow:0 0 0 2px var(--acc),0 6px 18px rgba(0,0,0,.5)}
-.who b{font:700 16px 'Libre Baskerville',serif;color:#f3e7c6}.small{font-size:12px;color:var(--mut)}
-.brief{background:var(--card);padding:10px 12px;border-radius:6px;font-size:13px;margin-top:10px}
-.chat{background:var(--card);border-radius:6px;padding:12px;height:min(52vh,460px);overflow:auto}
-.qq{color:var(--acc);margin:10px 0 2px;font-weight:600}.aa{margin:0 0 6px}.aa i.sd,.aa i.typing{color:var(--mut)}
-form{display:flex;gap:8px;margin-top:10px}input{flex:1;padding:11px;border-radius:6px;border:1px solid #4a4438;background:#14120f;color:var(--ink);font:inherit}
-button{padding:10px 14px;border-radius:6px;border:0;background:var(--acc);color:#1c1a17;font-weight:700;cursor:pointer}
-button.ghost{background:#3a352c;color:var(--ink)}.ex{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.ex button{background:#3a352c;color:var(--ink);font-weight:600;font-size:13px}
-.tips{font-size:13px;color:var(--mut);margin-top:10px}.tips b{color:var(--ink)}a{color:var(--acc)}
-</style></head><body>
-<header><div><div class="tag">PRACTICE INTERVIEW · NOT PART OF THE CASE</div><h1>The Case of the Missing Pie</h1></div>
-<div><button class="ghost" id="vox" type="button">🔊 Voice on</button> <button class="ghost" id="reset" type="button">Start over</button> <a href="../">Back to the case file</a></div></header>
+.pv video{opacity:0;transition:opacity .15s linear;pointer-events:none}
+.pv video.on{opacity:1}
+.pv.talking{box-shadow:0 0 0 2px var(--acc),0 10px 28px rgba(0,0,0,.45)}
+.nameplate{position:absolute;left:0;right:0;bottom:0;padding:36px 14px 12px;background:linear-gradient(transparent,rgba(0,0,0,.88));z-index:3;pointer-events:none}
+.nameplate b{display:block;font:700 16px/1.25 'Libre Baskerville',serif;color:#f3e7c6;text-shadow:0 1px 6px #000}
+.nameplate span{display:block;margin-top:2px;font-size:12px;color:#d4cbb0;text-shadow:0 1px 4px #000}
+.col{flex:1;min-height:0;display:flex;flex-direction:column}
+.stat{padding:4px 16px 0;font-size:12px;color:var(--mut);flex:none}
+.help-pop{background:var(--card);border-radius:12px;padding:12px 14px;margin:8px 16px 0;font-size:13px;color:#d4cbb0;line-height:1.55;flex:none}
+.help-pop p{margin:0 0 8px}.help-pop p:last-child{margin:0}
+.help-pop b{color:var(--ink)}
+.help-pop[hidden]{display:none}
+.chat{flex:1;min-height:0;overflow:auto;padding:8px 16px 12px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin}
+.qq{align-self:flex-end;max-width:85%;background:#3a332b;color:#f3e7c6;border-radius:16px 16px 4px 16px;padding:8px 12px;font-size:13.5px;font-weight:500;line-height:1.45}
+.qq.ev{background:#2c3640;color:#d7e4f0}
+.aa{align-self:flex-start;max-width:92%;padding:2px 2px 6px;font-size:15px;line-height:1.55;color:var(--ink)}
+.aa i,.aa i.sd,.aa i.typing{font-style:italic;color:var(--mut);font-size:13.5px}
+.dock{flex:none;background:var(--bg);padding:6px 12px calc(10px + env(safe-area-inset-bottom))}
+.chips,.ex{display:flex;gap:8px;overflow-x:auto;padding:2px 0 8px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+.chip,.ex button{flex:none;background:#2a251f;color:#eadfc4;border:0;border-radius:999px;padding:7px 12px;font:600 12.5px Inter,system-ui,sans-serif;white-space:nowrap;cursor:pointer}
+.chip:hover,.ex button:hover{background:#3a332b}
+.askbar{display:flex;gap:8px;align-items:center;flex-wrap:nowrap;margin:0}
+.askbar input{flex:1;min-width:0;padding:12px 16px;border:0;border-radius:999px;background:#241f1a;color:var(--ink);font:15px Inter,system-ui,sans-serif;outline:none}
+.askbar input:focus{box-shadow:0 0 0 2px rgba(217,164,65,.55)}
+.icon-btn{flex:none;width:44px;height:44px;border:0;border-radius:50%;background:#2a251f;color:var(--ink);font-size:18px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;touch-action:none;user-select:none}
+.icon-btn:hover{background:#3a332b}
+.icon-btn.rec,.mic.rec{background:#8f1b0f;color:#fff}
+.ask-btn{flex:none;border:0;border-radius:999px;padding:0 18px;height:44px;background:var(--acc);color:#1c1a17;font:700 14px Inter,system-ui,sans-serif;cursor:pointer}
+@media(max-width:420px){.tag{display:none}.pill .lbl{display:none}.pill{padding:6px 9px}}
+@media(min-width:701px){
+  main{flex-direction:row;max-width:1100px;margin:0 auto;padding:16px 20px 16px;gap:24px;align-items:stretch;width:100%}
+  .side{position:sticky;top:0;align-self:flex-start;width:min(420px,38vw);padding:0;flex:none}
+  .pv{width:min(100%,420px,calc(70vh * 3 / 4));max-height:70vh}
+  .col{flex:1;min-width:0;min-height:0}
+  .dock{padding-bottom:8px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="tag">PRACTICE INTERVIEW · NOT PART OF THE CASE</div><h1>The Case of the Missing Pie</h1></div>
+  <div class="hbar">
+    <button class="pill" id="vox" type="button" aria-pressed="true">🔊 <span class="lbl">Voice</span></button>
+    <button class="pill" id="reset" type="button">↺ <span class="lbl">Reset</span></button>
+    <a class="pill" href="../">← <span class="lbl">Back</span></a>
+    <button class="pill help-btn" id="help" type="button" aria-expanded="false" aria-controls="help-pop" title="How interviews work">ⓘ</button>
+  </div>
+</header>
 <main>
-<div class="side"><div class="pv" id="pv"><img id="still" alt="Walt Penrose"><video id="v0" muted playsinline preload="auto"></video><video id="v1" muted playsinline preload="auto"></video></div>
-<div><div class="who" style="margin-top:8px"><b>Walt Penrose</b><div class="small">Next-door neighbor · Willow Bend</div></div>
-<div class="brief"><b>The situation.</b> June Abernathy's prize blueberry pie vanished from her windowsill between 2 and 3 PM. The empty tin turned up in Walt's side yard. Find out what happened.</div></div></div>
-<div><div class="small" id="stat">Connecting to the interview room…</div>
-<div class="chat" id="chat"><div class="aa"><i class="sd">Walt tugs at his cardigan.</i> “Practice run, is it? Fire away, Detective. I've got nothing to hide. Mostly.”</div></div>
-<form id="f"><input id="q" placeholder="Ask Walt a question…" autocomplete="off" aria-label="Your question"><button type="button" class="ghost" id="mic" title="Hold to talk">🎙</button><button>Ask</button></form>
-<div class="ex"><span class="small" style="align-self:center">Show evidence:</span>
-<button type="button" data-ex="T1" data-t="Photo: pie tin in Walt's side yard, by the fence gap">📷 Tin by the fence</button>
-<button type="button" data-ex="T2" data-t="Photo: purple paw prints on Walt's porch">🐾 Purple paw prints</button>
-<button type="button" data-ex="T3" data-t="Photo: Pickles the beagle with a blue tongue">🐶 Pickles, close up</button></div>
-<div class="tips"><b>How interviews work:</b> ask anything in your own words, or hold 🎙 and speak. People answer from what they know, and they may dodge or fib about things that embarrass them. Repeating a question rarely changes a story; showing the right evidence, or pointing out a specific contradiction, does. Watch faces: a look away means something is uncomfortable, not necessarily guilty. Nothing on this page has anything to do with the real case.</div></div>
+  <div class="side">
+    <div class="pv" id="pv">
+      <img id="still" alt="Walt Penrose">
+      <video id="v0" muted playsinline preload="auto"></video>
+      <video id="v1" muted playsinline preload="auto"></video>
+      <div class="nameplate"><b>Walt Penrose</b><span>Next-door neighbor · Willow Bend</span></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="help-pop" id="help-pop" hidden>
+      <p><b>How interviews work.</b> Ask anything in your own words, or hold 🎙 and speak. People answer from what they know, and they may dodge or fib about things that embarrass them. Repeating a question rarely changes a story; showing the right evidence, or pointing out a specific contradiction, does. Watch faces: a look away means something is uncomfortable, not necessarily guilty. Nothing on this page has anything to do with the real case.</p>
+      <p><b>The situation.</b> June Abernathy's prize blueberry pie vanished from her windowsill between 2 and 3 PM. The empty tin turned up in Walt's side yard. Find out what happened.</p>
+    </div>
+    <div class="stat" id="stat">Connecting to the interview room…</div>
+    <div class="chat" id="chat"><div class="aa"><i class="sd">Walt tugs at his cardigan.</i> “Practice run, is it? Fire away, Detective. I've got nothing to hide. Mostly.”</div></div>
+    <div class="dock">
+      <div class="chips ex" aria-label="Present evidence">
+        <button type="button" class="chip" data-ex="T1" data-t="Photo: pie tin in Walt's side yard, by the fence gap">📷 Tin by the fence</button>
+        <button type="button" class="chip" data-ex="T2" data-t="Photo: purple paw prints on Walt's porch">🐾 Purple paw prints</button>
+        <button type="button" class="chip" data-ex="T3" data-t="Photo: Pickles the beagle with a blue tongue">🐶 Pickles, close up</button>
+      </div>
+      <form class="askbar" id="f">
+        <input id="q" placeholder="Ask Walt a question…" autocomplete="off" aria-label="Your question">
+        <button type="button" class="icon-btn mic" id="mic" title="Hold to talk" aria-label="Hold to talk">🎙</button>
+        <button class="ask-btn" type="submit">Ask</button>
+      </form>
+    </div>
+  </div>
 </main>
 <script>
+
 const LIVE='https://predator.tail66b1e9.ts.net/s/whitcombe';
 // Stand-in face: reuses one existing set of portrait clips with a different name and voice (see README). Change FACE to swap.
 const FACE='teddy', K='practice';
 const $=s=>document.querySelector(s), chat=$('#chat');
 let sid=localStorage.getItem('practice-sid');if(!sid){sid='practice-'+crypto.getRandomValues(new Uint32Array(2)).join('');localStorage.setItem('practice-sid',sid)}
-let voice=localStorage.getItem('practice-voice')!=='0';const vb=$('#vox');const setVB=()=>vb.textContent=voice?'🔊 Voice on':'🔈 Voice off';setVB();vb.onclick=()=>{voice=!voice;localStorage.setItem('practice-voice',voice?'1':'0');setVB();if(!voice)stopAudio()};
-$('#reset').onclick=()=>{localStorage.removeItem('practice-sid');location.reload()};
+let voice=localStorage.getItem('practice-voice')!=='0';const vb=$('#vox');vb.onclick=()=>{voice=!voice;localStorage.setItem('practice-voice',voice?'1':'0');setVB();if(!voice)stopAudio()};
+const help=$('#help'),pop=$('#help-pop');
+help.onclick=()=>{const on=pop.hidden;pop.hidden=!on;help.setAttribute('aria-expanded',on?'true':'false')};
+const setVB=()=>{vb.innerHTML=voice?'🔊 <span class="lbl">Voice</span>':'🔈 <span class="lbl">Voice</span>';vb.setAttribute('aria-pressed',voice?'true':'false')};
+setVB();$('#reset').onclick=()=>{localStorage.removeItem('practice-sid');location.reload()};
 // ---- portrait: listen loop, talk loop while speaking, a reaction clip first when the mood calls for it ----
 $('#still').src='../img/'+FACE+'.jpg';const V=[$('#v0'),$('#v1')];let cur=0,clip='';
 const src=n=>'../vid/'+FACE+'-'+n+'.mp4';
@@ -64,7 +131,7 @@ async function typeOut(el,html,cps){const tmp=document.createElement('div');tmp.
  el.textContent='';for(let i=0;i<=full.length;i+=2){el.textContent=full.slice(0,i);chat.scrollTop=chat.scrollHeight;await new Promise(r=>setTimeout(r,1000/cps*2))}el.innerHTML=html}
 const BEATS=['scratches his chin','glances at the fence','rocks back on his heels','fiddles with a button on his cardigan'];
 let busy=false;
-async function ask(msg,ex,title,label){if(busy)return;busy=true;add('qq','▸ '+esc(label||msg));const el=add('aa','<i class="typing sd">…</i>');let b=0;const ft=setInterval(()=>{el.innerHTML=`<i class="typing sd">${BEATS[b++%4]}…</i>`},1800);
+async function ask(msg,ex,title,label){if(busy)return;busy=true;add('qq'+(ex?' ev':''),esc(label||msg));const el=add('aa','<i class="typing sd">…</i>');let b=0;const ft=setInterval(()=>{el.innerHTML=`<i class="typing sd">${BEATS[b++%4]}…</i>`},1800);
  let j=null;try{for(let t=0;t<2;t++){const r=await fetch(LIVE+'/api/ask',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session:sid,suspect:K,message:msg||'',present:ex||undefined,present_title:title||undefined})});
    j=await r.json().catch(()=>({}));if(r.status==429&&t==0){el.innerHTML='<i class="typing sd">Give him a moment…</i>';await new Promise(s=>setTimeout(s,Math.min(15,Math.max(2,+j.retry_after||5))*1000));continue}if(!r.ok)throw new Error(j.error||'error');break}}
  catch(e){clearInterval(ft);el.innerHTML='<i class="sd">Walt needs a moment. Ask that again in a few seconds.</i>';busy=false;return}
@@ -79,4 +146,7 @@ if(!SR)mic.style.display='none';else{let rec=null;const start=e=>{e.preventDefau
  const stop=()=>{if(rec){rec.stop();rec=null;mic.textContent='🎙';$('#q').focus()}};mic.addEventListener('pointerdown',start);mic.addEventListener('pointerup',stop);mic.addEventListener('pointerleave',stop)}
 // ---- connection check ----
 fetch(LIVE+'/health').then(r=>r.json()).then(h=>{$('#stat').textContent=h.practice?'Live interview connected. Walt answers in his own words.':'The practice suspect is not installed on the server yet.'}).catch(()=>{$('#stat').innerHTML='Can\'t reach the interview room. Turn on Tailscale on this device, then reload.'});
-</script></body></html>
+
+</script>
+</body>
+</html>
