@@ -45,13 +45,17 @@ body.hint .hot.clue{box-shadow:0 0 0 1px rgba(243,215,120,.4);background:rgba(18
 body.hint #hintchip{display:block}
 @media(max-width:700px){
   #hud .t{font-size:12px;padding:5px 8px;max-width:calc(100% - 80px)}
-  #bar{gap:6px;padding:8px 8px calc(10px + env(safe-area-inset-bottom));justify-content:center}
+  #bar{gap:6px;padding:8px 8px 8px;justify-content:center;bottom:auto;background:rgba(12,10,8,.88)}
   #bar button{width:calc((100vw - 34px) / 4)}
   #bar button img{height:46px}
   #bar button span{font-size:10px;padding:4px 3px 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   #banner{display:none}
   #toast{top:120px}
-  #nav{top:calc(108px + 28.125vw);transform:translateY(-50%)}
+  #nav{transform:translateY(-50%)}
+  #panel{display:block;left:0;right:0;width:auto;max-width:none;margin:0;bottom:0;max-height:none;border-radius:16px 16px 0 0;padding:16px 18px calc(16px + env(safe-area-inset-bottom));box-shadow:0 -8px 28px rgba(0,0,0,.35)}
+  #panel.idle{background:rgba(246,240,224,.94)}
+  #panel.idle .x{display:none}
+  #panel.idle .tag{color:#6b5a3e}
 }
 @media(min-width:900px) and (orientation:landscape){
   #bar{left:auto;width:168px;top:72px;bottom:12px;flex-direction:column;overflow-y:auto;overflow-x:hidden;padding:8px;background:rgba(12,10,8,.62);border-radius:12px 0 0 12px;right:0}
@@ -119,7 +123,7 @@ const INFO={
 const scene=$('#scene'), photo=$('#photo'), stage=$('#stage'), hots=$('#hots'), bg=$('#bgblur');
 function $(s){return document.querySelector(s)}
 function desk(){return matchMedia('(min-width:900px) and (orientation:landscape)').matches}
-function vp(){if(desk())return{x:0,y:0,W:innerWidth-168,H:innerHeight};const hud=108,bar=108;return{x:0,y:hud,W:innerWidth,H:Math.max(160,innerHeight-hud-bar)}}
+function vp(){if(desk())return{x:0,y:0,W:innerWidth-168,H:innerHeight};const hud=96;return{x:0,y:hud,W:innerWidth,H:Math.max(200,innerWidth*9/16+8)}}
 let view='wide', scale=1, tx=0, ty=0, baseW=0, baseH=0;
 
 function logged(){try{return !!(P&&P.__practice&&P.__practice.hasObs&&P.__practice.hasObs('T4'))}catch(e){return false}}
@@ -140,7 +144,19 @@ function clamp(){
   if(w<=W) tx=x+(W-w)/2; else tx=Math.min(x, Math.max(x+W-w, tx));
   if(h<=H) ty=y+(desk()?(H-h)/2:6); else ty=Math.min(y, Math.max(y+H-h, ty));
 }
-function apply(){clamp();scene.style.transform=`translate(${tx}px,${ty}px) scale(${scale})`}
+function apply(){clamp();scene.style.transform=`translate(${tx}px,${ty}px) scale(${scale})`;placeChrome()}
+function placeChrome(){
+  const bar=$('#bar'), panel=$('#panel'), nav=$('#nav');
+  if(desk()){bar.style.top='';bar.style.bottom='';panel.style.top='';panel.style.bottom='';nav.style.top='';return}
+  const photoBottom=Math.round(ty+baseH*scale);
+  bar.style.top=(photoBottom+6)+'px';
+  bar.style.bottom='auto';
+  const barH=bar.getBoundingClientRect().height||96;
+  panel.style.top=Math.round(photoBottom+6+barH)+'px';
+  panel.style.bottom='0';
+  panel.style.maxHeight='none';
+  nav.style.top=Math.round(ty+baseH*scale/2)+'px';
+}
 function zoomAt(cx,cy,next){
   const prev=scale; scale=Math.max(1, Math.min(4.2, next));
   const r=scale/prev; tx=cx-(cx-tx)*r; ty=cy-(cy-ty)*r; apply();
@@ -170,9 +186,20 @@ function inspect(key){
   if(i.go){const b=document.createElement('button'); b.className='pri'; b.textContent='🔎 Look closer'; b.onclick=()=>showView(i.go); row.appendChild(b)}
   if(i.obs){const b=document.createElement('button'); b.className='pri'; const done=logged(); b.textContent=done?'✓ Observation already logged':'📝 Log observation '+i.obs;
     b.onclick=()=>{post({t:'obs',id:i.obs}); toast(done?'Already logged: '+i.obs:'New exhibit '+i.obs+' logged and pinned'); b.textContent='✓ Observation already logged'}; row.appendChild(b)}
-  $('#panel').classList.add('on');
+  $('#panel').classList.remove('idle'); $('#panel').classList.add('on');
 }
-function closePanel(){$('#panel').classList.remove('on')}
+function idleDock(){
+  $('#ptag').textContent='SIDE YARD';
+  $('#pt').textContent='Tap a spot in the photo';
+  $('#pb').innerHTML='<p>Look closer at the sill, the tin, or the fence. Pinch or double-tap to zoom, then drag to pan.</p>';
+  $('#pr').innerHTML='';
+  $('#panel').classList.remove('on');
+  $('#panel').classList.add('idle');
+}
+function closePanel(){
+  if(!desk()){idleDock();return}
+  $('#panel').classList.remove('on');
+}
 function step(d){showView(ORDER[(ORDER.indexOf(view)+d+ORDER.length)%ORDER.length])}
 
 $('#bar').innerHTML=ORDER.map(k=>`<button type="button" data-k="${k}"><img src="${VIEWS[k].file}" alt=""><span>${VIEWS[k].t}</span></button>`).join('');
