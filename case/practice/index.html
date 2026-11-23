@@ -3,73 +3,78 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Practice interview · The Case of the Missing Pie</title>
-<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Inter:wght@400;600;800&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#161410;--card:#221e19;--ink:#efe6cf;--mut:#b9ad8f;--acc:#d9a441}
-*{box-sizing:border-box}
-html,body{height:100%;margin:0}
-body{min-height:100dvh;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,sans-serif;padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
-header{position:sticky;top:0;z-index:20;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px 12px;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;background:var(--bg)}
-.brand{min-width:0}
-h1{font:700 16px/1.2 'Libre Baskerville',serif;margin:0;color:#f3e7c6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tag{font:11px/1.3 'Special Elite',monospace;color:var(--acc);letter-spacing:.06em;margin-bottom:2px}
-.hbar{display:flex;gap:6px;align-items:center;flex-wrap:nowrap}
-.pill{display:inline-flex;align-items:center;gap:5px;background:#2a251f;color:#eadfc4;border:0;border-radius:999px;padding:6px 11px;font:600 12px Inter,system-ui,sans-serif;text-decoration:none;white-space:nowrap;cursor:pointer;line-height:1.2}
-.pill:hover{background:#3a332b}
-main{flex:1;min-height:0;display:flex;flex-direction:column;width:100%}
-.side{flex:none;display:flex;justify-content:center;background:var(--bg);z-index:5;padding:0 12px 8px}
-.pv{position:relative;width:min(90vw,calc(45vh * 3 / 4));max-height:45vh;aspect-ratio:3/4;overflow:hidden;background:#2b2b2b;box-shadow:0 10px 28px rgba(0,0,0,.45);border-radius:12px;flex:none}
-.pv img,.pv video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.pv video{opacity:0;transition:opacity .15s linear;pointer-events:none}
-.pv video.on{opacity:1}
-.pv.talking{box-shadow:0 0 0 2px var(--acc),0 10px 28px rgba(0,0,0,.45)}
-.nameplate{position:absolute;left:0;right:0;bottom:0;padding:36px 14px 12px;background:linear-gradient(transparent,rgba(0,0,0,.88));z-index:3;pointer-events:none}
-.nameplate b{display:block;font:700 16px/1.25 'Libre Baskerville',serif;color:#f3e7c6;text-shadow:0 1px 6px #000}
-.nameplate span{display:block;margin-top:2px;font-size:12px;color:#d4cbb0;text-shadow:0 1px 4px #000}
-.col{flex:1;min-height:0;display:flex;flex-direction:column}
-.stat{padding:4px 16px 0;font-size:12px;color:var(--mut);flex:none}
-.help-pop{background:var(--card);border-radius:12px;padding:12px 14px;margin:8px 16px 0;font-size:13px;color:#d4cbb0;line-height:1.55;flex:none}
-.help-pop p{margin:0 0 8px}.help-pop p:last-child{margin:0}
-.help-pop b{color:var(--ink)}
-.help-pop[hidden]{display:none}
-.chat{flex:1;min-height:0;overflow:auto;padding:8px 16px 12px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin}
-.qq{align-self:flex-end;max-width:85%;background:#3a332b;color:#f3e7c6;border-radius:16px 16px 4px 16px;padding:8px 12px;font-size:13.5px;font-weight:500;line-height:1.45}
-.qq.ev{background:#2c3640;color:#d7e4f0}
-.aa{align-self:flex-start;max-width:92%;padding:2px 2px 6px;font-size:15px;line-height:1.55;color:var(--ink)}
-.aa i,.aa i.sd,.aa i.typing{font-style:italic;color:var(--mut);font-size:13.5px}
-.dock{flex:none;background:var(--bg);padding:6px 12px calc(10px + env(safe-area-inset-bottom))}
-.chips,.ex{display:flex;gap:8px;overflow-x:auto;padding:2px 0 8px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
-.chip,.ex button{flex:none;background:#2a251f;color:#eadfc4;border:0;border-radius:999px;padding:7px 12px;font:600 12.5px Inter,system-ui,sans-serif;white-space:nowrap;cursor:pointer}
-.chip:hover,.ex button:hover{background:#3a332b}
-.askbar{display:flex;gap:8px;align-items:center;flex-wrap:nowrap;margin:0}
-.askbar input{flex:1;min-width:0;padding:12px 16px;border:0;border-radius:999px;background:#241f1a;color:var(--ink);font:15px Inter,system-ui,sans-serif;outline:none}
-.askbar input:focus{box-shadow:0 0 0 2px rgba(217,164,65,.55)}
-.icon-btn{flex:none;width:44px;height:44px;border:0;border-radius:50%;background:#2a251f;color:var(--ink);font-size:18px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;touch-action:none;user-select:none}
-.icon-btn:hover{background:#3a332b}
-.icon-btn.rec,.mic.rec{background:#8f1b0f;color:#fff}
-.ask-btn{flex:none;border:0;border-radius:999px;padding:0 18px;height:44px;background:var(--acc);color:#1c1a17;font:700 14px Inter,system-ui,sans-serif;cursor:pointer}
-@media(max-width:420px){.tag{display:none}.pill .lbl{display:none}.pill{padding:6px 9px}}
-@media(min-width:701px){
-  main{flex-direction:row;max-width:1100px;margin:0 auto;padding:16px 20px 16px;gap:24px;align-items:stretch;width:100%}
-  .side{position:sticky;top:0;align-self:flex-start;width:min(420px,38vw);padding:0;flex:none}
-  .pv{width:min(100%,420px,calc(70vh * 3 / 4));max-height:70vh}
-  .col{flex:1;min-width:0;min-height:0}
-  .dock{padding-bottom:8px}
-}
-</style>
+<meta name="robots" content="noindex,nofollow">
+<title>Practice · The Case of the Missing Pie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;600;800&family=Caveat:wght@500&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="practice.css">
 </head>
 <body>
-<header>
-  <div class="brand"><div class="tag">PRACTICE INTERVIEW · NOT PART OF THE CASE</div><h1>The Case of the Missing Pie</h1></div>
-  <div class="hbar">
-    <button class="pill" id="vox" type="button" aria-pressed="true">🔊 <span class="lbl">Voice</span></button>
-    <button class="pill" id="reset" type="button">↺ <span class="lbl">Reset</span></button>
-    <a class="pill" href="../">← <span class="lbl">Back</span></a>
-    <button class="pill help-btn" id="help" type="button" aria-expanded="false" aria-controls="help-pop" title="How interviews work">ⓘ</button>
-  </div>
+<header class="top">
+ <div class="prac-banner">Practice: nothing here relates to the real case.</div>
+ <div class="bar">
+  <svg class="seal" viewBox="0 0 40 40"><path d="M20 2l5 6 8-1-1 8 6 5-6 5 1 8-8-1-5 6-5-6-8 1 1-8-6-5 6-5-1-8 8 1z" fill="#b8902f"/><circle cx="20" cy="20" r="8" fill="#1a1510"/><text x="20" y="23.5" font-size="8" text-anchor="middle" fill="#e2c479" font-family="Georgia">WB</text></svg>
+  <div class="ttl">PRACTICE · “THE MISSING PIE”<small>Willow Bend · Harvest Bake-Off · about 10 minutes</small></div>
+  <span class="score-pill" id="pill">Files read 0/5</span>
+  <a class="sound" href="../">← Case</a>
+ </div>
+ <nav class="tabs" id="tabs">
+  <button data-v="brief" class="on">Briefing</button><button data-v="files">Case Files</button><button data-v="interview">Interview</button><button data-v="tools">Tools &amp; Lab</button><button data-v="board">Evidence Board</button><button data-v="hints">Hints</button><button data-v="accuse">Accuse</button>
+ </nav>
 </header>
 <main>
+<section class="view on" id="v-brief">
+ <div class="brief">
+  <div class="memo">
+   <div class="stamp">PRACTICE</div>
+   <h3>MEMORANDUM</h3>
+   TO: &nbsp;&nbsp;Detective (you)<br>
+   FROM: The Willow Bend bake-off committee (fictional)<br>
+   DATE: Sat, late October &nbsp; RE: A missing blueberry pie<br><br>
+   This is a short practice case. <b>Nothing here relates to the real case</b> you may play later. It uses the same tools, just a made-up story about a pie.<br><br>
+   June Abernathy set her prize blueberry pie to cool on her kitchen windowsill at about 2:00 PM. At 3:00 it was gone. The empty tin turned up in Walt Penrose's side yard, by a gap in the fence. June would like to know what happened. Nobody is hurt. There is no crime beyond a missing pie.<br><br>
+   Work the file the same way you will in the real game. Typical time is about ten minutes. You get one accusation. — W.B.
+  </div>
+  <div>
+   <div class="panel" style="line-height:1.55;font-size:14px">
+    <b style="color:#f3e7c6">How to play (the tools, in miniature)</b><br>
+    1. Open <b>Case Files</b>. Read the papers and photos. Pin the useful ones to the <b>Evidence Board</b>.<br>
+    2. In <b>Tools &amp; Lab</b>, crack June's recipe tin (the code is in a document), send a <b>lab request</b>, and walk the <b>3D yard</b>. Some observations can only be logged there, and they become new exhibits.<br>
+    3. In the <b>Interview</b> room, ask Walt in your own words or present an exhibit. Watch his face when a question makes him uncomfortable. If he admits something important, it is filed as a new statement.<br>
+    4. Stuck? <b>Hints</b> come in three levels and each one costs points.<br>
+    5. When you're sure, <b>Accuse</b>: who, why, how, and when, with evidence for each. That's one shot, then a short scored reveal.<br>
+    <span class="small">Progress saves on this device. This page has nothing to do with the real case.</span>
+   </div>
+   <div class="panel small">All persons and places in this practice are fictional. The neighbor you interview is a stand-in with a made-up story.</div>
+  </div>
+ </div>
+ <h2 class="sec" style="margin-top:26px">Persons of interest</h2>
+ <div class="cards">
+  <div class="suspect"><svg viewBox="0 0 160 120"><rect width="160" height="120" fill="#cfe0c4"/><circle cx="80" cy="52" r="22" fill="#e8c4a0"/><rect x="55" y="74" width="50" height="40" rx="8" fill="#6b8f4a"/><rect x="48" y="40" width="64" height="12" fill="#c9a24a"/></svg><b>June Abernathy</b><i>70 · next-door neighbor · complainant</i><div style="margin-top:6px">Set the pie out to cool. Wants it explained before the bake-off.</div></div>
+  <div class="suspect"><svg viewBox="0 0 160 120"><rect width="160" height="120" fill="#d9cbb0"/><circle cx="80" cy="50" r="22" fill="#e8c4a0"/><rect x="52" y="72" width="56" height="42" rx="8" fill="#4a5a3a"/><path d="M58 48 h44 v8 h-44z" fill="#6a5030"/></svg><b>Walt Penrose</b><i>66 · next-door neighbor · retired mail carrier</i><div style="margin-top:6px">The tin was found in his side yard. Proud of his tomatoes.</div></div>
+  <div class="suspect"><svg viewBox="0 0 160 120"><rect width="160" height="120" fill="#e6d7b0"/><ellipse cx="80" cy="70" rx="40" ry="32" fill="#c4a06a"/><ellipse cx="50" cy="50" rx="12" ry="28" fill="#7a4a22"/><ellipse cx="110" cy="52" rx="12" ry="26" fill="#7a4a22"/><circle cx="68" cy="64" r="4" fill="#222"/><circle cx="92" cy="64" r="4" fill="#222"/></svg><b>Pickles</b><i>11 · Walt's beagle</i><div style="margin-top:6px">Lives next door. Fond of naps, and possibly of pie.</div></div>
+ </div>
+</section>
+
+<section class="view" id="v-files">
+ <h2 class="sec">Case files</h2>
+ <p class="lede">Tap a folder to open it, and pin the ones you'll want later. Folders you've opened are ticked. New exhibits from the locker, the lab, the 3D yard, and interviews will appear here too.</p>
+ <div class="groups" id="groups"></div>
+</section>
+
+<section class="view" id="v-interview">
+ <h2 class="sec">Interview room</h2>
+ <p class="lede">Ask Walt in plain words, or present an exhibit and watch the reaction. People may dodge or fib. A look away means something is uncomfortable, not necessarily guilty.</p>
+ <div class="ivbar">
+  <div class="stat" id="stat">Connecting to the interview room…</div>
+  <button class="pill" id="vox" type="button" aria-pressed="true">🔊 <span class="lbl">Voice</span></button>
+  <button class="pill" id="ivreset" type="button">↺ <span class="lbl">Reset chat</span></button>
+  <button class="pill" id="ivhelp" type="button" aria-expanded="false" aria-controls="help-pop" title="How interviews work">ⓘ</button>
+ </div>
+ <div class="help-pop" id="help-pop" hidden>
+  <p><b>How interviews work.</b> Ask anything in your own words, or hold 🎙 and speak. Showing the right evidence, or pointing out a contradiction, works better than repeating a question. If Walt admits something important, it is auto-filed as a new statement in Case Files. Nothing on this page has anything to do with the real case.</p>
+ </div>
+ <div class="ivwrap">
   <div class="side">
     <div class="pv" id="pv">
       <img id="still" alt="Walt Penrose">
@@ -79,18 +84,9 @@ main{flex:1;min-height:0;display:flex;flex-direction:column;width:100%}
     </div>
   </div>
   <div class="col">
-    <div class="help-pop" id="help-pop" hidden>
-      <p><b>How interviews work.</b> Ask anything in your own words, or hold 🎙 and speak. People answer from what they know, and they may dodge or fib about things that embarrass them. Repeating a question rarely changes a story; showing the right evidence, or pointing out a specific contradiction, does. Watch faces: a look away means something is uncomfortable, not necessarily guilty. Nothing on this page has anything to do with the real case.</p>
-      <p><b>The situation.</b> June Abernathy's prize blueberry pie vanished from her windowsill between 2 and 3 PM. The empty tin turned up in Walt's side yard. Find out what happened.</p>
-    </div>
-    <div class="stat" id="stat">Connecting to the interview room…</div>
     <div class="chat" id="chat"><div class="aa"><i class="sd">Walt tugs at his cardigan.</i> “Practice run, is it? Fire away, Detective. I've got nothing to hide. Mostly.”</div></div>
     <div class="dock">
-      <div class="chips ex" aria-label="Present evidence">
-        <button type="button" class="chip" data-ex="T1" data-t="Photo: pie tin in Walt's side yard, by the fence gap">📷 Tin by the fence</button>
-        <button type="button" class="chip" data-ex="T2" data-t="Photo: purple paw prints on Walt's porch">🐾 Purple paw prints</button>
-        <button type="button" class="chip" data-ex="T3" data-t="Photo: Pickles the beagle with a blue tongue">🐶 Pickles, close up</button>
-      </div>
+      <div class="chips" id="evchips" aria-label="Present an exhibit"></div>
       <form class="askbar" id="f">
         <input id="q" placeholder="Ask Walt a question…" autocomplete="off" aria-label="Your question">
         <button type="button" class="icon-btn mic" id="mic" title="Hold to talk" aria-label="Hold to talk">🎙</button>
@@ -98,55 +94,134 @@ main{flex:1;min-height:0;display:flex;flex-direction:column;width:100%}
       </form>
     </div>
   </div>
+ </div>
+</section>
+
+<section class="view" id="v-tools">
+ <h2 class="sec">Tools &amp; lab</h2>
+ <div class="toolnav" id="toolnav"><button data-t="locker" class="on">🗄 Evidence locker</button><button data-t="lab">🧪 Lab request</button><button data-t="yard">🧊 3D side yard</button></div>
+ <div id="toolbox"></div>
+</section>
+
+<section class="view" id="v-board">
+ <h2 class="sec">Evidence board</h2>
+ <div class="board">
+  <table class="grid" id="mmo"><thead><tr><th>Suspect</th><th>Motive</th><th>Means</th><th>Opportunity</th></tr></thead><tbody></tbody></table>
+  <div class="legend">Tap to cycle: <b>·</b> unknown → <b>✓</b> has it → <b>✗</b> provably lacks it → <b>?</b> suspicious</div>
+  <div class="pins" id="pins"></div>
+  <div class="legend" id="pinhelp">Pin files from the file viewer (📌) and they'll appear here.</div>
+ </div>
+</section>
+
+<section class="view" id="v-hints">
+ <h2 class="sec">Hints</h2>
+ <p class="lede">Each hint costs points off your final score. Unlock them in order. They only talk about this pie story.</p>
+ <div id="hintbox"></div>
+</section>
+
+<section class="view" id="v-accuse">
+ <h2 class="sec">Accuse</h2>
+ <div id="accwrap"></div>
+</section>
 </main>
-<script>
 
-const LIVE='https://predator.tail66b1e9.ts.net/s/whitcombe';
-// Stand-in face: reuses one existing set of portrait clips with a different name and voice (see README). Change FACE to swap.
-const FACE='teddy', K='practice';
-const $=s=>document.querySelector(s), chat=$('#chat');
-let sid=localStorage.getItem('practice-sid');if(!sid){sid='practice-'+crypto.getRandomValues(new Uint32Array(2)).join('');localStorage.setItem('practice-sid',sid)}
-let voice=localStorage.getItem('practice-voice')!=='0';const vb=$('#vox');vb.onclick=()=>{voice=!voice;localStorage.setItem('practice-voice',voice?'1':'0');setVB();if(!voice)stopAudio()};
-const help=$('#help'),pop=$('#help-pop');
-help.onclick=()=>{const on=pop.hidden;pop.hidden=!on;help.setAttribute('aria-expanded',on?'true':'false')};
-const setVB=()=>{vb.innerHTML=voice?'🔊 <span class="lbl">Voice</span>':'🔈 <span class="lbl">Voice</span>';vb.setAttribute('aria-pressed',voice?'true':'false')};
-setVB();$('#reset').onclick=()=>{localStorage.removeItem('practice-sid');location.reload()};
-// ---- portrait: listen loop, talk loop while speaking, a reaction clip first when the mood calls for it ----
-$('#still').src='../img/'+FACE+'.jpg';const V=[$('#v0'),$('#v1')];let cur=0,clip='';
-const src=n=>'../vid/'+FACE+'-'+n+'.mp4';
-const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-function play(n,loop){if(reduce)return Promise.resolve();return new Promise(res=>{const nx=V[1-cur];nx.loop=!!loop;nx.onended=loop?null:()=>res();nx.src=src(n);nx.currentTime=0;nx.play().then(()=>{nx.classList.add('on');V[cur].classList.remove('on');V[cur].pause();cur=1-cur;clip=n;if(loop)res()}).catch(()=>res())})}
-play('listen',true);
-// ---- voice (same Kokoro server endpoint as the case) ----
-let audio=null,gen=0;function stopAudio(){gen++;if(audio){audio.pause();audio=null}speechSynthesis&&speechSynthesis.cancel()}
-const sents=t=>(t.match(/[^.!?…]+(?:[.!?…]+|$)/g)||[]).map(x=>x.trim()).filter(Boolean);
-async function say(text){if(!voice)return;const g=++gen;for(const s of sents(text)){if(g!=gen)return;try{const r=await fetch(LIVE+'/api/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({character:K,text:s})});if(!r.ok)throw 0;const b=await r.blob();if(g!=gen)return;audio=new Audio(URL.createObjectURL(b));await new Promise(res=>{audio.onended=res;audio.onerror=res;audio.play().catch(res)})}catch(e){if('speechSynthesis' in window){await new Promise(res=>{const u=new SpeechSynthesisUtterance(s);u.onend=res;u.onerror=res;speechSynthesis.speak(u)})}}}}
-// ---- formatting: *actions* as italic narration outside the quotes ----
-const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-function fmt(t){t=String(t||'').trim();const out=[];let last=0;t.replace(/\*([^*]+)\*/g,(m,x,i)=>{out.push(['s',t.slice(last,i)]);out.push(['n',x]);last=i+m.length});out.push(['s',t.slice(last)]);
- return out.map(([w,x])=>{x=x.replace(/^[\s“”"]+|[\s“”"]+$/g,'');return !x?'':w=='n'?`<i class="sd">${esc(x)}</i>`:'“'+esc(x)+'”'}).filter(Boolean).join(' ')}
-const speech=t=>String(t).replace(/\*[^*]*\*/g,' ').replace(/[“”"]/g,'').replace(/\s+/g,' ').trim();
-function add(cls,html){const d=document.createElement('div');d.className=cls;d.innerHTML=html;chat.appendChild(d);chat.scrollTop=chat.scrollHeight;return d}
-async function typeOut(el,html,cps){const tmp=document.createElement('div');tmp.innerHTML=html;const full=tmp.textContent;if(reduce){el.innerHTML=html;return}
- el.textContent='';for(let i=0;i<=full.length;i+=2){el.textContent=full.slice(0,i);chat.scrollTop=chat.scrollHeight;await new Promise(r=>setTimeout(r,1000/cps*2))}el.innerHTML=html}
-const BEATS=['scratches his chin','glances at the fence','rocks back on his heels','fiddles with a button on his cardigan'];
-let busy=false;
-async function ask(msg,ex,title,label){if(busy)return;busy=true;add('qq'+(ex?' ev':''),esc(label||msg));const el=add('aa','<i class="typing sd">…</i>');let b=0;const ft=setInterval(()=>{el.innerHTML=`<i class="typing sd">${BEATS[b++%4]}…</i>`},1800);
- let j=null;try{for(let t=0;t<2;t++){const r=await fetch(LIVE+'/api/ask',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session:sid,suspect:K,message:msg||'',present:ex||undefined,present_title:title||undefined})});
-   j=await r.json().catch(()=>({}));if(r.status==429&&t==0){el.innerHTML='<i class="typing sd">Give him a moment…</i>';await new Promise(s=>setTimeout(s,Math.min(15,Math.max(2,+j.retry_after||5))*1000));continue}if(!r.ok)throw new Error(j.error||'error');break}}
- catch(e){clearInterval(ft);el.innerHTML='<i class="sd">Walt needs a moment. Ask that again in a few seconds.</i>';busy=false;return}
- clearInterval(ft);const html=fmt(j.reply),mood=['uneasy','sad'].includes(j.mood)?j.mood:'neutral';
- if(mood!='neutral')await play(mood,false);$('#pv').classList.add('talking');play('talk',true);
- await Promise.all([typeOut(el,html,voice?18:45),say(speech(j.reply))]);$('#pv').classList.remove('talking');play('listen',true);busy=false}
-$('#f').onsubmit=e=>{e.preventDefault();const q=$('#q').value.trim();if(!q)return;$('#q').value='';ask(q)};
-document.querySelectorAll('.ex button').forEach(b=>b.onclick=()=>ask('',b.dataset.ex,b.dataset.t,'[shows] '+b.dataset.t));
-// ---- hold-to-talk ----
-const SR=window.SpeechRecognition||window.webkitSpeechRecognition;const mic=$('#mic');
-if(!SR)mic.style.display='none';else{let rec=null;const start=e=>{e.preventDefault();rec=new SR();rec.lang='en-US';rec.interimResults=true;rec.onresult=ev=>{$('#q').value=[...ev.results].map(r=>r[0].transcript).join(' ')};rec.start();mic.textContent='⏺'};
- const stop=()=>{if(rec){rec.stop();rec=null;mic.textContent='🎙';$('#q').focus()}};mic.addEventListener('pointerdown',start);mic.addEventListener('pointerup',stop);mic.addEventListener('pointerleave',stop)}
-// ---- connection check ----
-fetch(LIVE+'/health').then(r=>r.json()).then(h=>{$('#stat').textContent=h.practice?'Live interview connected. Walt answers in his own words.':'The practice suspect is not installed on the server yet.'}).catch(()=>{$('#stat').innerHTML='Can\'t reach the interview room. Turn on Tailscale on this device, then reload.'});
+<div class="viewer" id="viewer"><div class="vtools"><button id="vprev" aria-label="Previous file">‹</button><span class="vt" id="vtitle"></span><span class="vbtns"><button id="vpin" aria-label="Pin to board">📌<span class="pl"> Pin</span></button> <button id="vnext" aria-label="Next file">›</button> <button id="vclose" aria-label="Close">✕</button></span></div><div class="vbody" id="vbody"></div></div>
+<div class="toast" id="toast"></div>
 
-</script>
+<template id="d-C1" data-g="Reports" data-t="June's complaint">
+<div class="doc">
+<div class="hd"><div><div class="agency">WILLOW BEND COMMUNITY DESK</div>Complaint · missing bake-off pie</div><div>C1 · 22 Oct</div></div>
+<div class="fld">
+<div>Complainant</div><div>ABERNATHY, June · 70 · 14 Maple Lane</div>
+<div>Neighbor</div><div>PENROSE, Walter · 16 Maple Lane</div>
+<div>Time</div><div>Pie set out ~2:00 PM; gone at 3:00 PM</div>
+</div>
+<p>June states she set her prize blueberry pie on the <b>low kitchen windowsill</b> to cool, window closed, screen up. At 3:00 the pie was gone. The tin was later found in Walt's side yard, just inside a <b>gap in the fence</b>.</p>
+<p>She and Walt have been neighbors twenty-two years. “He still hasn't forgiven me for the blue ribbon. I beat his tomatoes every year and I am not sorry.” She does not accuse him. She would like the tin back, and an explanation.</p>
+<p class="foot">Practice document. Nothing here relates to the real case.</p>
+</div>
+</template>
+
+<template id="d-T1" data-g="Photos" data-t="Photo: pie tin in Walt's side yard, by the fence gap">
+<div class="photo"><svg viewBox="0 0 640 420" xmlns="http://www.w3.org/2000/svg">
+<rect width="640" height="420" fill="#6a8a3a"/>
+<rect x="0" y="300" width="640" height="120" fill="#4d6e2c"/>
+<path d="M0 310 Q80 280 160 305 T320 300 T480 312 T640 298 L640 420 L0 420Z" fill="#3d5c24"/>
+<rect x="430" y="40" width="18" height="280" fill="#6b4424"/>
+<rect x="448" y="50" width="14" height="270" fill="#5a381c"/>
+<rect x="462" y="45" width="16" height="275" fill="#7a5030"/>
+<rect x="430" y="80" width="80" height="10" fill="#4a2e14"/>
+<ellipse cx="260" cy="330" rx="70" ry="18" fill="#3a4a20"/>
+<ellipse cx="260" cy="322" rx="62" ry="16" fill="#b7b0a2" stroke="#6a655c" stroke-width="3"/>
+<ellipse cx="260" cy="322" rx="48" ry="11" fill="#6a4a2a"/>
+<ellipse cx="255" cy="320" rx="30" ry="7" fill="#3a2060" opacity=".7"/>
+<ellipse cx="400" cy="360" rx="90" ry="14" fill="#2d4a18" opacity=".35"/>
+</svg><div class="cap">T1 · Looking toward the fence from Walt's side yard. June's empty pie tin is in the grass just inside a gap in the slats. Taken 3:10 PM by June Abernathy.</div></div>
+</template>
+
+<template id="d-T2" data-g="Photos" data-t="Photo: purple paw prints on Walt's porch">
+<div class="photo"><svg viewBox="0 0 640 420" xmlns="http://www.w3.org/2000/svg">
+<rect width="640" height="420" fill="#6b4a2c"/>
+<g fill="#5a3c22">
+<rect x="0" y="0" width="640" height="18"/>
+<rect x="0" y="80" width="640" height="10"/>
+<rect x="0" y="160" width="640" height="12"/>
+<rect x="0" y="240" width="640" height="10"/>
+<rect x="0" y="320" width="640" height="14"/>
+<rect x="0" y="400" width="640" height="20"/>
+</g>
+<g fill="#5a2a70" opacity=".85">
+  <g transform="translate(160 150) rotate(-12)">
+    <ellipse cx="0" cy="10" rx="22" ry="16"/>
+    <circle cx="-18" cy="-10" r="7"/><circle cx="-4" cy="-16" r="7"/><circle cx="10" cy="-14" r="7"/><circle cx="20" cy="-4" r="6"/>
+  </g>
+  <g transform="translate(240 200) rotate(8)">
+    <ellipse cx="0" cy="10" rx="20" ry="15"/>
+    <circle cx="-16" cy="-8" r="6"/><circle cx="-2" cy="-15" r="6"/><circle cx="11" cy="-12" r="6"/><circle cx="18" cy="-2" r="5"/>
+  </g>
+  <g transform="translate(330 255) rotate(-6)" opacity=".7">
+    <ellipse cx="0" cy="9" rx="18" ry="13"/>
+    <circle cx="-14" cy="-7" r="5"/><circle cx="-1" cy="-13" r="5"/><circle cx="10" cy="-10" r="5"/><circle cx="16" cy="-1" r="4"/>
+  </g>
+</g>
+</svg><div class="cap">T2 · Walt's front porch boards. A trail of purple paw prints leads from the yard steps toward the door. Taken 3:12 PM by June Abernathy.</div></div>
+</template>
+
+<template id="d-T3" data-g="Photos" data-t="Photo: Pickles the beagle with a blue tongue">
+<div class="photo"><svg viewBox="0 0 640 420" xmlns="http://www.w3.org/2000/svg">
+<rect width="640" height="420" fill="#d8c8a0"/>
+<ellipse cx="320" cy="400" rx="180" ry="40" fill="#c4b08a"/>
+<ellipse cx="320" cy="250" rx="130" ry="120" fill="#c4a06a"/>
+<ellipse cx="200" cy="200" rx="40" ry="90" fill="#7a4a22"/>
+<ellipse cx="440" cy="210" rx="38" ry="85" fill="#7a4a22"/>
+<ellipse cx="320" cy="250" rx="110" ry="100" fill="#d2b07a"/>
+<ellipse cx="280" cy="230" rx="16" ry="20" fill="#2a2018"/>
+<ellipse cx="360" cy="230" rx="16" ry="20" fill="#2a2018"/>
+<ellipse cx="282" cy="226" rx="5" ry="6" fill="#eee"/>
+<ellipse cx="362" cy="226" rx="5" ry="6" fill="#eee"/>
+<ellipse cx="320" cy="270" rx="22" ry="14" fill="#3a2a20"/>
+<path d="M300 300 Q320 330 340 300" fill="#5a3a9a" stroke="#3a2060" stroke-width="2"/>
+<ellipse cx="320" cy="318" rx="16" ry="10" fill="#4a2a80"/>
+</svg><div class="cap">T3 · Pickles, photographed on the porch a few minutes later. Her tongue is stained a deep blue-purple. June says she “just happened to get a shot.”</div></div>
+</template>
+
+<template id="d-N1" data-g="Kitchen papers" data-t="Photo: notepad on June's fridge">
+<div class="photo"><svg viewBox="0 0 640 420" xmlns="http://www.w3.org/2000/svg">
+<rect width="640" height="420" fill="#c5c8cc"/>
+<rect x="40" y="20" width="560" height="380" fill="#9aa0a6" stroke="#7a8086" stroke-width="6"/>
+<rect x="70" y="50" width="180" height="240" fill="#e8eef5" stroke="#8a9aaa"/>
+<rect x="90" y="70" width="40" height="50" fill="#cde"/>
+<rect x="150" y="80" width="70" height="12" fill="#f4d36a"/>
+<rect x="280" y="90" width="220" height="200" fill="#fff6a3" stroke="#e0d070" stroke-width="3" transform="rotate(-6 390 190)"/>
+<text x="300" y="150" font-family="Georgia" font-size="20" fill="#1d3f8f" transform="rotate(-6 390 190)">Recipe tin:</text>
+<text x="305" y="190" font-family="Georgia" font-size="28" font-weight="700" fill="#1d3f8f" transform="rotate(-6 390 190)">2 - 4 - 8</text>
+<text x="300" y="230" font-family="Georgia" font-size="16" fill="#1d3f8f" transform="rotate(-6 390 190)">ribbon count —</text>
+<text x="302" y="256" font-family="Georgia" font-size="16" fill="#1d3f8f" transform="rotate(-6 390 190)">don't let Walt see,</text>
+<text x="304" y="282" font-family="Georgia" font-size="16" fill="#1d3f8f" transform="rotate(-6 390 190)">he'll never let it go.</text>
+<circle cx="390" cy="108" r="8" fill="#c23"/>
+</svg><div class="cap">N1 · June's fridge, photographed when the complaint was taken. A yellow notepad is stuck under a magnet. The handwriting is June's.</div></div>
+</template>
+
+<script src="practice.js"></script>
 </body>
 </html>

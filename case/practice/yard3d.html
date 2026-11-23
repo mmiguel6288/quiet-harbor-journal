@@ -1,0 +1,207 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Maple Lane side yard (practice)</title>
+<style>
+html,body{margin:0;height:100%;background:#87b6d9;color:#eee;font:14px/1.45 Inter,system-ui,sans-serif;overflow:hidden;touch-action:none}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block}
+#hud{position:fixed;left:12px;top:10px;right:12px;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none;gap:8px}
+#hud .t{background:rgba(20,24,16,.78);border:1px solid #4a5a3c;padding:6px 10px;border-radius:8px;pointer-events:auto;font-size:12.5px}
+#hud .t b{color:#f3e7c6;font-family:Georgia,serif}
+#close{pointer-events:auto;background:#b8862f;color:#1a1209;border:none;border-radius:8px;padding:8px 12px;font-weight:700;cursor:pointer}
+#panel{box-sizing:border-box;position:fixed;right:12px;bottom:66px;width:min(380px,calc(100% - 24px));max-height:52vh;overflow:auto;background:rgba(246,240,224,.97);color:#1d1a16;border-radius:10px;box-shadow:0 10px 40px rgba(0,0,0,.6);padding:14px 16px;display:none}
+#panel.on{display:block}
+#panel h3{margin:0 0 6px;font-family:Georgia,serif;font-size:17px}
+#panel .tag{font:600 10px monospace;letter-spacing:1px;color:#7a1c12}
+#panel p{margin:6px 0}
+#panel .row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+#panel button{border:1px solid #6b5a3e;background:#fff;border-radius:16px;padding:5px 10px;font-size:12px;cursor:pointer}
+#panel button.pri{background:#2b2218;color:#f3e7c6}
+#panel .x{position:absolute;right:8px;top:6px;border:none;background:none;font-size:18px}
+#bar{position:fixed;left:0;right:0;bottom:0;display:flex;gap:6px;overflow-x:auto;padding:10px 12px;background:linear-gradient(transparent,rgba(0,0,0,.55));scrollbar-width:none}
+#bar button{flex:none;background:rgba(30,25,19,.9);color:#e6dcc3;border:1px solid #4a3d2c;border-radius:16px;padding:7px 11px;font-size:12.5px;cursor:pointer}
+#bar button.on{background:#b8862f;color:#1a1209}
+#load{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#6fa0c8;color:#1a2a18;font-family:Georgia,serif;font-size:18px;z-index:9}
+#toast{position:fixed;left:50%;top:60px;transform:translateX(-50%);background:#2b2218;color:#f3e7c6;padding:8px 14px;border-radius:8px;display:none;z-index:8;max-width:90vw;text-align:center}
+#banner{position:fixed;left:0;right:0;bottom:52px;text-align:center;pointer-events:none;font:600 10px/1.3 'IBM Plex Mono',monospace;color:#f3e7c6;text-shadow:0 1px 4px #000;letter-spacing:.04em;padding:0 12px}
+</style></head><body>
+<canvas id="c"></canvas>
+<div id="load">Opening the side yard…</div>
+<div id="hud"><div class="t"><b>June's windowsill &amp; side yard</b> · Maple Lane, practice<br><span id="help">Drag to look around · scroll/pinch to zoom · tap objects to inspect</span></div><button id="close">✕ Close</button></div>
+<div id="panel"><button class="x" id="px">×</button><div class="tag" id="ptag"></div><h3 id="pt"></h3><div id="pb"></div><div class="row" id="pr"></div></div>
+<div id="bar"></div><div id="toast"></div>
+<div id="banner">Practice: nothing here relates to the real case.</div>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+const isMobile=matchMedia('(pointer:coarse)').matches||innerWidth<700;
+const canvas=document.getElementById('c');
+const R=new THREE.WebGLRenderer({canvas,antialias:!isMobile||devicePixelRatio<2,powerPreference:'high-performance'});
+R.setPixelRatio(Math.min(devicePixelRatio,isMobile?1.5:1.75));R.setSize(innerWidth,innerHeight);
+R.outputColorSpace=THREE.SRGBColorSpace;R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=1.15;
+R.shadowMap.enabled=true;R.shadowMap.type=THREE.PCFSoftShadowMap;
+const S=new THREE.Scene();S.background=new THREE.Color(0x87b6d9);S.fog=new THREE.Fog(0x9ec4dc,14,28);
+const pm=new THREE.PMREMGenerator(R);S.environment=pm.fromScene(new RoomEnvironment(),0.04).texture;S.environmentIntensity=0.45;
+const cam=new THREE.PerspectiveCamera(isMobile?62:52,innerWidth/innerHeight,0.05,50);
+cam.position.set(0.15,1.55,3.35);
+const ctl=new OrbitControls(cam,canvas);ctl.target.set(0.85,0.55,-0.4);ctl.enableDamping=true;ctl.dampingFactor=0.08;
+ctl.minDistance=0.6;ctl.maxDistance=8;ctl.maxPolarAngle=Math.PI*0.49;ctl.minPolarAngle=0.08;ctl.screenSpacePanning=true;ctl.panSpeed=0.6;ctl.rotateSpeed=isMobile?0.55:0.7;
+
+function tex(w,h,draw,rep){const c=document.createElement('canvas');c.width=w;c.height=h;const g=c.getContext('2d');draw(g,w,h);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=Math.min(8,R.capabilities.getMaxAnisotropy());if(rep){t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(rep[0],rep[1])}return t}
+const rnd=(a,b)=>a+Math.random()*(b-a);
+function grain(g,w,h,base,dark,lines=60,vert=false){g.fillStyle=base;g.fillRect(0,0,w,h);for(let i=0;i<lines;i++){g.strokeStyle=`rgba(${dark},${rnd(.05,.22)})`;g.lineWidth=rnd(.6,2.4);g.beginPath();let y=rnd(0,vert?w:h);for(let x=0;x<=(vert?h:w);x+=8){const yy=y+Math.sin(x*0.013+i)*rnd(1,4);vert?g.lineTo(yy,x):g.lineTo(x,yy)}g.stroke()}const id=g.getImageData(0,0,w,h);for(let i=0;i<id.data.length;i+=4){const n=rnd(-9,9);id.data[i]+=n;id.data[i+1]+=n;id.data[i+2]+=n}g.putImageData(id,0,0)}
+const tGrass=tex(512,512,(g,w,h)=>{g.fillStyle='#3d6a28';g.fillRect(0,0,w,h);for(let i=0;i<1800;i++){g.strokeStyle=`rgba(${20+rnd(0,40)},${80+rnd(0,70)},${10+rnd(0,20)},${rnd(.25,.7)})`;g.lineWidth=rnd(.6,1.6);const x=rnd(0,w),y=rnd(0,h);g.beginPath();g.moveTo(x,y);g.lineTo(x+rnd(-2,2),y-rnd(4,10));g.stroke()}for(let i=0;i<80;i++){g.fillStyle=`rgba(80,50,20,${rnd(.05,.15)})`;g.fillRect(rnd(0,w),rnd(0,h),rnd(4,16),rnd(3,10))}},[6,6]);
+const tWood=tex(256,512,(g,w,h)=>grain(g,w,h,'#6b4424','40,22,8',50,true),[1,1]);
+const tWoodL=tex(256,256,(g,w,h)=>grain(g,w,h,'#8a5a32','50,28,10',40),[1,1]);
+const tClap=tex(256,256,(g,w,h)=>{g.fillStyle='#f0e2c4';g.fillRect(0,0,w,h);for(let y=0;y<h;y+=18){g.fillStyle='#e4d4b0';g.fillRect(0,y,w,16);g.fillStyle='rgba(80,60,30,.22)';g.fillRect(0,y+15,w,2);for(let i=0;i<40;i++){g.fillStyle=`rgba(255,255,240,${rnd(0,.08)})`;g.fillRect(rnd(0,w),y+rnd(0,14),3,2)}}},[4,6]);
+const tDirt=tex(256,256,(g,w,h)=>{g.fillStyle='#5a3a22';g.fillRect(0,0,w,h);for(let i=0;i<800;i++){const v=40+rnd(0,40);g.fillStyle=`rgb(${v+20},${v},${v-10})`;g.fillRect(rnd(0,w),rnd(0,h),rnd(1,3),rnd(1,3))}},[2,2]);
+const tTin=tex(128,128,(g,w,h)=>{g.fillStyle='#c5c0b4';g.fillRect(0,0,w,h);g.strokeStyle='rgba(80,70,50,.35)';for(let y=8;y<h;y+=10){g.beginPath();g.moveTo(0,y);g.lineTo(w,y);g.stroke()}g.fillStyle='rgba(60,40,90,.18)';g.beginPath();g.arc(w/2,h/2,28,0,6.3);g.fill()});
+
+const M=(o)=>new THREE.MeshStandardMaterial(o);
+const mGrass=M({map:tGrass,roughness:.95}),mWood=M({map:tWood,roughness:.7}),mWoodL=M({map:tWoodL,roughness:.65});
+const mClap=M({map:tClap,roughness:.9}),mDirt=M({map:tDirt,roughness:.95}),mTin=M({map:tTin,metalness:.7,roughness:.35,color:0xc9c3b6});
+const mGlass=M({color:0x9ec8e6,roughness:.15,metalness:.2,transparent:true,opacity:.45}),mCurtain=M({color:0xf6efe0,roughness:.9});
+const mLeaf=M({color:0x3d8a2a,roughness:.8}),mTomat=M({color:0xc43b22,roughness:.6}),mCan=M({color:0x3a6ea5,metalness:.4,roughness:.45});
+const mCrumb=M({color:0x3a2060,roughness:.7,emissive:0x2a1040,emissiveIntensity:.35});
+const mSillStain=M({color:0x4a2a70,roughness:.9,transparent:true,opacity:.45});
+const clickables=[],byKey={};
+function add(mesh,parent=S,cast=true,recv=true){mesh.castShadow=cast;mesh.receiveShadow=recv;parent.add(mesh);return mesh}
+function box(w,h,d,mat,x,y,z,parent){const m=add(new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat),parent);m.position.set(x,y,z);return m}
+function rbox(w,h,d,r,mat,x,y,z,parent){const m=add(new THREE.Mesh(new RoundedBoxGeometry(w,h,d,3,r),mat),parent);m.position.set(x,y,z);return m}
+function group(key,x=0,y=0,z=0){const g=new THREE.Group();g.position.set(x,y,z);g.userData.key=key;S.add(g);byKey[key]=g;clickables.push(g);return g}
+
+const W=10,D=10;
+const ground=add(new THREE.Mesh(new THREE.PlaneGeometry(W,D),mGrass),S,false,true);ground.rotation.x=-Math.PI/2;
+// sky-ish distant ground fade is fog; a simple sun
+const hemi=new THREE.HemisphereLight(0xcfe8ff,0x5a6a3a,0.9);S.add(hemi);
+const sun=new THREE.DirectionalLight(0xfff3d0,1.35);sun.position.set(-4,8,3);sun.castShadow=true;
+sun.shadow.mapSize.set(1024,1024);sun.shadow.camera.near=.5;sun.shadow.camera.far=22;
+sun.shadow.camera.left=-8;sun.shadow.camera.right=8;sun.shadow.camera.top=8;sun.shadow.camera.bottom=-8;S.add(sun);
+S.add(new THREE.AmbientLight(0xffffff,.28));
+
+// June's house wall (north) with a real window opening
+{const Wl=7.2,Hl=2.6,wx=-0.4,wy=0.88,ww=1.22,wh=1.0;
+ const shape=new THREE.Shape();shape.moveTo(-Wl/2,0);shape.lineTo(Wl/2,0);shape.lineTo(Wl/2,Hl);shape.lineTo(-Wl/2,Hl);shape.lineTo(-Wl/2,0);
+ const hole=new THREE.Path();hole.moveTo(wx-ww/2,wy);hole.lineTo(wx+ww/2,wy);hole.lineTo(wx+ww/2,wy+wh);hole.lineTo(wx-ww/2,wy+wh);hole.lineTo(wx-ww/2,wy);shape.holes.push(hole);
+ const wall=add(new THREE.Mesh(new THREE.ExtrudeGeometry(shape,{depth:0.16,bevelEnabled:false}),mClap),S,false,true);
+ wall.position.set(0,0,-3.28); // extruded in +z locally? Extrude goes +Z; rotate if needed
+ // ExtrudeGeometry extrudes along +Z, so the wall's front is at z=-3.28+0.16=-3.12
+ box(7.4,0.12,0.28,mWood,0,2.62,-3.2); // eave
+ const g=group('sill',wx,0,-3.12);
+ // actual frame (four sides) so the glass and interior show
+ box(1.40,0.08,0.07,mWoodL,0,1.90,0.02,g);
+ box(1.40,0.08,0.07,mWoodL,0,0.86,0.02,g);
+ box(0.08,1.12,0.07,mWoodL,-0.66,1.38,0.02,g);
+ box(0.08,1.12,0.07,mWoodL,0.66,1.38,0.02,g);
+ box(1.20,1.00,0.02,mGlass,0,1.38,-0.03,g);
+ box(0.03,1.00,0.03,mWoodL,0,1.38,-0.02,g);
+ box(1.20,0.03,0.03,mWoodL,0,1.38,-0.02,g);
+ const curt=box(0.20,0.90,0.02,mCurtain,-0.46,1.38,-0.01,g);curt.castShadow=false;
+ box(0.20,0.90,0.02,mCurtain,0.46,1.38,-0.01,g);
+ rbox(1.5,0.07,0.30,0.015,mWoodL,0,0.84,0.14,g);
+ const stain=add(new THREE.Mesh(new THREE.CircleGeometry(0.09,16),mSillStain),g,false,false);
+ stain.rotation.x=-Math.PI/2;stain.position.set(0.12,0.88,0.16);
+ box(1.24,1.04,0.02,M({color:0xe8d7b0,roughness:1,emissive:0x33220a,emissiveIntensity:.12}),0,1.38,-0.14,g);
+}
+// Walt's porch edge (east)
+{box(0.2,0.55,4.2,mWoodL,3.35,0.28,0.4);
+ box(1.6,0.08,4.2,mWood,3.95,0.52,0.4);
+ [ -1.4,0,1.4].forEach(z=>box(0.1,1.8,0.1,mWood,3.35,1.4,z+0.4));
+ box(0.08,0.06,4.2,mWood,3.35,2.28,0.4)}
+
+// Fence along x≈2, gap around z=0.35
+{const z0=-2.4;
+ for(let i=0;i<22;i++){const z=z0+i*0.22;if(z>-0.05&&z<0.85)continue; // gap
+  const slat=box(0.04,1.15,0.08,mWood,2.05,0.58,z);slat.rotation.y=rnd(-.03,.03)}
+ box(0.07,1.28,0.07,mWood,2.05,0.64,-2.45);
+ box(0.06,0.04,2.5,mWood,2.05,1.05,-1.2);
+ box(0.06,0.04,2.2,mWood,2.05,1.05,1.7);
+ const fallen=box(0.04,1.05,0.08,mWood,2.05,0.16,0.42);fallen.rotation.z=1.15;fallen.rotation.y=0.2;
+}
+const postG=group('post',2.05,0,0.12);
+box(0.1,1.32,0.1,mWood,0,0.66,0,postG);
+box(0.06,0.04,0.5,mWood,0,1.05,0.28,postG);
+// crumbs about a beagle's nose high, yard-facing
+for(let i=0;i<9;i++){const c=add(new THREE.Mesh(new THREE.SphereGeometry(0.018+rnd(0,.01),8,8),mCrumb),postG);
+ c.position.set(-0.06+rnd(-.01,.01),0.42+rnd(0,0.18),rnd(-.04,.05))}
+// a couple on the ground by the post
+for(let i=0;i<4;i++){const c=add(new THREE.Mesh(new THREE.SphereGeometry(0.01,8,8),mCrumb),postG,false,true);
+ c.position.set(-0.12+rnd(-.04,.04),0.012,0.08+rnd(-.05,.08))}
+
+const tinG=group('tin',1.45,0,0.48);
+const tin=add(new THREE.Mesh(new THREE.CylinderGeometry(0.16,0.16,0.05,24,1,true),mTin),tinG);
+tin.position.y=0.028;
+add(new THREE.Mesh(new THREE.CylinderGeometry(0.15,0.15,0.007,24),M({color:0xb7a090,roughness:.8,metalness:.3})),tinG).position.y=0.008;
+const rim=add(new THREE.Mesh(new THREE.TorusGeometry(0.16,0.014,8,24),mTin),tinG);rim.rotation.x=Math.PI/2;rim.position.y=0.048;
+// stain inside
+const fill=add(new THREE.Mesh(new THREE.CircleGeometry(0.14,20),M({color:0x3a2060,roughness:.9})),tinG,false,false);
+fill.rotation.x=-Math.PI/2;fill.position.y=0.014;
+
+const tom=group('tomatoes',-2.15,0,1.15);
+// dirt bed
+rbox(1.1,0.08,0.7,0.02,mDirt,0,0.04,0,tom);
+[-0.28,0,0.28].forEach((x,i)=>{
+  box(0.02,0.7,0.02,M({color:0x888}),x,0.4,0,tom);
+  box(0.02,0.7,0.02,M({color:0x888}),x,0.4,0.18,tom);
+  box(0.5,0.02,0.02,M({color:0x888}),x,0.55,0.09,tom);
+  for(let k=0;k<5;k++){const leaf=add(new THREE.Mesh(new THREE.SphereGeometry(0.09,8,8),mLeaf),tom);
+   leaf.position.set(x+rnd(-.12,.12),0.25+rnd(0,0.4),rnd(-.05,.22));leaf.scale.set(1,0.6,1.2)}
+  if(i){const t=add(new THREE.Mesh(new THREE.SphereGeometry(0.045,8,8),mTomat),tom);t.position.set(x+0.05,0.38,0.1)}
+});
+const can=add(new THREE.Mesh(new THREE.CylinderGeometry(0.07,0.09,0.16,12),mCan),tom);can.position.set(0.48,0.14,0.28);
+const spout=add(new THREE.Mesh(new THREE.CylinderGeometry(0.015,0.015,0.16,8),mCan),tom);spout.rotation.z=Math.PI/2.6;spout.position.set(0.38,0.2,0.28);
+add(new THREE.Mesh(new THREE.TorusGeometry(0.05,0.01,6,12),mCan),tom).position.set(0.48,0.23,0.28);
+
+// a modest tree in the back for depth
+{const tr=new THREE.Group();tr.position.set(-2.6,0,1.8);S.add(tr);
+ box(0.18,1.1,0.18,mWood,0,0.55,0,tr);
+ const top=add(new THREE.Mesh(new THREE.SphereGeometry(0.7,10,10),mLeaf),tr);top.position.y=1.45;top.scale.set(1.1,0.8,1)}
+
+const INFO={
+ sill:{t:"June's kitchen windowsill",d:"A low painted sill under June's kitchen window, about a beagle's head high from the yard. A faint purple ring marks where a pie tin sat to cool. The pie is gone."},
+ tin:{t:"Empty pie tin in the grass",d:"June's bake-off tin, lying on its side in Walt's side yard, just inside the fence gap. A smear of dark filling clings to the bottom. Same tin as the photo in the case file."},
+ post:{t:"Fence post at the gap",d:"A weathered post where two or three slats are missing, leaving a dog-sized gap. Look closely at the yard-facing side, about nose-high: small dark-blue crumbs are stuck to the wood.",obs:"T4"},
+ tomatoes:{t:"Walt's tomato bed",d:"Three cages, late-season tomatoes, and a blue watering can still sitting in the dirt. Walt is vain about these plants. Nothing here looks out of place."}
+};
+const OBS={T4:"Blueberry crumbs stuck to the fence post at the gap, about a beagle's nose high, plus a few in the grass at the foot of the post."};
+
+const ray=new THREE.Raycaster(),ptr=new THREE.Vector2();let hover=null,sel=null;const P=parent!==window?parent:null;
+function keyOf(o){while(o){if(o.userData&&o.userData.key)return o.userData.key;o=o.parent}return null}
+function setGlow(key,on){const g=byKey[key];if(!g)return;g.traverse(m=>{if(m.isMesh&&m.material&&!Array.isArray(m.material)){if(on){if(!m.userData.em){m.userData.em=m.material.emissive?m.material.emissive.clone():null;m.userData.ei=m.material.emissiveIntensity}if(!m.material.userData.cloned){m.material=m.material.clone();m.material.userData.cloned=1}m.material.emissive&&m.material.emissive.setHex(0x4a3410);m.material.emissiveIntensity=Math.max(.22,m.userData.ei||0)}else if(m.userData.em){m.material.emissive.copy(m.userData.em);m.material.emissiveIntensity=m.userData.ei}}})}
+function pick(x,y){ptr.set(x/innerWidth*2-1,-(y/innerHeight)*2+1);ray.setFromCamera(ptr,cam);const h=ray.intersectObjects(clickables,true);return h.length?keyOf(h[0].object):null}
+let down=null;canvas.addEventListener('pointerdown',e=>{down=[e.clientX,e.clientY]});
+canvas.addEventListener('pointerup',e=>{if(down&&Math.hypot(e.clientX-down[0],e.clientY-down[1])<7){const k=pick(e.clientX,e.clientY);if(k)select(k,false);else closePanel()}down=null});
+canvas.addEventListener('pointermove',e=>{if(isMobile||e.buttons)return;const k=pick(e.clientX,e.clientY);if(k!==hover){if(hover&&hover!==sel)setGlow(hover,false);hover=k;if(k)setGlow(k,true);canvas.style.cursor=k?'pointer':'grab';need=2}});
+const tw={on:false};
+const V=(p,t)=>[new THREE.Vector3(...p),new THREE.Vector3(...t)];
+const VIEWS={sill:V([-0.1,1.45,-1.15],[-0.4,1.0,-3.1]),tin:V([0.7,1.05,1.35],[1.45,0.05,0.48]),post:V([0.7,1.15,1.15],[2.05,0.55,0.12]),tomatoes:V([-1.1,1.3,2.3],[-2.15,0.3,1.15])};
+function focusOn(key){const v=VIEWS[key];if(!v)return;Object.assign(tw,{on:true,t:0,fp:cam.position.clone(),ft:ctl.target.clone(),tp:v[0].clone(),tt:v[1].clone()})}
+function logged(){try{return !!(P&&P.__practice&&P.__practice.hasObs&&P.__practice.hasObs('T4'))}catch(e){return false}}
+function select(key,fly=true){if(sel&&sel!==key)setGlow(sel,false);sel=key;setGlow(key,true);const i=INFO[key];
+ document.getElementById('ptag').textContent='INSPECTING';document.getElementById('pt').textContent=i.t;document.getElementById('pb').innerHTML='<p>'+i.d+'</p>';
+ const row=document.getElementById('pr');row.innerHTML='';
+ if(i.obs){const b=document.createElement('button');b.className='pri';const done=logged();b.textContent=done?'✓ Observation already logged':'📝 Log observation '+i.obs;b.onclick=()=>{post({t:'obs',id:i.obs});toast(done?'Already logged: '+i.obs:'New exhibit '+i.obs+' logged');b.textContent='✓ Observation already logged'};row.appendChild(b)}
+ document.getElementById('panel').classList.add('on');[...document.querySelectorAll('#bar button')].forEach(b=>b.classList.toggle('on',b.dataset.k==key));if(fly)focusOn(key);need=2}
+function closePanel(){document.getElementById('panel').classList.remove('on');if(sel)setGlow(sel,false);sel=null;need=2}
+function post(m){if(P)P.postMessage(Object.assign({src:'practice3d'},m),location.origin);}
+function toast(s){const t=document.getElementById('toast');t.textContent=s;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',2200)}
+document.getElementById('px').onclick=closePanel;document.getElementById('close').onclick=()=>post({t:'close'});
+const order=['sill','tin','post','tomatoes'];
+document.getElementById('bar').innerHTML=order.map(k=>`<button data-k="${k}">${INFO[k].t.replace(/^June's /,'').replace(/^Walt's /,'')}</button>`).join('');
+document.getElementById('bar').onclick=e=>{const b=e.target.closest('button');if(b)select(b.dataset.k)};
+if(isMobile)document.getElementById('help').textContent='Drag to look · pinch to zoom · two fingers to pan · tap objects';
+let need=3;ctl.addEventListener('change',()=>need=2);
+addEventListener('resize',()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();R.setSize(innerWidth,innerHeight);need=2});
+const clock=new THREE.Clock();
+function loop(){requestAnimationFrame(loop);const dt=clock.getDelta();
+ if(tw.on){tw.t=Math.min(1,tw.t+dt/0.9);const e=tw.t<.5?2*tw.t*tw.t:1-Math.pow(-2*tw.t+2,2)/2;cam.position.lerpVectors(tw.fp,tw.tp,e);ctl.target.lerpVectors(tw.ft,tw.tt,e);if(tw.t>=1)tw.on=false;need=2}
+ ctl.target.x=THREE.MathUtils.clamp(ctl.target.x,-3.5,3.6);ctl.target.z=THREE.MathUtils.clamp(ctl.target.z,-3.2,3.6);ctl.target.y=THREE.MathUtils.clamp(ctl.target.y,.05,2.2);
+ ctl.update();
+ cam.position.x=THREE.MathUtils.clamp(cam.position.x,-4.5,4.6);cam.position.z=THREE.MathUtils.clamp(cam.position.z,-2.6,4.8);cam.position.y=THREE.MathUtils.clamp(cam.position.y,.2,4.5);
+ if(need>0){R.render(S,cam);need--}}
+loop();document.getElementById('load').style.display='none';
+window.__practice3d={select,INFO,ready:true};
+</script></body></html>
