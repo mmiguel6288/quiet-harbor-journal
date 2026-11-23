@@ -88,6 +88,35 @@ body.hint #hintchip{display:block}
 #tmenu svg{max-width:1100px;width:100%;height:auto;margin:4px 0 14px;display:block}
 @media(max-width:480px){#travel{padding:7px 9px;font-size:12px}#close{padding:7px 10px}}
 #panel .rel{font-size:12px;color:#555;margin-top:6px}
+.hot.ev::after{content:'';position:absolute;left:50%;top:50%;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:radial-gradient(circle,#ffe7a3 0 30%,#e0a83a 60%,rgba(224,168,58,0) 72%);box-shadow:0 0 10px 3px rgba(232,184,74,.55);animation:evp 1.8s ease-in-out infinite;pointer-events:none}
+@keyframes evp{0%,100%{transform:scale(.8);opacity:.75}50%{transform:scale(1.15);opacity:1}}
+#panel button.ev{background:#e8b84a;border-color:#8a6420;color:#1a1209;font-weight:700}
+#panel .evline{font:600 12px Inter,system-ui,sans-serif;color:#6b4a12;margin-top:6px}
+#tmenu .card .badge2{position:absolute;left:8px;top:8px;background:rgba(20,16,12,.85);border:1px solid #e8b84a;color:#ffe7a3;border-radius:12px;padding:2px 8px;font-size:11px}
+#pc{position:fixed;inset:0;z-index:30;background:rgba(6,6,8,.9);display:none;padding:14px;box-sizing:border-box}
+#pc.on{display:flex;align-items:center;justify-content:center}
+#pc .list,#pc .read,#pc .tabs{touch-action:pan-x pan-y;-webkit-overflow-scrolling:touch}
+#pc .read{-webkit-user-select:text;user-select:text}
+#pc .win{width:min(1180px,100%);height:min(760px,100%);background:#1b1d22;border:1px solid #3b3f48;border-radius:10px;box-shadow:0 20px 60px rgba(0,0,0,.7);display:flex;flex-direction:column;overflow:hidden;color:#dfe3ea;font:13px/1.4 Inter,system-ui,sans-serif}
+#pc .tb{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 12px;background:#101216;border-bottom:1px solid #2c3038;font-size:12px;color:#9aa3b2}
+#pc .tb button{white-space:nowrap;background:#b8862f;color:#1a1209;border:0;border-radius:6px;padding:6px 10px;font-weight:700;cursor:pointer}
+#pc .tabs{display:flex;gap:4px;padding:6px 8px;background:#15171c;border-bottom:1px solid #2c3038;overflow-x:auto;scrollbar-width:none}
+#pc .tabs button{flex:none;background:transparent;color:#c5ccd8;border:1px solid transparent;border-radius:6px;padding:7px 11px;cursor:pointer;font:600 12.5px Inter,system-ui,sans-serif}
+#pc .tabs button.on{background:#2a2f3a;border-color:#4a5163;color:#fff}
+#pc .body{flex:1;display:flex;min-height:0}
+#pc .list{width:36%;min-width:220px;border-right:1px solid #2c3038;overflow:auto}
+#pc .it{display:block;width:100%;text-align:left;background:transparent;border:0;border-bottom:1px solid #262a32;color:#dfe3ea;padding:10px 12px;cursor:pointer;font:inherit}
+#pc .it.on{background:#26303f}
+#pc .it small{display:block;color:#8e97a6;font-size:11px}
+#pc .it b{display:block;font-weight:600;color:#fff;margin:1px 0}
+#pc .it .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#e8b84a;margin-right:6px;box-shadow:0 0 6px #e8b84a}
+#pc .read{flex:1;min-width:0;min-height:0;overflow:auto;padding:12px;background:#22252b}
+#pc .win{max-width:100vw}#pc .tb span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#pc .acts{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 10px}
+#pc .acts button{border:1px solid #6b5a3e;background:#f6f0e0;color:#1d1a16;border-radius:16px;padding:7px 13px;font:600 12.5px Inter,system-ui,sans-serif;cursor:pointer}
+#pc .acts button.ev{background:#e8b84a;border-color:#8a6420}
+#pc .empty{color:#8e97a6;padding:24px;text-align:center}
+@media(max-width:700px){#pc{padding:0}#pc .win{height:100%;border-radius:0}#pc .body{flex-direction:column}#pc .list{width:auto;min-width:0;max-height:34%;border-right:0;border-bottom:1px solid #2c3038}}
 </style>
 </head>
 <body>
@@ -100,8 +129,9 @@ body.hint #hintchip{display:block}
 <div id="panel"><button class="x" id="px" type="button" aria-label="Close inspect">×</button><div class="tag" id="ptag"></div><h3 id="pt"></h3><div id="pb"></div><div class="row" id="pr"></div></div>
 <div id="bar"></div>
 <div id="toast"></div>
+<div id="pc"><div class="win"><div class="tb"><span id="pchead">🖥</span><button id="pcx" type="button">✕ Log off</button></div><div class="tabs" id="pctabs"></div><div class="body"><div class="list" id="pclist"></div><div class="read" id="pcread"></div></div></div></div>
 <div id="banner"></div>
-<div id="tmenu"><button class="x" id="tx" type="button">✕ Back</button><h2>Where to, Detective?</h2><p class="lede">Every place you can visit. Things you notice can be logged as new exhibits in your Case Files.</p><div id="tmap"></div><div class="grid" id="tgrid"></div></div>
+<div id="tmenu"><button class="x" id="tx" type="button">✕ Back</button><h2>Where to, Detective?</h2><p class="lede">Every place you can visit. Much of the evidence is out here, not in the file: 📁 counts the exhibits you have collected at each place, 📝 the observations you have logged.</p><div id="tmap"></div><div class="grid" id="tgrid"></div></div>
 <script src="data.js"></script>
 <script>
 const P=parent!==window?parent:null;
@@ -116,6 +146,12 @@ function desk(){return matchMedia('(min-width:900px) and (orientation:landscape)
 function vp(){if(desk())return{x:0,y:0,W:innerWidth-168,H:innerHeight};const hud=96;return{x:0,y:hud,W:innerWidth,H:Math.max(200,innerWidth*9/16+8)}}
 let view=ORDER[0], scale=1, tx=0, ty=0, baseW=0, baseH=0;
 function logged(id){try{return !!(P&&P.__whitObs&&P.__whitObs(id))}catch(e){return false}}
+const EVID=D.EVID||{};
+function found(id){try{return !!(P&&P.__whitFound&&P.__whitFound(id))}catch(e){return false}}
+function avail(id){return !EVID[id]||found(id)}
+function dtitle(id){try{const t=P.document.getElementById('d-'+id);return t?t.dataset.t.replace(/&amp;/g,'&'):''}catch(e){return ''}}
+function hotEv(h){if((INFO[h.k]||{}).pc&&L.pc){const a=[];L.pc.tabs.forEach(t=>(t.items||[]).forEach(i=>{if(i.doc&&EVID[i.doc])a.push(i.doc)}));return a}return (h.ev||(INFO[h.k]||{}).ev||[])}
+function evCount(loc){const L2=D.locs[loc];if(!L2)return[0,0];const ids=new Set();Object.values(L2.views).forEach(v=>v.hots.forEach(h=>(h.ev||[]).forEach(i=>ids.add(i))));if(L2.pc)L2.pc.tabs.forEach(t=>(t.items||[]).forEach(i=>{if(i.doc&&EVID[i.doc])ids.add(i.doc)}));const a=[...ids];return [a.filter(found).length,a.length]}
 function post(m){if(P)P.postMessage(Object.assign({src:'place'},m),location.origin)}
 function toast(s){const t=$('#toast');t.textContent=s;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',2400)}
 function layout(){
@@ -163,24 +199,27 @@ function showView(id){
 }
 function drawHots(){
   const v=VIEWS[view];
-  hots.innerHTML=v.hots.map(h=>`<button type="button" class="hot${h.clue?' clue':''}" data-k="${h.k}" style="left:${h.l}%;top:${h.t}%;width:${h.w}%;height:${h.h}%" aria-label="${h.label}"></button>`).join('');
+  hots.innerHTML=v.hots.map(h=>`<button type="button" class="hot${h.clue?' clue':''}${hotEv(h).some(i=>!found(i))?' ev':''}" data-k="${h.k}" style="left:${h.l}%;top:${h.t}%;width:${h.w}%;height:${h.h}%" aria-label="${h.label}"></button>`).join('');
 }
 function inspect(key){
   const h=(VIEWS[view].hots.find(x=>x.k===key)||{});
-  const i=Object.assign({},INFO[key]||{}); if(h.go)i.go=h.go; if(h.obs)i.obs=h.obs;
+  const i=Object.assign({},INFO[key]||{}); if(h.go)i.go=h.go; if(h.obs)i.obs=h.obs; if(h.ev)i.ev=h.ev;
   if(!i.t)return;
-  $('#ptag').textContent='INSPECTING'; $('#pt').textContent=i.t; $('#pb').innerHTML='<p>'+i.d+'</p>'+((i.ex&&i.ex.length)?'<div class="rel">Related exhibits: '+i.ex.join(', ')+'</div>':'');
+  $('#ptag').textContent='INSPECTING'; $('#pt').textContent=i.t; $('#pb').innerHTML='<p>'+i.d+'</p>'+((i.ex||[]).filter(avail).length?'<div class="rel">Related exhibits: '+i.ex.filter(avail).join(', ')+'</div>':'');
   const row=$('#pr'); row.innerHTML='';
+  if(i.pc){const b=document.createElement('button'); b.className='pri'; b.textContent='🖥 Use the computer'; b.onclick=openPC; row.appendChild(b)}
+  (i.ev||[]).forEach(id=>{const b=document.createElement('button'); const done=found(id); const tt=dtitle(id); b.className=done?'':'ev'; b.textContent=done?'✓ '+id+' is in your Case Files':'📁 Collect exhibit '+id+(tt?': '+tt:'');
+    b.onclick=()=>{if(found(id)){post({t:'pin',id});toast(id+' pinned to your board');return} post({t:'found',id}); if(!P){toast('Open this from the case file to collect evidence');return} toast('Collected! Exhibit '+id+' is now in your Case Files and pinned'); b.className=''; b.textContent='✓ '+id+' is in your Case Files'; drawHots()}; row.appendChild(b)});
   if(i.go&&i.go!==view){const b=document.createElement('button'); b.className='pri'; b.textContent='🔎 Look closer'; b.onclick=()=>showView(i.go); row.appendChild(b)}
   if(i.obs){const b=document.createElement('button'); b.className='pri'; const done=logged(i.obs); b.textContent=done?'✓ Logged as '+i.obs:'📝 Log observation '+i.obs;
     b.onclick=()=>{const was=logged(i.obs); post({t:'obs',id:i.obs}); if(!P)toast('Open this from the case file to log observations'); else toast(was?'Already logged: '+i.obs:'New exhibit '+i.obs+' logged and pinned'); b.textContent='✓ Logged as '+i.obs}; row.appendChild(b)}
-  (i.ex||[]).forEach(id=>{const b=document.createElement('button'); b.textContent='📌 Pin '+id; b.onclick=()=>post({t:'pin',id}); row.appendChild(b)});
+  (i.ex||[]).filter(avail).forEach(id=>{const b=document.createElement('button'); b.textContent='📌 Pin '+id; b.onclick=()=>post({t:'pin',id}); row.appendChild(b)});
   $('#panel').classList.remove('idle'); $('#panel').classList.add('on');
 }
 function idleDock(){
   $('#ptag').textContent=META.t.toUpperCase();
   $('#pt').textContent=VIEWS[view].t;
-  $('#pb').innerHTML='<p>'+L.idle+'</p>';
+  const ec=evCount(LOC); $('#pb').innerHTML='<p>'+L.idle+'</p>'+(ec[1]?'<div class="evline">📁 Evidence here: '+ec[0]+' of '+ec[1]+' collected'+(ec[0]<ec[1]?' · look for the glowing markers':' ✓')+'</div>':'');
   $('#pr').innerHTML='';
   $('#panel').classList.remove('on');
   $('#panel').classList.add('idle');
@@ -234,25 +273,52 @@ stage.addEventListener('pointerup',endPtr);
 stage.addEventListener('pointercancel',endPtr);
 stage.addEventListener('wheel',e=>{e.preventDefault(); zoomAt(e.clientX,e.clientY, scale*(e.deltaY>0?0.88:1.14))},{passive:false});
 addEventListener('resize',layout);
-addEventListener('keydown',e=>{if(e.key==='Escape'){if($('#tmenu').classList.contains('on'))$('#tmenu').classList.remove('on'); else if($('#panel').classList.contains('on'))closePanel(); else post({t:'close'})} if(e.key==='ArrowRight')step(1); if(e.key==='ArrowLeft')step(-1)});
+addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#pc').classList.contains('on')){closePC();return} if($('#pc').classList.contains('on'))return; if(e.key==='Escape'){if($('#tmenu').classList.contains('on'))$('#tmenu').classList.remove('on'); else if($('#panel').classList.contains('on'))closePanel(); else post({t:'close'})} if(e.key==='ArrowRight')step(1); if(e.key==='ArrowLeft')step(-1)});
 window.addEventListener('message',e=>{if(e.origin!==location.origin)return; const m=e.data; if(m&&m.t==='hint')document.body.classList.toggle('hint',!!m.on)});
 
 
 // ---- travel menu ----
 function cnt(loc){const ids=Object.keys(D.OBS).filter(id=>Object.values(D.locs[loc]?D.locs[loc].views:{}).some(v=>v.hots.some(h=>h.obs===id)));return [ids.filter(logged).length,ids.length]}
+function studyEv(){const a=Object.keys(EVID).filter(i=>EVID[i].includes('study'));return [a.filter(found).length,a.length]}
 function travelMenu(){
   $('#tmap').innerHTML=`<svg viewBox="0 0 900 150" xmlns="http://www.w3.org/2000/svg" aria-label="Map"><rect width="900" height="150" rx="12" fill="#14110d" stroke="#3a3024"/>
   <path d="M120 75 C 300 30, 420 120, 560 72 S 760 40, 800 80" fill="none" stroke="#6b5a3e" stroke-width="3" stroke-dasharray="7 6"/>
   <g font-family="Georgia,serif" fill="#f3e7c6" font-size="15"><circle cx="120" cy="75" r="9" fill="#b8862f"/><text x="120" y="108" text-anchor="middle">Larkspur Lodge</text><text x="120" y="126" text-anchor="middle" font-size="11" fill="#b9ab8a">Lake Arrowhead · study, kitchen, mudroom</text>
+  <path d="M120 75 L 285 36" stroke="#6b5a3e" stroke-width="2" stroke-dasharray="4 5"/><circle cx="290" cy="34" r="7" fill="#9a7a3a"/><text x="300" y="22" font-size="13">Whitcombe HQ</text><text x="300" y="52" font-size="11" fill="#b9ab8a">Blue Jay · 10 min</text>
   <circle cx="470" cy="85" r="7" fill="#8a7350"/><text x="470" y="62" text-anchor="middle">Rim Fuel &amp; Market</text><text x="470" y="112" text-anchor="middle" font-size="11" fill="#b9ab8a">Running Springs · 15 min</text>
-  <circle cx="800" cy="80" r="7" fill="#5f7a80"/><text x="800" y="58" text-anchor="middle">Coroner</text><text x="800" y="108" text-anchor="middle" font-size="11" fill="#b9ab8a">San Bernardino · ~45 min</text></g></svg>`;
-  $('#tgrid').innerHTML=D.order.map(k=>{const m=D.meta[k];const c=m.three?null:cnt(k);return `<button class="card${k===LOC?' here':''}" data-k="${k}" type="button"><img src="${m.thumb}" alt=""><b>${m.t}${k===LOC?' · you are here':''}</b><span>${m.sub}</span>${c?`<i class="badge">${c[0]}/${c[1]} logged</i>`:''}</button>`}).join('');
+  <circle cx="800" cy="80" r="7" fill="#5f7a80"/><text x="800" y="58" text-anchor="middle">Coroner &amp; crime lab</text><text x="800" y="108" text-anchor="middle" font-size="11" fill="#b9ab8a">San Bernardino · ~45 min</text></g></svg>`;
+  $('#tgrid').innerHTML=D.order.map(k=>{const m=D.meta[k];const c=m.three?null:cnt(k);return `<button class="card${k===LOC?' here':''}" data-k="${k}" type="button"><img src="${m.thumb}" alt=""><b>${m.t}${k===LOC?' · you are here':''}</b><span>${m.sub}</span>${c&&c[1]?`<i class="badge">📝 ${c[0]}/${c[1]}</i>`:''}${(()=>{const e=m.three?studyEv():evCount(k);return e[1]?`<i class="badge2">📁 ${e[0]}/${e[1]}</i>`:''})()}</button>`}).join('');
   $('#tmenu').classList.add('on');
 }
 $('#travel').onclick=travelMenu; $('#tx').onclick=()=>$('#tmenu').classList.remove('on');
 $('#tgrid').onclick=e=>{const b=e.target.closest('.card'); if(!b)return; const k=b.dataset.k; if(k===LOC){$('#tmenu').classList.remove('on');return}
   if(D.meta[k].three){post({t:'study'}); if(!P)location.href='../study3d.html'; return}
   const q=new URLSearchParams(location.search); q.set('loc',k); location.replace('place.html?'+q.toString())};
+
+// ---- the office computer ----
+let pcTab=0,pcSel=-1,pcCSS=null;
+function getCSS(){if(pcCSS!==null)return pcCSS;pcCSS='';try{pcCSS=[...P.document.querySelectorAll('style')].map(x=>x.textContent).join('\n').replace(/:root/g,':host');[...P.document.querySelectorAll('link[rel=stylesheet]')].forEach(l=>{if(!document.querySelector('link[href="'+l.href+'"]')){const n=document.createElement('link');n.rel='stylesheet';n.href=l.href;document.head.appendChild(n)}})}catch(e){}return pcCSS}
+function docHTML(id){try{const t=P.document.getElementById('d-'+id);return t?t.innerHTML:''}catch(e){return ''}}
+function paper(html){const host=document.createElement('div');host.style.cssText='display:block;padding:6px 4px 18px';const sh=host.attachShadow({mode:'open'});sh.innerHTML='<style>'+getCSS()+'\n:host{color:#1d1a16} .memo{transform:none!important} #vbody{max-width:860px;margin:0 auto;overflow-x:auto} #vbody table{max-width:100%}</style><div id="vbody">'+html+'</div>';return host}
+function openPC(){const pc=L.pc;if(!pc)return;$('#pchead').textContent='🖥 '+pc.host+' · signed in as '+pc.user+' · Mon 11/03, 6:20 PM';$('#pc').classList.add('on');pcTab=0;drawPC()}
+function closePC(){$('#pc').classList.remove('on');drawHots();if(!desk())idleDock()}
+function drawPC(){const pc=L.pc;$('#pctabs').innerHTML=pc.tabs.map((t,i)=>`<button type="button" data-i="${i}" class="${i===pcTab?'on':''}">${t.t}</button>`).join('');
+ const T=pc.tabs[pcTab];pcSel=-1;
+ if(T.obs){$('#pclist').innerHTML='';$('#pclist').style.display='none';showObs(T.obs);return}
+ $('#pclist').style.display='';$('#pclist').innerHTML=T.items.map((it,i)=>`<button type="button" class="it" data-i="${i}"><small>${it.f} · ${it.d}</small><b>${it.doc&&EVID[it.doc]&&!found(it.doc)?'<span class="dot"></span>':''}${it.who}</b>${it.s}</button>`).join('');
+ $('#pcread').innerHTML='<div class="empty">Select an item.</div>';if(desk())showItem(0)}
+function showObs(id){const r=$('#pcread');r.innerHTML='';const a=document.createElement('div');a.className='acts';const b=document.createElement('button');const done=logged(id);b.className=done?'':'ev';b.textContent=done?'✓ Logged as '+id:'📝 Log as observation '+id;b.onclick=()=>{post({t:'obs',id});if(!P){toast('Open this from the case file to log observations');return}toast(done?'Already logged: '+id:'New exhibit '+id+' logged and pinned');b.className='';b.textContent='✓ Logged as '+id};a.appendChild(b);r.appendChild(a);r.appendChild(paper(D.OBS[id][1]))}
+function showItem(i){const it=L.pc.tabs[pcTab].items[i];if(!it)return;pcSel=i;$$('#pclist .it').forEach(b=>b.classList.toggle('on',+b.dataset.i===i));const r=$('#pcread');r.innerHTML='';r.scrollTop=0;
+ const a=document.createElement('div');a.className='acts';
+ if(it.doc){const id=it.doc;const b=document.createElement('button');const lock=EVID[id]&&!found(id);b.className=lock?'ev':'';b.textContent=lock?'📁 Collect as exhibit '+id:(EVID[id]?'✓ '+id+' is in your Case Files · 📌 Pin':'📌 Already in your Case Files as '+id+' · Pin');
+  b.onclick=()=>{if(!P){toast('Open this from the case file to collect evidence');return} if(EVID[id]&&!found(id)){post({t:'found',id});toast('Collected! Exhibit '+id+' is now in your Case Files and pinned');b.className='';b.textContent='✓ '+id+' is in your Case Files · 📌 Pin';const d=$('#pclist .it.on .dot');if(d)d.remove()}else{post({t:'pin',id});toast(id+' pinned to your board')}};a.appendChild(b)}
+ r.appendChild(a);
+ if(it.doc){const h=docHTML(it.doc);r.appendChild(paper(h||'<div class="memo"><p>Open this location from the case file to read it.</p></div>'))}
+ else r.appendChild(paper('<div class="memo"><p><b>From:</b> '+it.who+'<br><b>Subject:</b> '+it.s+'<br><b>Date:</b> '+it.d+'</p>'+it.html+'</div>'))}
+function $$(q){return [...document.querySelectorAll(q)]}
+$('#pctabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;pcTab=+b.dataset.i;drawPC()};
+$('#pclist').onclick=e=>{const b=e.target.closest('.it');if(b)showItem(+b.dataset.i)};
+$('#pcx').onclick=closePC;
 // ---- light snow on outdoor views ----
 const sc=$('#snow'),sx=sc.getContext('2d');let flakes=[],snowRun=false;
 function snowOn(on){sc.style.display=on?'block':'none';if(on&&!snowRun){snowRun=true;sc.width=innerWidth;sc.height=innerHeight;flakes=Array.from({length:Math.round(innerWidth/9)},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:.6+Math.random()*1.6,s:.3+Math.random()*.8,d:Math.random()*6}));requestAnimationFrame(snowTick)} if(!on)snowRun=false}
