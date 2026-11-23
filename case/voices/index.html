@@ -37,12 +37,12 @@ h1{font:700 26px/1.2 'Libre Baskerville',serif;margin:4px 0 8px;color:#f3e7c6}
 <script>
 const PEOPLE=[
   {id:'delia',name:'Delia Whitcombe-Park',img:'../img/delia.jpg',voice:'af_sarah',speed:'1.08',src:'delia.mp3'},
-  {id:'owen',name:'Owen Whitcombe',img:'../img/owen.jpg',voice:'am_michael',speed:'0.94',src:'owen.mp3'},
-  {id:'margo',name:'Margo Whitcombe',img:'../img/margo.jpg',voice:'af_alloy',speed:'0.92',src:'margo.mp3'},
-  {id:'kira',name:'Kira Whitcombe',img:'../img/kira.jpg',voice:'af_bella',speed:'1.0',src:'kira.mp3'},
-  {id:'teddy',name:'Teddy Alcott',img:'../img/teddy.jpg',voice:'am_onyx',speed:'0.92',src:'teddy.mp3'},
-  {id:'rosa',name:'Rosa Delgado',img:'../img/rosa.jpg',voice:'af_heart',speed:'0.92',src:'rosa.mp3'},
-  {id:'walt',name:'Walt Penrose',img:'../img/teddy.jpg',voice:'am_fenrir',speed:'1.02',src:'walt.mp3'},
+  {id:'owen',name:'Owen Whitcombe',img:'../img/owen.jpg',voice:'am_adam',speed:'1.0',src:'owen.mp3'},
+  {id:'margo',name:'Margo Whitcombe',img:'../img/margo.jpg',voice:'af_alloy',speed:'1.04',src:'margo.mp3'},
+  {id:'kira',name:'Lena Whitcombe',img:'../img/kira.jpg',voice:'af_bella',speed:'1.0',src:'kira.mp3'},
+  {id:'teddy',name:'Teddy Alcott',img:'../img/teddy.jpg',voice:'am_onyx',speed:'0.98',src:'teddy.mp3'},
+  {id:'rosa',name:'Rosa Delgado',img:'../img/rosa.jpg',voice:'ef_dora',speed:'1.0',lang:'es',src:'rosa.mp3'},
+  {id:'walt',name:'Walt Penrose',img:'../img/teddy.jpg',voice:'am_michael',speed:'0.95',src:'walt.mp3'},
 ];
 const grid=document.getElementById('grid');
 let cur=null,audio=null;
@@ -50,7 +50,7 @@ grid.innerHTML=PEOPLE.map(p=>`<article class="card" data-id="${p.id}">
   <img src="${p.img}" alt="${p.name}">
   <div class="meta">
     <b>${p.name}</b>
-    <div class="vid">${p.voice} · ${p.speed}×</div>
+    <div class="vid">${p.voice} · ${p.speed}×${p.lang?' · lang '+p.lang:''}</div>
     <button class="play" type="button" aria-pressed="false" data-src="${p.src}" aria-label="Play ${p.name}">▶ Play</button>
   </div>
 </article>`).join('');

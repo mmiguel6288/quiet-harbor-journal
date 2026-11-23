@@ -197,8 +197,21 @@ async function ask(msg,ex,title,label){if(busy)return;busy=true;add('qq'+(ex?' e
 $('#f').onsubmit=e=>{e.preventDefault();const q=$('#q').value.trim();if(!q)return;$('#q').value='';ask(q)};
 renderChips();
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;const mic=$('#mic');
-if(!SR){if(mic)mic.style.display='none'}else{let rec=null;const start=e=>{e.preventDefault();rec=new SR();rec.lang='en-US';rec.interimResults=true;rec.onresult=ev=>{$('#q').value=[...ev.results].map(r=>r[0].transcript).join(' ')};rec.start();mic.classList.add('rec');mic.textContent='⏺'};
-  const stop=()=>{if(rec){rec.stop();rec=null;mic.classList.remove('rec');mic.textContent='🎙';$('#q').focus()}};mic.addEventListener('pointerdown',start);mic.addEventListener('pointerup',stop);mic.addEventListener('pointerleave',stop)}
+if(!SR){if(mic)mic.style.display='none'}else{
+  let rec=null,recOn=false,recSticky=false,recT0=0;
+  const hint=$('#listen-hint');
+  const micUI=()=>{mic.classList.toggle('rec',recOn);mic.setAttribute('aria-pressed',recOn?'true':'false');if(hint){hint.hidden=!recOn;hint.classList.toggle('on',recOn)}};
+  const micStart=()=>{if(recOn||!SR)return;try{rec=new SR();rec.lang='en-US';rec.interimResults=true;rec.continuous=false;rec.maxAlternatives=1;
+    rec.onresult=ev=>{$('#q').value=[...ev.results].map(r=>r[0].transcript).join(' ')};
+    rec.onend=()=>{if(!recOn)return;recOn=false;recSticky=false;rec=null;micUI();if($('#q').value){$('#q').focus();toast('Check the words, then tap Ask')}};
+    rec.onerror=e=>{const err=e&&e.error;if(err=='aborted'||(err=='no-speech'&&!recSticky))return;toast(err=='not-allowed'||err=='service-not-allowed'?'Microphone is blocked. Allow mic access for this site to ask out loud.':err=='no-speech'?'Didn\'t hear anything. Hold 🎙 and speak, or tap 🎙 to start.':'Voice input hiccup: '+err)};
+    rec.start();recOn=true;recT0=Date.now();micUI()}catch(e){recOn=false;micUI();toast((e&&e.name)=='NotAllowedError'?'Microphone is blocked. Allow mic access for this site to ask out loud.':'Voice input isn\'t available in this browser.')}};
+  const micStop=()=>{try{if(rec&&recOn)rec.stop()}catch(e){}};
+  mic.addEventListener('pointerdown',e=>{e.preventDefault();try{mic.setPointerCapture(e.pointerId)}catch(_){ }if(recOn){micStop();return}micStart();recSticky=false});
+  mic.addEventListener('pointerup',()=>{if(!recOn)return;if(Date.now()-recT0<400){recSticky=true;toast('Listening… tap 🎙 again when you\'re done')}else micStop()});
+  mic.addEventListener('pointercancel',()=>{if(recOn&&!recSticky)micStop()});
+  mic.addEventListener('contextmenu',e=>e.preventDefault());
+}
 fetch(LIVE+'/health').then(r=>r.json()).then(h=>{$('#stat').textContent=h.practice?'Live interview connected. Walt answers in his own words.':'The practice suspect is not installed on the server yet.'}).catch(()=>{$('#stat').innerHTML='Can\'t reach the interview room. Turn on Tailscale on this device, then reload.'});
 
 show((location.hash||'').replace('#','')||'brief');
