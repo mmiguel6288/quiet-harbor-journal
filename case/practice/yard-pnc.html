@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Maple Lane side yard (photo tour)</title>
+<style>
+html,body{margin:0;height:100%;background:#0d0b09;color:#eee;font:14px/1.45 Inter,system-ui,sans-serif;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none}
+#bgblur{position:fixed;inset:0;background:#0d0b09 center/cover no-repeat;filter:blur(28px) saturate(.9) brightness(.32);transform:scale(1.12);pointer-events:none;z-index:0}
+#stage{position:fixed;inset:0;overflow:hidden;cursor:grab;z-index:1}
+#stage.drag{cursor:grabbing}
+#scene{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform;line-height:0}
+#scene img.view{display:block;width:100%;height:auto;pointer-events:none;-webkit-user-drag:none;box-shadow:0 8px 40px rgba(0,0,0,.55)}
+#hots{position:absolute;inset:0;pointer-events:none}
+.hot{position:absolute;border:0;padding:0;background:transparent;cursor:pointer;border-radius:10px;pointer-events:auto;-webkit-tap-highlight-color:transparent}
+.hot:focus-visible{outline:2px solid #b8862f;outline-offset:2px}
+@media(hover:hover){.hot:hover{background:rgba(184,134,47,.18);box-shadow:inset 0 0 0 1px rgba(243,215,120,.45)}}
+body.hint .hot.clue{box-shadow:0 0 0 1px rgba(243,215,120,.4);background:rgba(184,134,47,.1);animation:shimmer 2.4s ease-in-out infinite}
+@keyframes shimmer{0%,100%{box-shadow:0 0 0 1px rgba(243,215,120,.28),0 0 0 0 rgba(217,164,65,0)}50%{box-shadow:0 0 0 3px rgba(243,215,120,.75),0 0 18px 3px rgba(217,164,65,.5)}}
+#hud{position:fixed;left:12px;top:10px;right:12px;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none;gap:8px;z-index:5}
+#hud .t{background:rgba(20,24,16,.82);border:1px solid #4a5a3c;padding:6px 10px;border-radius:8px;pointer-events:auto;font-size:12.5px;max-width:min(440px,calc(100% - 88px))}
+#hud .t b{color:#f3e7c6;font-family:Georgia,serif}
+#close{pointer-events:auto;background:#b8862f;color:#1a1209;border:none;border-radius:8px;padding:8px 12px;font-weight:700;cursor:pointer}
+#panel{box-sizing:border-box;position:fixed;left:12px;right:12px;bottom:108px;width:auto;max-width:380px;margin:0 auto;max-height:42vh;overflow:auto;background:rgba(246,240,224,.97);color:#1d1a16;border-radius:10px;box-shadow:0 10px 40px rgba(0,0,0,.6);padding:14px 16px;display:none;z-index:6}
+#panel.on{display:block}
+#panel h3{margin:0 0 6px;font-family:Georgia,serif;font-size:17px}
+#panel .tag{font:600 10px ui-monospace,monospace;letter-spacing:1px;color:#7a1c12}
+#panel p{margin:6px 0}
+#panel .row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+#panel button{border:1px solid #6b5a3e;background:#fff;border-radius:16px;padding:6px 12px;font-size:12.5px;cursor:pointer}
+#panel button.pri{background:#2b2218;color:#f3e7c6}
+#panel .x{position:absolute;right:8px;top:6px;border:none;background:none;font-size:18px;cursor:pointer;color:#1d1a16}
+#bar{position:fixed;left:0;right:0;bottom:0;display:flex;gap:8px;align-items:stretch;overflow-x:auto;padding:8px 12px calc(10px + env(safe-area-inset-bottom));background:linear-gradient(transparent,rgba(0,0,0,.82) 28%);scrollbar-width:none;z-index:5}
+#bar::-webkit-scrollbar{display:none}
+#bar button{flex:none;display:flex;flex-direction:column;width:112px;background:rgba(30,25,19,.92);color:#e6dcc3;border:1px solid #4a3d2c;border-radius:10px;padding:0;overflow:hidden;cursor:pointer;font:600 11px/1.2 Inter,system-ui,sans-serif}
+#bar button img{display:block;width:100%;height:56px;object-fit:cover}
+#bar button span{padding:5px 6px 6px}
+#bar button.on{border-color:#b8862f;box-shadow:0 0 0 2px #b8862f}
+#toast{position:fixed;left:50%;top:108px;transform:translateX(-50%);background:#2b2218;color:#f3e7c6;padding:10px 16px;border-radius:8px;display:none;z-index:8;max-width:min(320px,86vw);text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.55);font:600 13.5px/1.35 Inter,system-ui,sans-serif}
+#banner{position:fixed;left:12px;right:12px;bottom:108px;text-align:center;pointer-events:none;font:600 10px/1.3 ui-monospace,monospace;color:#d7c89a;text-shadow:0 1px 4px #000;letter-spacing:.04em;z-index:3}
+#nav{position:fixed;top:46%;left:0;right:0;transform:translateY(-50%);display:flex;justify-content:space-between;pointer-events:none;padding:0 6px;z-index:4}
+#nav button{pointer-events:auto;width:40px;height:40px;border:0;border-radius:50%;background:rgba(20,16,12,.62);color:#f3e7c6;font-size:22px;cursor:pointer}
+#load{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#1a1610;color:#cbbd9c;font-family:Georgia,serif;font-size:18px;z-index:9}
+#hintchip{display:none;margin-top:4px;color:#f3e7c6}
+body.hint #hintchip{display:block}
+@media(max-width:700px){
+  #hud .t{font-size:12px;padding:5px 8px;max-width:calc(100% - 80px)}
+  #bar{gap:6px;padding:8px 8px calc(10px + env(safe-area-inset-bottom));justify-content:center}
+  #bar button{width:calc((100vw - 34px) / 4)}
+  #bar button img{height:46px}
+  #bar button span{font-size:10px;padding:4px 3px 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #banner{display:none}
+  #toast{top:120px}
+  #nav{top:calc(108px + 28.125vw);transform:translateY(-50%)}
+}
+@media(min-width:900px) and (orientation:landscape){
+  #bar{left:auto;width:168px;top:72px;bottom:12px;flex-direction:column;overflow-y:auto;overflow-x:hidden;padding:8px;background:rgba(12,10,8,.62);border-radius:12px 0 0 12px;right:0}
+  #bar button{width:100%}
+  #bar button img{height:72px}
+  #panel{left:auto;right:188px;bottom:24px;width:min(400px,calc(100% - 220px));margin:0;max-width:none}
+  #banner{display:block;bottom:16px;right:180px;left:12px;text-align:left}
+  #hud .t{font-size:14px}
+  #nav{display:none}
+  #toast{top:84px}
+}
+</style>
+</head>
+<body>
+<div id="load">Opening the side yard…</div>
+<div id="bgblur"></div>
+<div id="stage"><div id="scene"><img class="view" id="photo" alt=""><div id="hots"></div></div></div>
+<div id="hud"><div class="t"><b>June's windowsill &amp; side yard</b> · Maple Lane, practice<br><span id="help">Tap a spot to inspect · pinch or double-tap to zoom</span><span id="hintchip">A faint shimmer marks something easy to miss.</span></div><button id="close" type="button">✕ Close</button></div>
+<div id="nav"><button id="prev" type="button" aria-label="Previous view">‹</button><button id="next" type="button" aria-label="Next view">›</button></div>
+<div id="panel"><button class="x" id="px" type="button" aria-label="Close inspect">×</button><div class="tag" id="ptag"></div><h3 id="pt"></h3><div id="pb"></div><div class="row" id="pr"></div></div>
+<div id="bar"></div>
+<div id="toast"></div>
+<div id="banner">Practice: nothing here relates to the real case.</div>
+<script>
+const P=parent!==window?parent:null;
+const params=new URLSearchParams(location.search);
+try{if(params.get('hint')==='1'||(P&&P.__practiceApp&&P.__practiceApp.st&&P.__practiceApp.st.hints>=2))document.body.classList.add('hint')}catch(e){}
+const VIEWS={
+  wide:{t:'The side yard',file:'yard/wide.jpg',hots:[
+    {k:'sill',l:23,t:4,w:18,h:42,label:'Kitchen windowsill'},
+    {k:'tomatoes',l:0,t:38,w:23,h:42,label:"Walt's tomato bed"},
+    {k:'tin',l:50,t:66,w:18,h:24,label:'Pie tin in the grass',go:'gap'},
+    {k:'fence',l:54,t:18,w:40,h:48,label:'The fence'},
+    {k:'crumbs',l:66,t:42,w:9,h:20,label:'Something on the post',clue:true,go:'post'}
+  ]},
+  sill:{t:'The windowsill',file:'yard/sill.jpg',hots:[
+    {k:'glass',l:24,t:0,w:50,h:58,label:'Kitchen window'},
+    {k:'stain',l:24,t:56,w:52,h:22,label:'Stain on the sill'}
+  ]},
+  gap:{t:'The fence gap',file:'yard/gap.jpg',hots:[
+    {k:'opening',l:20,t:0,w:42,h:58,label:'Gap in the fence'},
+    {k:'tin',l:36,t:60,w:28,h:28,label:'Pie tin in the grass'},
+    {k:'crumbs',l:66,t:28,w:16,h:52,label:'Crumbs on the post',clue:true,obs:'T4'},
+    {k:'ground',l:54,t:80,w:22,h:16,label:'Crumbs in the grass',clue:true,obs:'T4'}
+  ]},
+  post:{t:'The fence post',file:'yard/post.jpg',hots:[
+    {k:'crumbs',l:47,t:6,w:16,h:56,label:'Crumbs on the post',clue:true,obs:'T4'},
+    {k:'ground',l:36,t:66,w:30,h:28,label:'Crumbs in the grass',clue:true,obs:'T4'},
+    {k:'tin',l:0,t:46,w:32,h:44,label:'Pie tin in the grass'}
+  ]}
+};
+const ORDER=['wide','sill','gap','post'];
+const INFO={
+  sill:{t:"June's kitchen windowsill",d:"A low painted sill under June's kitchen window, about a beagle's head high from the yard. A faint purple ring marks where a pie tin sat to cool. The pie is gone.",go:'sill'},
+  stain:{t:'A ring on the sill',d:"A dull purple-blue ring is baked onto the paint, the size of a pie tin. Whatever cooled here left a stain. The tin itself is not on the sill now."},
+  glass:{t:'The kitchen window',d:"The glass is closed. You can just see trees reflected in the panes. Nobody came through here — the pie was taken from the low sill on the yard side."},
+  tomatoes:{t:"Walt's tomato bed",d:"Wire cages, late-season tomatoes, and a blue watering can still sitting in the dirt. Walt is vain about these plants. Nothing here looks out of place."},
+  tin:{t:'Empty pie tin in the grass',d:"June's bake-off tin, lying in the grass just inside the fence. A smear of dark blueberry filling still clings to the bottom. Same tin as the photo in the case file."},
+  fence:{t:'The wooden fence',d:"Weathered slats run along the yard. Look closer — a few are missing, and something dark is stuck to a post. It is easier to see in a tighter shot.",go:'gap'},
+  opening:{t:'Gap in the fence',d:"Two or three slats are missing, leaving an opening a beagle could squeeze through. The empty tin is just inside it, on this side of the yard."},
+  crumbs:{t:'Crumbs on the fence post',d:"On the yard-facing side of the post, about a beagle's nose high, small dark-blue crumbs are stuck to the wood. A few more lie in the grass at the foot of the post. They are not in the original photo of the tin."},
+  ground:{t:'Crumbs in the grass',d:"A few more dark-blue crumbs have fallen at the foot of the post, in the grass beside the tin. They match the ones stuck to the wood."}
+};
+
+const scene=$('#scene'), photo=$('#photo'), stage=$('#stage'), hots=$('#hots'), bg=$('#bgblur');
+function $(s){return document.querySelector(s)}
+function desk(){return matchMedia('(min-width:900px) and (orientation:landscape)').matches}
+function vp(){if(desk())return{x:0,y:0,W:innerWidth-168,H:innerHeight};const hud=108,bar=108;return{x:0,y:hud,W:innerWidth,H:Math.max(160,innerHeight-hud-bar)}}
+let view='wide', scale=1, tx=0, ty=0, baseW=0, baseH=0;
+
+function logged(){try{return !!(P&&P.__practice&&P.__practice.hasObs&&P.__practice.hasObs('T4'))}catch(e){return false}}
+function post(m){if(P)P.postMessage(Object.assign({src:'practice3d'},m),location.origin)}
+function toast(s){const t=$('#toast');t.textContent=s;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',2400)}
+
+function layout(){
+  const {W,H}=vp();
+  const imgW=photo.naturalWidth||1280, imgH=photo.naturalHeight||720;
+  const fit=Math.min(W/imgW, H/imgH);
+  baseW=imgW*fit; baseH=imgH*fit;
+  scene.style.width=baseW+'px';
+  apply();
+}
+function clamp(){
+  const {x,y,W,H}=vp();
+  const w=baseW*scale, h=baseH*scale;
+  if(w<=W) tx=x+(W-w)/2; else tx=Math.min(x, Math.max(x+W-w, tx));
+  if(h<=H) ty=y+(desk()?(H-h)/2:6); else ty=Math.min(y, Math.max(y+H-h, ty));
+}
+function apply(){clamp();scene.style.transform=`translate(${tx}px,${ty}px) scale(${scale})`}
+function zoomAt(cx,cy,next){
+  const prev=scale; scale=Math.max(1, Math.min(4.2, next));
+  const r=scale/prev; tx=cx-(cx-tx)*r; ty=cy-(cy-ty)*r; apply();
+}
+
+function showView(id){
+  if(!VIEWS[id])return; view=id; closePanel();
+  const v=VIEWS[id];
+  scale=1; tx=0; ty=0;
+  photo.src=v.file; photo.alt=v.t;
+  bg.style.backgroundImage=`url("${v.file}")`;
+  function syncBar(){$('#bar').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.k===view))}
+  syncBar();
+  photo.onload=()=>{if(photo.getAttribute('src')!==VIEWS[view].file)return;layout();drawHots();$('#load').style.display='none'};
+  if(photo.complete&&photo.naturalWidth){layout();drawHots();$('#load').style.display='none'}
+}
+function drawHots(){
+  const v=VIEWS[view];
+  hots.innerHTML=v.hots.map(h=>`<button type="button" class="hot${h.clue?' clue':''}" data-k="${h.k}" style="left:${h.l}%;top:${h.t}%;width:${h.w}%;height:${h.h}%" aria-label="${h.label}"></button>`).join('');
+}
+function inspect(key){
+  const h=(VIEWS[view].hots.find(x=>x.k===key)||{});
+  const i=Object.assign({},INFO[key]||{}); if(h.go)i.go=h.go; if(h.obs)i.obs=h.obs;
+  if(!i.t)return;
+  $('#ptag').textContent='INSPECTING'; $('#pt').textContent=i.t; $('#pb').innerHTML='<p>'+i.d+'</p>';
+  const row=$('#pr'); row.innerHTML='';
+  if(i.go){const b=document.createElement('button'); b.className='pri'; b.textContent='🔎 Look closer'; b.onclick=()=>showView(i.go); row.appendChild(b)}
+  if(i.obs){const b=document.createElement('button'); b.className='pri'; const done=logged(); b.textContent=done?'✓ Observation already logged':'📝 Log observation '+i.obs;
+    b.onclick=()=>{post({t:'obs',id:i.obs}); toast(done?'Already logged: '+i.obs:'New exhibit '+i.obs+' logged and pinned'); b.textContent='✓ Observation already logged'}; row.appendChild(b)}
+  $('#panel').classList.add('on');
+}
+function closePanel(){$('#panel').classList.remove('on')}
+function step(d){showView(ORDER[(ORDER.indexOf(view)+d+ORDER.length)%ORDER.length])}
+
+$('#bar').innerHTML=ORDER.map(k=>`<button type="button" data-k="${k}"><img src="${VIEWS[k].file}" alt=""><span>${VIEWS[k].t}</span></button>`).join('');
+$('#bar').onclick=e=>{const b=e.target.closest('button'); if(b)showView(b.dataset.k)};
+$('#prev').onclick=()=>step(-1); $('#next').onclick=()=>step(1);
+$('#px').onclick=closePanel; $('#close').onclick=()=>post({t:'close'});
+
+const pointers=new Map();
+let lastTap=0, lastTapX=0, lastTapY=0, down=null, moved=false, pinch0=null, hotKey=null;
+stage.addEventListener('pointerdown',e=>{
+  stage.setPointerCapture(e.pointerId);
+  pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  down={x:e.clientX,y:e.clientY}; moved=false; stage.classList.add('drag');
+  hotKey=e.target.classList&&e.target.classList.contains('hot')?e.target.dataset.k:null;
+  if(pointers.size===2){const [a,b]=[...pointers.values()]; pinch0={d:Math.hypot(a.x-b.x,a.y-b.y),s:scale,cx:(a.x+b.x)/2,cy:(a.y+b.y)/2}}
+});
+stage.addEventListener('pointermove',e=>{
+  if(!pointers.has(e.pointerId))return;
+  const prev=pointers.get(e.pointerId);
+  pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(pointers.size===2&&pinch0){const [a,b]=[...pointers.values()]; const d=Math.hypot(a.x-b.x,a.y-b.y); zoomAt(pinch0.cx,pinch0.cy, pinch0.s*(d/Math.max(1,pinch0.d))); moved=true; return}
+  if(down&&pointers.size===1){
+    const dx=e.clientX-down.x, dy=e.clientY-down.y;
+    if(Math.hypot(dx,dy)>8)moved=true;
+    if(moved){tx+=e.clientX-prev.x; ty+=e.clientY-prev.y; apply()}
+  }
+});
+function endPtr(e){
+  pointers.delete(e.pointerId); pinch0=null; stage.classList.remove('drag');
+  if(e.type==='pointerup'&&down&&!moved&&pointers.size===0){
+    const now=performance.now();
+    if(now-lastTap<320&&Math.hypot(e.clientX-lastTapX,e.clientY-lastTapY)<28){
+      if(scale>1.2){scale=1;tx=0;ty=0;layout()} else zoomAt(e.clientX,e.clientY,2.3);
+      lastTap=0;
+    } else {
+      lastTap=now; lastTapX=e.clientX; lastTapY=e.clientY;
+      if(hotKey) inspect(hotKey); else closePanel();
+    }
+  }
+  down=null; hotKey=null;
+}
+stage.addEventListener('pointerup',endPtr);
+stage.addEventListener('pointercancel',endPtr);
+stage.addEventListener('wheel',e=>{e.preventDefault(); zoomAt(e.clientX,e.clientY, scale*(e.deltaY>0?0.88:1.14))},{passive:false});
+addEventListener('resize',layout);
+addEventListener('keydown',e=>{if(e.key==='Escape'){if($('#panel').classList.contains('on'))closePanel(); else post({t:'close'})} if(e.key==='ArrowRight')step(1); if(e.key==='ArrowLeft')step(-1)});
+window.addEventListener('message',e=>{if(e.origin!==location.origin)return; const m=e.data; if(m&&m.t==='hint')document.body.classList.toggle('hint',!!m.on)});
+
+showView('wide');
+setTimeout(()=>{$('#load').style.display='none'},1200);
+window.__practicePnc={showView,inspect,VIEWS,ready:true};
+</script>
+</body>
+</html>
