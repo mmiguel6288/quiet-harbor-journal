@@ -24,18 +24,9 @@ h1{font:700 26px/1.2 'Libre Baskerville',serif;margin:4px 0 8px;color:#f3e7c6}
 .play{margin-top:auto;border:0;border-radius:999px;padding:8px 12px;background:#2a251f;color:#eadfc4;font:600 13px Inter,system-ui,sans-serif;cursor:pointer}
 .play:hover,.play:focus{background:#3a332b;outline:none}
 .play[aria-pressed="true"]{background:var(--acc);color:#1c1a17}
-.card.opts .meta{padding-bottom:12px}
-.optlist{display:flex;flex-direction:column;gap:6px;margin-top:2px}
-.optlist .play{margin:0;width:100%;text-align:left;border-radius:10px;padding:7px 10px;font:600 12px/1.35 Inter,system-ui,sans-serif}
-.optlist .play .lab{display:block;font:600 10.5px/1.3 'IBM Plex Mono',ui-monospace,monospace;color:#b9ad8f;margin-top:1px}
-.play[aria-pressed="true"] .lab{color:#3a2a12}
-.play.is-current{box-shadow:inset 0 0 0 1px rgba(217,164,65,.7)}
-.note{font:12px/1.4 Inter,system-ui,sans-serif;color:var(--mut)}
 @media(min-width:720px){
   .grid{grid-template-columns:repeat(4,1fr)}
   h1{font-size:30px}
-  .card.opts{grid-column:span 2;display:grid;grid-template-columns:200px 1fr;align-items:stretch}
-  .card.opts img{height:100%;aspect-ratio:auto;min-height:280px}
 }
 </style>
 </head>
@@ -43,80 +34,33 @@ h1{font:700 26px/1.2 'Libre Baskerville',serif;margin:4px 0 8px;color:#f3e7c6}
 <header>
   <div class="tag">VOICE CHECK · NOT PART OF THE CASE</div>
   <h1>Interview voices</h1>
-  <p class="lede">A short hello from each person you can interview, plus Walt from the practice interview. Owen, Margo, and Rosa each have a few alternate reads to compare. The current interview voice is labeled, and is still what the live interviews use. Nothing here is about the case.</p>
+  <p class="lede">A short hello from each person you can interview, plus Walt from the practice interview. These are the same voices the live interviews use. Nothing here is about the case.</p>
 </header>
 <main class="grid" id="grid"></main>
 <script>
 const PEOPLE=[
   {id:'delia',name:'Delia Whitcombe-Park',img:'../img/delia.jpg',voice:'af_sarah',speed:'1.08',src:'delia.mp3'},
-  {id:'owen',name:'Owen Whitcombe',img:'../img/owen.jpg',voice:'am_adam',speed:'1.0',src:'owen.mp3',
-    note:'Looking for a more casual, laid-back read than the current voice.',
-    options:[
-      {label:'Current',voice:'am_adam',speed:'1.0',src:'owen.mp3',current:true},
-      {label:'A',voice:'am_puck',speed:'1.05',src:'owen-a.mp3'},
-      {label:'B',voice:'am_echo',speed:'0.98',src:'owen-b.mp3'},
-      {label:'C',voice:'am_eric',speed:'1.02',src:'owen-c.mp3'},
-      {label:'D',voice:'am_liam',speed:'0.95',src:'owen-d.mp3'}
-    ]},
-  {id:'margo',name:'Margo Whitcombe',img:'../img/margo.jpg',voice:'af_alloy',speed:'1.04',src:'margo.mp3',
-    note:'Looking for a clearly female, slightly older and more mature read.',
-    options:[
-      {label:'Current',voice:'af_alloy',speed:'1.04',src:'margo.mp3',current:true},
-      {label:'A',voice:'af_nicole',speed:'0.98',src:'margo-a.mp3'},
-      {label:'B',voice:'af_kore',speed:'1.0',src:'margo-b.mp3'},
-      {label:'C',voice:'af_jessica',speed:'0.96',src:'margo-c.mp3'},
-      {label:'D',voice:'bf_emma',speed:'0.98',lang:'en-gb',src:'margo-d.mp3'}
-    ]},
+  {id:'owen',name:'Owen Whitcombe',img:'../img/owen.jpg',voice:'am_puck',speed:'1.05',src:'owen.mp3'},
+  {id:'margo',name:'Margo Whitcombe',img:'../img/margo.jpg',voice:'bf_emma',speed:'0.98',lang:'en-gb',src:'margo.mp3'},
   {id:'kira',name:'Lena Whitcombe',img:'../img/kira.jpg',voice:'af_bella',speed:'1.0',src:'kira.mp3'},
   {id:'teddy',name:'Teddy Alcott',img:'../img/teddy.jpg',voice:'am_onyx',speed:'0.98',src:'teddy.mp3'},
-  {id:'rosa',name:'Rosa Delgado',img:'../img/rosa.jpg',voice:'ef_dora',speed:'1.0',lang:'es',src:'rosa.mp3',
-    note:'Looking for correct English with a light Spanish accent — not Spanish phonetics on English words.',
-    options:[
-      {label:'Current',voice:'ef_dora',speed:'1.0',lang:'es',src:'rosa.mp3',current:true},
-      {label:'A',voice:'ef_dora',speed:'1.0',lang:'en-us',src:'rosa-a.mp3'},
-      {label:'B',voice:'ef_dora',speed:'1.0',lang:'en-us + es',src:'rosa-b.mp3'},
-      {label:'C',voice:'af_nicole',speed:'0.98',src:'rosa-c.mp3'},
-      {label:'D',voice:'af_river',speed:'1.0',src:'rosa-d.mp3'}
-    ]},
+  {id:'rosa',name:'Rosa Delgado',img:'../img/rosa.jpg',voice:'ef_dora',speed:'1.0',lang:'en-us + es',src:'rosa.mp3'},
   {id:'walt',name:'Walt Penrose',img:'../img/teddy.jpg',voice:'am_onyx',speed:'0.98',src:'walt.mp3'}
 ];
 const grid=document.getElementById('grid');
 let cur=null,audio=null;
 function vid(o){return o.voice+' · '+o.speed+'×'+(o.lang?' · lang '+o.lang:'')}
-function btnLabel(o,playing){
-  const head=playing?'■ Stop':'▶ '+(o.current?'Current':o.label);
-  return head+'<span class="lab">'+vid(o)+'</span>';
-}
-grid.innerHTML=PEOPLE.map(p=>{
-  if(p.options){
-    const opts=p.options.map(o=>`<button class="play${o.current?' is-current':''}" type="button" aria-pressed="false" data-src="${o.src}" data-label="${o.current?'Current':o.label}" aria-label="Play ${p.name}, ${o.current?'current voice':('option '+o.label)}">${btnLabel(o,false)}</button>`).join('');
-    return `<article class="card opts" data-id="${p.id}">
-      <img src="${p.img}" alt="${p.name}">
-      <div class="meta">
-        <b>${p.name}</b>
-        ${p.note?`<div class="note">${p.note}</div>`:''}
-        <div class="optlist">${opts}</div>
-      </div>
-    </article>`;
-  }
-  return `<article class="card" data-id="${p.id}">
-    <img src="${p.img}" alt="${p.name}">
-    <div class="meta">
-      <b>${p.name}</b>
-      <div class="vid">${vid(p)}</div>
-      <button class="play" type="button" aria-pressed="false" data-src="${p.src}" aria-label="Play ${p.name}">▶ Play</button>
-    </div>
-  </article>`;
-}).join('');
-function restore(b){
-  if(!b)return;
-  const opt=PEOPLE.flatMap(p=>p.options||[]).find(o=>o.src===b.dataset.src);
-  if(opt) b.innerHTML=btnLabel(opt,false);
-  else b.textContent='▶ Play';
-}
+grid.innerHTML=PEOPLE.map(p=>`<article class="card" data-id="${p.id}">
+  <img src="${p.img}" alt="${p.name}">
+  <div class="meta">
+    <b>${p.name}</b>
+    <div class="vid">${vid(p)}</div>
+    <button class="play" type="button" aria-pressed="false" data-src="${p.src}" aria-label="Play ${p.name}">▶ Play</button>
+  </div>
+</article>`).join('');
 function stop(){
   if(audio){audio.pause();audio=null}
-  if(cur){cur.setAttribute('aria-pressed','false');restore(cur);cur=null}
+  if(cur){cur.setAttribute('aria-pressed','false');cur.textContent='▶ Play';cur=null}
 }
 grid.addEventListener('click',e=>{
   const b=e.target.closest('.play');if(!b)return;
@@ -125,10 +69,7 @@ grid.addEventListener('click',e=>{
   audio=new Audio(b.dataset.src);
   audio.addEventListener('ended',stop);
   audio.addEventListener('error',stop);
-  cur=b;b.setAttribute('aria-pressed','true');
-  const opt=PEOPLE.flatMap(p=>p.options||[]).find(o=>o.src===b.dataset.src);
-  if(opt) b.innerHTML=btnLabel(opt,true);
-  else b.textContent='■ Stop';
+  cur=b;b.setAttribute('aria-pressed','true');b.textContent='■ Stop';
   audio.play().catch(stop);
 });
 </script>
