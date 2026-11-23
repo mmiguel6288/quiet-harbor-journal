@@ -16,6 +16,7 @@
   <svg class="seal" viewBox="0 0 40 40"><path d="M20 2l5 6 8-1-1 8 6 5-6 5 1 8-8-1-5 6-5-6-8 1 1-8-6-5 6-5-1-8 8 1z" fill="#b8902f"/><circle cx="20" cy="20" r="8" fill="#1a1510"/><text x="20" y="23.5" font-size="8" text-anchor="middle" fill="#e2c479" font-family="Georgia">WB</text></svg>
   <div class="ttl">PRACTICE · “THE MISSING PIE”<small>Willow Bend · Harvest Bake-Off · about 10 minutes</small></div>
   <span class="score-pill" id="pill">Files read 0/5</span>
+  <button class="sound" id="bgmbtn" type="button" aria-pressed="true" aria-label="Music">🎵<span class="sl"> Music</span></button>
   <a class="sound" href="../">← Case</a>
  </div>
  <nav class="tabs" id="tabs">
@@ -39,7 +40,7 @@
    <div class="panel" style="line-height:1.55;font-size:14px">
     <b style="color:#f3e7c6">How to play (the tools, in miniature)</b><br>
     1. Open <b>Case Files</b>. Read the papers and photos. Pin the useful ones to the <b>Evidence Board</b>.<br>
-    2. In <b>Tools &amp; Lab</b>, crack June's recipe tin (the code is in a document), send a <b>lab request</b>, and walk the <b>3D yard</b>. Some observations can only be logged there, and they become new exhibits.<br>
+    2. In <b>Tools &amp; Lab</b>, crack June's recipe tin (the code is in a document), send a <b>lab request</b>, and walk the <b>side yard</b>. Some observations can only be logged there, and they become new exhibits.<br>
     3. In the <b>Interview</b> room, ask Walt in your own words or present an exhibit. Watch his face when a question makes him uncomfortable. If he admits something important, it is filed as a new statement.<br>
     4. Stuck? <b>Hints</b> come in three levels and each one costs points.<br>
     5. When you're sure, <b>Accuse</b>: who, why, how, and when, with evidence for each. That's one shot, then a short scored reveal.<br>
@@ -58,7 +59,7 @@
 
 <section class="view" id="v-files">
  <h2 class="sec">Case files</h2>
- <p class="lede">Tap a folder to open it, and pin the ones you'll want later. Folders you've opened are ticked. New exhibits from the locker, the lab, the 3D yard, and interviews will appear here too.</p>
+ <p class="lede">Tap a folder to open it, and pin the ones you'll want later. Folders you've opened are ticked. New exhibits from the locker, the lab, the side yard, and interviews will appear here too.</p>
  <div class="groups" id="groups"></div>
 </section>
 
@@ -68,6 +69,7 @@
  <div class="ivbar">
   <div class="stat" id="stat">Connecting to the interview room…</div>
   <button class="pill" id="vox" type="button" aria-pressed="true">🔊 <span class="lbl">Voice</span></button>
+  <button class="pill" id="bgmiv" type="button" aria-pressed="true" aria-label="Music">🎵 <span class="lbl">Music</span></button>
   <button class="pill" id="ivreset" type="button">↺ <span class="lbl">Reset chat</span></button>
   <button class="pill" id="ivhelp" type="button" aria-expanded="false" aria-controls="help-pop" title="How interviews work">ⓘ</button>
  </div>
@@ -100,7 +102,7 @@
 
 <section class="view" id="v-tools">
  <h2 class="sec">Tools &amp; lab</h2>
- <div class="toolnav" id="toolnav"><button data-t="locker" class="on">🗄 Evidence locker</button><button data-t="lab">🧪 Lab request</button><button data-t="yard">🧊 3D side yard</button></div>
+ <div class="toolnav" id="toolnav"><button data-t="locker" class="on">🗄 Evidence locker</button><button data-t="lab">🧪 Lab request</button><button data-t="yard">🧊 Side yard</button></div>
  <div id="toolbox"></div>
 </section>
 
@@ -223,6 +225,7 @@
 </svg><div class="cap">N1 · June's fridge, photographed when the complaint was taken. A yellow notepad is stuck under a magnet. The handwriting is June's.</div></div>
 </template>
 
+<script src="../bgm.js"></script>
 <script src="practice.js"></script>
 </body>
 </html>

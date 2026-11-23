@@ -28,13 +28,13 @@ const EXTRA={
  L1:['June\'s recipe tin (unlocked)','<div class="doc"><div class="hd"><div><div class="agency">WILLOW BEND HARVEST BAKE-OFF</div>Contents of June Abernathy\'s recipe tin</div><div>Unlocked · 3-digit tin</div></div><p>A worn card is tucked under the blueberry-pie recipe:</p><p class="hand">Blueberry filling stains like ink — purple on paws, blue on tongues, and it never comes out of a beagle. If Pickles gets into my baking again I am telling the whole of Maple Lane. — J.</p><p>The recipe itself is ordinary: flour, butter, sugar, lemon zest, and “too many berries.” A faint purple smear marks the bottom of the tin.</p><p class="foot">Logged after the tin was opened in the practice Evidence Locker. Practice: nothing here relates to the real case.</p></div>'],
  R1:['Lab: filling in the pie tin','<div class="doc"><div class="hd"><div><div class="agency">WILLOW BEND COMMUNITY LAB</div>Request for examination</div><div>R1 · food residue</div></div><p><b>Item:</b> Pie tin from Walt Penrose\'s side yard.</p><p>The residue is cooked blueberry filling (anthocyanin stain, lemon, sugar). The rim has small crescent tooth marks consistent with a medium dog, not a rodent. Filling is still tacky: hours, not days.</p><p class="foot">Practice lab result. Filed as a new exhibit.</p></div>'],
  R2:['Lab: purple porch prints','<div class="doc"><div class="hd"><div><div class="agency">WILLOW BEND COMMUNITY LAB</div>Request for examination</div><div>R2 · stain analysis</div></div><p><b>Item:</b> Swab of purple prints on Walt\'s porch.</p><p>The pigment is blueberry filling (anthocyanin stain, lemon, sugar), not beet juice or paint. Print size and pad pattern are consistent with a beagle.</p><p class="foot">Practice lab result. Filed as a new exhibit.</p></div>'],
- T4:['3D: Blueberry crumbs on the fence post','<div class="doc"><div class="hd"><div><div class="agency">3D WALKTHROUGH</div>Observation logged in the side yard</div><div>T4</div></div><p>At the fence gap, on the yard-facing side of the post and about a beagle\'s nose high, several dark-blue crumbs are stuck to the wood. A few more lie in the grass at the foot of the post.</p><p>They are not in the original photo of the tin. They could only be noticed by walking the yard.</p><p class="foot">Logged from the practice 3D walkthrough. Practice: nothing here relates to the real case.</p></div>'],
+ T4:['Yard: Blueberry crumbs on the fence post','<div class="doc"><div class="hd"><div><div class="agency">YARD WALKTHROUGH</div>Observation logged in the side yard</div><div>T4</div></div><p>At the fence gap, on the yard-facing side of the post and about a beagle\'s nose high, several dark-blue crumbs are stuck to the wood. A few more lie in the grass at the foot of the post.</p><p>They are not in the original photo of the tin. They could only be noticed by walking the yard.</p><p class="foot">Logged from the practice yard walkthrough. Practice: nothing here relates to the real case.</p></div>'],
  S1:['Supplemental statement: Walt Penrose','<div class="doc"><div class="hd"><div><div class="agency">WILLOW BEND PRACTICE INTERVIEW</div>Supplemental statement</div><div>S1 · 22 Oct</div></div><p>During the interview, Walt Penrose admitted the following:</p><p>While he dozed on the porch around half past two, his beagle Pickles squeezed through the fence gap, pulled June Abernathy\'s pie off the low kitchen windowsill, and ate most of it in the side yard. He woke, found the tin and the purple-mouthed dog, and was too embarrassed to tell June — they have a long tomato-and-ribbon rivalry.</p><p>He offers to make it right with a (store) pie.</p><p class="foot">Auto-filed when Walt\'s answer included the admission. Practice only.</p></div>']
 };
 function restore(){
   if(st.unl.L1)addDoc('L1',EXTRA.L1[0],EXTRA.L1[1],'Unlocked: evidence locker');
   st.lab.forEach(k=>{const id=LABR[k]&&LABR[k][0];if(id&&EXTRA[id])addDoc(id,EXTRA[id][0],EXTRA[id][1],'Lab results')});
-  if(st.v3.T4)addDoc('T4',EXTRA.T4[0],EXTRA.T4[1],'3D walkthrough');
+  if(st.v3.T4)addDoc('T4',EXTRA.T4[0],EXTRA.T4[1],'Yard walkthrough');
   if(st.sup.S1)addDoc('S1',EXTRA.S1[0],EXTRA.S1[1],'Witness statements');
 }
 
@@ -59,11 +59,11 @@ $('#pins').onclick=e=>{const b=e.target.closest('.pin');if(b)openDoc(DOCS.findIn
 const PEN=[5,10,15];
 const HINTS=[
   "June left a number in one of the kitchen papers in the case file. It opens something in the Evidence Locker under Tools &amp; Lab.",
-  "Walk the side yard in 3D. One thing on the fence is not in the photo file — you can log it as a new exhibit and then show it to Walt.",
+  "Walk the side yard (the photo tour, or the 3D model). One thing on the fence is not in the photo file — you can log it as a new exhibit and then show it to Walt.",
   "Walt keeps blaming squirrels and beet juice. Show him the photo of Pickles' blue tongue, or put the fence-post crumbs together with the purple prints. Watch his face when a question makes him uncomfortable — then a confession is auto-filed as a statement."
 ];
 function renderHints(){let h='';for(let i=0;i<3;i++){if(i<st.hints)h+=`<div class="hint"><b>Hint ${i+1}</b> <span class="small">(−${PEN[i]})</span><br>${HINTS[i]}</div>`;else if(i==st.hints&&!st.locked)h+=`<button class="btn ghost" id="hbtn">Unlock hint ${i+1} (−${PEN[i]} points)</button>`}
-  if(st.locked&&st.hints<3)h+='<p class="small">This practice case is closed. See the Accuse tab for the reveal.</p>';$('#hintbox').innerHTML=h||'';const b=$('#hbtn');if(b)b.onclick=()=>{if(confirm(`Unlock hint ${st.hints+1}? This costs ${PEN[st.hints]} points.`)){st.hints++;save();renderHints()}}}
+  if(st.locked&&st.hints<3)h+='<p class="small">This practice case is closed. See the Accuse tab for the reveal.</p>';$('#hintbox').innerHTML=h||'';const b=$('#hbtn');if(b)b.onclick=()=>{if(confirm(`Unlock hint ${st.hints+1}? This costs ${PEN[st.hints]} points.`)){st.hints++;save();renderHints();pingYardHint()}}}
 
 const OPT={
   who:[['pickles','Pickles the beagle ate the pie, and Walt hid it afterward'],['walt','Walt Penrose took the pie off the sill himself'],['june','June Abernathy hid her own pie'],['squirrels','Squirrels dragged the tin into the yard']],
@@ -77,10 +77,10 @@ const EVG={
   opp:{groups:[[8,['T3','S1']],[7,['T2','R2']]],extra:['R1','C1']}
 };
 
-function renderAccuse(){const w=$('#accwrap');if(st.locked){w.innerHTML=st.result+`<div class="reveal" style="margin-top:16px"><h3>What happened</h3><p>Pickles, Walt's beagle, squeezed through the fence gap while Walt dozed around half past two, pulled June's blueberry pie off the low kitchen windowsill, and ate it in the side yard. Walt woke, saw the tin and the purple-mouthed dog, and was too embarrassed to tell June because of their long rivalry at the bake-off.</p><p>You could prove it with the case photos, the crumbs logged in the 3D yard, a lab result that the prints were blueberry filling (not beet juice), the note in June's recipe tin, and Walt's own admission once you showed him the right exhibit.</p><p class="foot" style="color:#655c4e">Practice: nothing here relates to the real case. Reset below to try again, or go back to the real case when you're ready.</p></div><p style="margin-top:18px"><button class="btn ghost" id="resetall">Reset this practice on this device</button></p>`;
+function renderAccuse(){const w=$('#accwrap');if(st.locked){w.innerHTML=st.result+`<div class="reveal" style="margin-top:16px"><h3>What happened</h3><p>Pickles, Walt's beagle, squeezed through the fence gap while Walt dozed around half past two, pulled June's blueberry pie off the low kitchen windowsill, and ate it in the side yard. Walt woke, saw the tin and the purple-mouthed dog, and was too embarrassed to tell June because of their long rivalry at the bake-off.</p><p>You could prove it with the case photos, the crumbs logged in the side yard, a lab result that the prints were blueberry filling (not beet juice), the note in June's recipe tin, and Walt's own admission once you showed him the right exhibit.</p><p class="foot" style="color:#655c4e">Practice: nothing here relates to the real case. Reset below to try again, or go back to the real case when you're ready.</p></div><p style="margin-top:18px"><button class="btn ghost" id="resetall">Reset this practice on this device</button></p>`;
   $('#resetall').onclick=()=>{if(confirm('Erase practice progress, notes, and the accusation on this device?')){localStorage.removeItem(LS);localStorage.removeItem('practice-sid');location.reload()}};return}
   const radio=(n,arr)=>arr.map(o=>`<label class="opt"><input type="radio" name="${n}" value="${o[0]}">${o[1]}</label>`).join('');
-  const ev=n=>`<div class="small" style="margin-top:10px">Key evidence: pick up to 4 exhibits that prove it. Lab results, unlocked papers, and 3D observations count. Wrong picks cost points.</div><div class="evpick" data-n="${n}">${DOCS.map(d=>`<label><input type="checkbox" value="${d.id}"> ${d.id} · ${d.t}</label>`).join('')}</div>`;
+  const ev=n=>`<div class="small" style="margin-top:10px">Key evidence: pick up to 4 exhibits that prove it. Lab results, unlocked papers, and yard observations count. Wrong picks cost points.</div><div class="evpick" data-n="${n}">${DOCS.map(d=>`<label><input type="checkbox" value="${d.id}"> ${d.id} · ${d.t}</label>`).join('')}</div>`;
   w.innerHTML=`<p class="lede">One shot, same shape as the real case: who, why, and how, plus opportunity, and cite evidence for each. Scored out of 100${st.hints?`, minus ${[0,5,15,30][st.hints]} for hints used`:''}. This is only the missing-pie story.</p>
   <form class="acc" id="acc"><fieldset><legend>1 · Who did it</legend>${radio('who',OPT.who)}</fieldset>
   <fieldset><legend>2 · Motive (why Walt hid it)</legend>${radio('mot',OPT.mot)}${ev('mot')}</fieldset>
@@ -125,7 +125,7 @@ function renderTool(){const tb=$('#toolbox');
       $('#trytin').onclick=async()=>{const code=$$('.dial input').map(i=>i.value||'0').join('');if(await sha('lock|'+code)==HASH.lock)unlockL1(code);else{$('#cmsg').textContent='The lid doesn\'t budge.'}}}}
   if(tool=='lab'){const left=4-st.lab.length;const items=LAB_ITEMS.filter(i=>i[0]!='crumbs'||crumbsOk());
     tb.innerHTML=`<div class="labform"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;border-bottom:2px solid #222;padding-bottom:6px;margin-bottom:10px"><b>WILLOW BEND · REQUEST FOR LABORATORY EXAMINATION</b><span>Requests left: <b>${left}</b>/4</span></div>
-    <div class="ltnote"><b>Practice lab.</b> Pick an item and a test. A residue test on the tin or the porch prints is worth filing. Fingerprints may turn up nothing — that still counts as a request, just like the real case. ${crumbsOk()?'The fence-post crumbs are available to test.':'Walk the 3D yard if you want a third item to test.'}</div>
+    <div class="ltnote"><b>Practice lab.</b> Pick an item and a test. A residue test on the tin or the porch prints is worth filing. Fingerprints may turn up nothing — that still counts as a request, just like the real case. ${crumbsOk()?'The fence-post crumbs are available to test.':'Walk the side yard if you want a third item to test.'}</div>
     <label>Item / subject</label><select id="li"><option value="">Choose…</option>${items.map(i=>`<option value="${i[0]}">${i[1]}</option>`).join('')}</select>
     <label>Examination requested</label><select id="lt"><option value="">Choose an item first…</option></select>
     <label>Justification</label><textarea id="lj" rows="2" placeholder="What do you expect this to show?"></textarea>
@@ -136,20 +136,24 @@ function renderTool(){const tb=$('#toolbox');
     $('#lsub').onclick=()=>{const k=$('#li').value+'|'+$('#lt').value;if(!$('#li').value||!$('#lt').value){toast('Choose an item and an examination');return}if(st.lab.includes(k)){toast('Already requested');return}
       if(!(LAB_APP[$('#li').value]||[]).includes($('#lt').value)){toast('That examination does not apply to this item');return}
       st.lab.push(k);const x=LABR[k];if(x)addDoc(x[0],EXTRA[x[0]][0],EXTRA[x[0]][1],'Lab results');save();renderTool();renderChips();toast(x?'Result received: exhibit '+x[0]:'No probative findings')}}
-  if(tool=='yard'){const n=st.v3.T4?1:0;
-    tb.innerHTML=`<div class="panel"><b style="color:#f3e7c6">June's windowsill &amp; side yard (3D)</b> <span class="small">A short walk-around of the practice scene. Drag to look around, pinch or scroll to zoom, tap objects to inspect. A few things can only be noticed in the yard itself and can be logged as new exhibits.</span>
-    <div style="margin:12px 0"><button class="btn" id="go3d" style="padding:10px 16px;font-size:15px">🧊 Enter the side yard</button></div>
-    <div class="small">Observations logged: ${n}${n?' (T4)':''}. Needs WebGL; works on phones.</div>
+  if(tool=='yard'){const n=st.v3.T4?1:0;const mode=yardMode();
+    tb.innerHTML=`<div class="panel"><b style="color:#f3e7c6">June's windowsill &amp; side yard</b> <span class="small">A photoreal photo tour of the practice scene (default). Tap a spot to inspect, pinch or double-tap to zoom, and use the thumbnails to change views. A few things can only be noticed in the yard itself and can be logged as new exhibits. The earlier 3D model is still here for comparison.</span>
+    <div style="margin:12px 0;display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button class="btn" id="go3d" style="padding:10px 16px;font-size:15px">${mode==='3d'?'🧊 Enter the 3D yard':'🖼 Enter the side yard'}</button>
+    <button class="btn ghost" id="goalt" style="padding:8px 12px">${mode==='3d'?'Open the photo tour instead':'Compare with the 3D model'}</button></div>
+    <div class="small">Observations logged: ${n}${n?' (T4)':''}. Prefer a mode: <a href="?yard=pnc">photo tour</a> · <a href="?yard=3d">3D model</a>.</div>
     <p class="small" style="margin-top:8px">Practice: nothing here relates to the real case.</p></div>`;
-    $('#go3d').onclick=open3D}
+    $('#go3d').onclick=()=>open3D(mode); $('#goalt').onclick=()=>open3D(mode==='3d'?'pnc':'3d')}
 }
 function unlockL1(code){st.unl.L1=code;save();addDoc('L1',EXTRA.L1[0],EXTRA.L1[1],'Unlocked: evidence locker');toast('Unlocked!');renderTool();renderChips();openDoc(DOCS.findIndex(d=>d.id=='L1'))}
 
-function open3D(){if($('#s3d'))return;const o=document.createElement('div');o.id='s3d';o.innerHTML='<iframe src="yard3d.html" title="Practice 3D yard" allow="fullscreen"></iframe>';document.body.appendChild(o);document.body.style.overflow='hidden'}
+const YARD_LS='practice-yard-mode';
+function yardMode(){const q=new URLSearchParams(location.search).get('yard');if(q==='3d'||q==='pnc'){try{localStorage.setItem(YARD_LS,q)}catch(e){}return q}try{return localStorage.getItem(YARD_LS)||'pnc'}catch(e){return 'pnc'}}
+function open3D(mode){if(mode==='3d'||mode==='pnc'){try{localStorage.setItem(YARD_LS,mode)}catch(e){}}if($('#s3d'))return;const use=yardMode();const src=(use==='3d'?'yard3d.html':'yard-pnc.html')+(st.hints>=2?'?hint=1':'');const o=document.createElement('div');o.id='s3d';o.innerHTML='<iframe src="'+src+'" title="Practice side yard" allow="fullscreen"></iframe>';document.body.appendChild(o);document.body.style.overflow='hidden'}
 function close3D(){const o=$('#s3d');if(o)o.remove();document.body.style.overflow='';if(tool=='yard')renderTool();renderChips()}
+function pingYardHint(){const f=$('#s3d iframe');if(f&&f.contentWindow&&st.hints>=2)f.contentWindow.postMessage({t:'hint',on:true},location.origin)}
 window.addEventListener('message',e=>{if(e.origin!==location.origin)return;const m=e.data;if(!m||m.src!=='practice3d')return;
   if(m.t=='close')close3D();
-  if(m.t=='obs'&&m.id=='T4'){const n=!st.v3.T4;st.v3.T4=1;addDoc('T4',EXTRA.T4[0],EXTRA.T4[1],'3D walkthrough');st.pins.T4=1;save();toast(n?'New exhibit T4 logged and pinned':'Already logged: T4');renderChips()}});
+  if(m.t=='obs'&&m.id=='T4'){const n=!st.v3.T4;st.v3.T4=1;addDoc('T4',EXTRA.T4[0],EXTRA.T4[1],'Yard walkthrough');st.pins.T4=1;save();toast(n?'New exhibit T4 logged and pinned':'Already logged: T4');renderChips()}});
 window.__practice={hasObs:id=>!!st.v3[id]};
 
 const CHIP_LABEL={C1:'June\'s complaint',N1:'Kitchen notepad',T1:'Tin by the fence',T2:'Purple paw prints',T3:'Pickles, close up',T4:'Blueberry crumbs on the fence post',L1:'June\'s recipe tin',R1:'Lab: tin filling',R2:'Lab: porch prints',S1:'Walt\'s statement'};
@@ -172,9 +176,9 @@ const src=n=>'../vid/'+FACE+'-'+n+'.mp4';
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 function play(n,loop){if(reduce||!$('#v0'))return Promise.resolve();return new Promise(res=>{const nx=V[1-curV];nx.loop=!!loop;nx.onended=loop?null:()=>res();nx.src=src(n);nx.currentTime=0;nx.play().then(()=>{nx.classList.add('on');V[curV].classList.remove('on');V[curV].pause();curV=1-curV;clip=n;if(loop)res()}).catch(()=>res())})}
 play('listen',true);
-let audio=null,gen=0;function stopAudio(){gen++;if(audio){audio.pause();audio=null}speechSynthesis&&speechSynthesis.cancel()}
+let audio=null,gen=0;function stopAudio(){gen++;if(audio){audio.pause();audio=null}speechSynthesis&&speechSynthesis.cancel();if(window.CaseBGM)CaseBGM.setDuck(false,'tts')}
 const sents=t=>(t.match(/[^.!?…]+(?:[.!?…]+|$)/g)||[]).map(x=>x.trim()).filter(Boolean);
-async function say(text){if(!voice)return;const g=++gen;for(const s of sents(text)){if(g!=gen)return;try{const r=await fetch(LIVE+'/api/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({character:K,text:s})});if(!r.ok)throw 0;const b=await r.blob();if(g!=gen)return;audio=new Audio(URL.createObjectURL(b));await new Promise(res=>{audio.onended=res;audio.onerror=res;audio.play().catch(res)})}catch(e){if('speechSynthesis' in window){await new Promise(res=>{const u=new SpeechSynthesisUtterance(s);u.onend=res;u.onerror=res;speechSynthesis.speak(u)})}}}}
+async function say(text){if(!voice)return;if(window.CaseBGM)CaseBGM.setDuck(true,'tts');try{const g=++gen;for(const s of sents(text)){if(g!=gen)return;try{const r=await fetch(LIVE+'/api/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({character:K,text:s})});if(!r.ok)throw 0;const b=await r.blob();if(g!=gen)return;audio=new Audio(URL.createObjectURL(b));await new Promise(res=>{audio.onended=res;audio.onerror=res;audio.play().catch(res)})}catch(e){if('speechSynthesis' in window){await new Promise(res=>{const u=new SpeechSynthesisUtterance(s);u.onend=res;u.onerror=res;speechSynthesis.speak(u)})}}}}finally{if(window.CaseBGM)CaseBGM.setDuck(false,'tts')}}
 function fmt(t){t=String(t||'').trim();const out=[];let last=0;t.replace(/\*([^*]+)\*/g,(m,x,i)=>{out.push(['s',t.slice(last,i)]);out.push(['n',x]);last=i+m.length});out.push(['s',t.slice(last)]);
   return out.map(([w,x])=>{x=x.replace(/^[\s“”"]+|[\s“”"]+$/g,'');return !x?'':w=='n'?`<i class="sd">${esc(x)}</i>`:'“'+esc(x)+'”'}).filter(Boolean).join(' ')}
 const speech=t=>String(t).replace(/\*[^*]*\*/g,' ').replace(/[“”"]/g,'').replace(/\s+/g,' ').trim();
@@ -201,9 +205,9 @@ if(!SR){if(mic)mic.style.display='none'}else{
   let rec=null,recOn=false,recSticky=false,recT0=0;
   const hint=$('#listen-hint');
   const micUI=()=>{mic.classList.toggle('rec',recOn);mic.setAttribute('aria-pressed',recOn?'true':'false');if(hint){hint.hidden=!recOn;hint.classList.toggle('on',recOn)}};
-  const micStart=()=>{if(recOn||!SR)return;try{rec=new SR();rec.lang='en-US';rec.interimResults=true;rec.continuous=false;rec.maxAlternatives=1;
+  const micStart=()=>{if(recOn||!SR)return;if(window.CaseBGM)CaseBGM.setDuck(true,'mic');try{rec=new SR();rec.lang='en-US';rec.interimResults=true;rec.continuous=false;rec.maxAlternatives=1;
     rec.onresult=ev=>{$('#q').value=[...ev.results].map(r=>r[0].transcript).join(' ')};
-    rec.onend=()=>{if(!recOn)return;recOn=false;recSticky=false;rec=null;micUI();if($('#q').value){$('#q').focus();toast('Check the words, then tap Ask')}};
+    rec.onend=()=>{if(!recOn)return;recOn=false;recSticky=false;rec=null;micUI();if(window.CaseBGM)CaseBGM.setDuck(false,'mic');if($('#q').value){$('#q').focus();toast('Check the words, then tap Ask')}};
     rec.onerror=e=>{const err=e&&e.error;if(err=='aborted'||(err=='no-speech'&&!recSticky))return;toast(err=='not-allowed'||err=='service-not-allowed'?'Microphone is blocked. Allow mic access for this site to ask out loud.':err=='no-speech'?'Didn\'t hear anything. Hold 🎙 and speak, or tap 🎙 to start.':'Voice input hiccup: '+err)};
     rec.start();recOn=true;recT0=Date.now();micUI()}catch(e){recOn=false;micUI();toast((e&&e.name)=='NotAllowedError'?'Microphone is blocked. Allow mic access for this site to ask out loud.':'Voice input isn\'t available in this browser.')}};
   const micStop=()=>{try{if(rec&&recOn)rec.stop()}catch(e){}};
@@ -211,9 +215,10 @@ if(!SR){if(mic)mic.style.display='none'}else{
   mic.addEventListener('pointerup',()=>{if(!recOn)return;if(Date.now()-recT0<400){recSticky=true;toast('Listening… tap 🎙 again when you\'re done')}else micStop()});
   mic.addEventListener('pointercancel',()=>{if(recOn&&!recSticky)micStop()});
   mic.addEventListener('contextmenu',e=>e.preventDefault());
-}
+;if(window.CaseBGM)CaseBGM.setDuck(false,'tts')}
 fetch(LIVE+'/health').then(r=>r.json()).then(h=>{$('#stat').textContent=h.practice?'Live interview connected. Walt answers in his own words.':'The practice suspect is not installed on the server yet.'}).catch(()=>{$('#stat').innerHTML='Can\'t reach the interview room. Turn on Tailscale on this device, then reload.'});
 
+if(window.CaseBGM)CaseBGM.init({base:'../'});
 show((location.hash||'').replace('#','')||'brief');
 window.__practiceApp={show,openDoc,open3D,unlockL1,st,DOCS,toast,ask,fileSupp,renderTool,renderFiles,renderAccuse,renderHints,renderBoard,toolSet:t=>{tool=t;$$('#toolnav button').forEach(x=>x.classList.toggle('on',x.dataset.t==t));renderTool()}};
 })();

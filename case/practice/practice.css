@@ -11,7 +11,8 @@ header.top{position:sticky;top:0;z-index:20;background:rgba(15,13,11,.94);backdr
 .ttl{font-family:'Special Elite',monospace;font-size:15px;line-height:1.2;letter-spacing:.5px;min-width:0}
 .ttl small{display:block;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:11px}
 .score-pill{margin-left:auto;font:600 12px 'IBM Plex Mono';color:var(--accent);border:1px solid #4a3d2c;border-radius:20px;padding:4px 10px;white-space:nowrap}
-.sound{background:none;border:1px solid #4a3d2c;color:#cbbf9f;border-radius:20px;padding:4px 10px;font-size:12px;text-decoration:none}
+.sound{background:none;border:1px solid #4a3d2c;color:#cbbf9f;border-radius:20px;padding:4px 10px;font-size:12px;text-decoration:none;display:inline-flex;align-items:center}
+@media(max-width:600px){.sound .sl{display:none}.sound{font-size:14px;padding:4px 8px}}
 nav.tabs{display:flex;gap:4px;overflow-x:auto;max-width:1200px;margin:0 auto;padding:0 12px;scrollbar-width:none}
 nav.tabs button{background:none;border:none;color:#a99d84;padding:10px 12px;border-bottom:2px solid transparent;font-weight:600;font-size:14px;white-space:nowrap}
 nav.tabs button.on{color:#f3e7c6;border-color:var(--accent)}
