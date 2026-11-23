@@ -1,0 +1,82 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Practice interview · The Case of the Missing Pie</title>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Inter:wght@400;600;800&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#1c1a17;--card:#26231e;--ink:#efe6cf;--mut:#b9ad8f;--acc:#d9a441}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,sans-serif}
+header{padding:14px 16px;border-bottom:1px solid #3a352c;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+h1{font:700 18px 'Libre Baskerville',serif;margin:0;color:#f3e7c6}.tag{font:12px 'Special Elite';color:var(--acc);letter-spacing:.06em}
+main{max-width:1000px;margin:0 auto;padding:14px;display:grid;grid-template-columns:220px 1fr;gap:16px}
+@media(max-width:700px){main{grid-template-columns:1fr}.side{display:flex;gap:12px;align-items:flex-start}.pv{width:128px!important}}
+.pv{position:relative;width:100%;aspect-ratio:3/4;overflow:hidden;background:#2b2b2b;box-shadow:0 6px 18px rgba(0,0,0,.5);border-radius:4px}
+.pv img,.pv video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.pv video{opacity:0;transition:opacity .15s linear}.pv video.on{opacity:1}.pv.talking{box-shadow:0 0 0 2px var(--acc),0 6px 18px rgba(0,0,0,.5)}
+.who b{font:700 16px 'Libre Baskerville',serif;color:#f3e7c6}.small{font-size:12px;color:var(--mut)}
+.brief{background:var(--card);padding:10px 12px;border-radius:6px;font-size:13px;margin-top:10px}
+.chat{background:var(--card);border-radius:6px;padding:12px;height:min(52vh,460px);overflow:auto}
+.qq{color:var(--acc);margin:10px 0 2px;font-weight:600}.aa{margin:0 0 6px}.aa i.sd,.aa i.typing{color:var(--mut)}
+form{display:flex;gap:8px;margin-top:10px}input{flex:1;padding:11px;border-radius:6px;border:1px solid #4a4438;background:#14120f;color:var(--ink);font:inherit}
+button{padding:10px 14px;border-radius:6px;border:0;background:var(--acc);color:#1c1a17;font-weight:700;cursor:pointer}
+button.ghost{background:#3a352c;color:var(--ink)}.ex{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.ex button{background:#3a352c;color:var(--ink);font-weight:600;font-size:13px}
+.tips{font-size:13px;color:var(--mut);margin-top:10px}.tips b{color:var(--ink)}a{color:var(--acc)}
+</style></head><body>
+<header><div><div class="tag">PRACTICE INTERVIEW · NOT PART OF THE CASE</div><h1>The Case of the Missing Pie</h1></div>
+<div><button class="ghost" id="vox" type="button">🔊 Voice on</button> <button class="ghost" id="reset" type="button">Start over</button> <a href="../">Back to the case file</a></div></header>
+<main>
+<div class="side"><div class="pv" id="pv"><img id="still" alt="Walt Penrose"><video id="v0" muted playsinline preload="auto"></video><video id="v1" muted playsinline preload="auto"></video></div>
+<div><div class="who" style="margin-top:8px"><b>Walt Penrose</b><div class="small">Next-door neighbor · Willow Bend</div></div>
+<div class="brief"><b>The situation.</b> June Abernathy's prize blueberry pie vanished from her windowsill between 2 and 3 PM. The empty tin turned up in Walt's side yard. Find out what happened.</div></div></div>
+<div><div class="small" id="stat">Connecting to the interview room…</div>
+<div class="chat" id="chat"><div class="aa"><i class="sd">Walt tugs at his cardigan.</i> “Practice run, is it? Fire away, Detective. I've got nothing to hide. Mostly.”</div></div>
+<form id="f"><input id="q" placeholder="Ask Walt a question…" autocomplete="off" aria-label="Your question"><button type="button" class="ghost" id="mic" title="Hold to talk">🎙</button><button>Ask</button></form>
+<div class="ex"><span class="small" style="align-self:center">Show evidence:</span>
+<button type="button" data-ex="T1" data-t="Photo: pie tin in Walt's side yard, by the fence gap">📷 Tin by the fence</button>
+<button type="button" data-ex="T2" data-t="Photo: purple paw prints on Walt's porch">🐾 Purple paw prints</button>
+<button type="button" data-ex="T3" data-t="Photo: Pickles the beagle with a blue tongue">🐶 Pickles, close up</button></div>
+<div class="tips"><b>How interviews work:</b> ask anything in your own words, or hold 🎙 and speak. People answer from what they know, and they may dodge or fib about things that embarrass them. Repeating a question rarely changes a story; showing the right evidence, or pointing out a specific contradiction, does. Watch faces: a look away means something is uncomfortable, not necessarily guilty. Nothing on this page has anything to do with the real case.</div></div>
+</main>
+<script>
+const LIVE='https://predator.tail66b1e9.ts.net/s/whitcombe';
+// Stand-in face: reuses one existing set of portrait clips with a different name and voice (see README). Change FACE to swap.
+const FACE='teddy', K='practice';
+const $=s=>document.querySelector(s), chat=$('#chat');
+let sid=localStorage.getItem('practice-sid');if(!sid){sid='practice-'+crypto.getRandomValues(new Uint32Array(2)).join('');localStorage.setItem('practice-sid',sid)}
+let voice=localStorage.getItem('practice-voice')!=='0';const vb=$('#vox');const setVB=()=>vb.textContent=voice?'🔊 Voice on':'🔈 Voice off';setVB();vb.onclick=()=>{voice=!voice;localStorage.setItem('practice-voice',voice?'1':'0');setVB();if(!voice)stopAudio()};
+$('#reset').onclick=()=>{localStorage.removeItem('practice-sid');location.reload()};
+// ---- portrait: listen loop, talk loop while speaking, a reaction clip first when the mood calls for it ----
+$('#still').src='../img/'+FACE+'.jpg';const V=[$('#v0'),$('#v1')];let cur=0,clip='';
+const src=n=>'../vid/'+FACE+'-'+n+'.mp4';
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function play(n,loop){if(reduce)return Promise.resolve();return new Promise(res=>{const nx=V[1-cur];nx.loop=!!loop;nx.onended=loop?null:()=>res();nx.src=src(n);nx.currentTime=0;nx.play().then(()=>{nx.classList.add('on');V[cur].classList.remove('on');V[cur].pause();cur=1-cur;clip=n;if(loop)res()}).catch(()=>res())})}
+play('listen',true);
+// ---- voice (same Kokoro server endpoint as the case) ----
+let audio=null,gen=0;function stopAudio(){gen++;if(audio){audio.pause();audio=null}speechSynthesis&&speechSynthesis.cancel()}
+const sents=t=>(t.match(/[^.!?…]+(?:[.!?…]+|$)/g)||[]).map(x=>x.trim()).filter(Boolean);
+async function say(text){if(!voice)return;const g=++gen;for(const s of sents(text)){if(g!=gen)return;try{const r=await fetch(LIVE+'/api/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({character:K,text:s})});if(!r.ok)throw 0;const b=await r.blob();if(g!=gen)return;audio=new Audio(URL.createObjectURL(b));await new Promise(res=>{audio.onended=res;audio.onerror=res;audio.play().catch(res)})}catch(e){if('speechSynthesis' in window){await new Promise(res=>{const u=new SpeechSynthesisUtterance(s);u.onend=res;u.onerror=res;speechSynthesis.speak(u)})}}}}
+// ---- formatting: *actions* as italic narration outside the quotes ----
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+function fmt(t){t=String(t||'').trim();const out=[];let last=0;t.replace(/\*([^*]+)\*/g,(m,x,i)=>{out.push(['s',t.slice(last,i)]);out.push(['n',x]);last=i+m.length});out.push(['s',t.slice(last)]);
+ return out.map(([w,x])=>{x=x.replace(/^[\s“”"]+|[\s“”"]+$/g,'');return !x?'':w=='n'?`<i class="sd">${esc(x)}</i>`:'“'+esc(x)+'”'}).filter(Boolean).join(' ')}
+const speech=t=>String(t).replace(/\*[^*]*\*/g,' ').replace(/[“”"]/g,'').replace(/\s+/g,' ').trim();
+function add(cls,html){const d=document.createElement('div');d.className=cls;d.innerHTML=html;chat.appendChild(d);chat.scrollTop=chat.scrollHeight;return d}
+async function typeOut(el,html,cps){const tmp=document.createElement('div');tmp.innerHTML=html;const full=tmp.textContent;if(reduce){el.innerHTML=html;return}
+ el.textContent='';for(let i=0;i<=full.length;i+=2){el.textContent=full.slice(0,i);chat.scrollTop=chat.scrollHeight;await new Promise(r=>setTimeout(r,1000/cps*2))}el.innerHTML=html}
+const BEATS=['scratches his chin','glances at the fence','rocks back on his heels','fiddles with a button on his cardigan'];
+let busy=false;
+async function ask(msg,ex,title,label){if(busy)return;busy=true;add('qq','▸ '+esc(label||msg));const el=add('aa','<i class="typing sd">…</i>');let b=0;const ft=setInterval(()=>{el.innerHTML=`<i class="typing sd">${BEATS[b++%4]}…</i>`},1800);
+ let j=null;try{for(let t=0;t<2;t++){const r=await fetch(LIVE+'/api/ask',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session:sid,suspect:K,message:msg||'',present:ex||undefined,present_title:title||undefined})});
+   j=await r.json().catch(()=>({}));if(r.status==429&&t==0){el.innerHTML='<i class="typing sd">Give him a moment…</i>';await new Promise(s=>setTimeout(s,Math.min(15,Math.max(2,+j.retry_after||5))*1000));continue}if(!r.ok)throw new Error(j.error||'error');break}}
+ catch(e){clearInterval(ft);el.innerHTML='<i class="sd">Walt needs a moment. Ask that again in a few seconds.</i>';busy=false;return}
+ clearInterval(ft);const html=fmt(j.reply),mood=['uneasy','sad'].includes(j.mood)?j.mood:'neutral';
+ if(mood!='neutral')await play(mood,false);$('#pv').classList.add('talking');play('talk',true);
+ await Promise.all([typeOut(el,html,voice?18:45),say(speech(j.reply))]);$('#pv').classList.remove('talking');play('listen',true);busy=false}
+$('#f').onsubmit=e=>{e.preventDefault();const q=$('#q').value.trim();if(!q)return;$('#q').value='';ask(q)};
+document.querySelectorAll('.ex button').forEach(b=>b.onclick=()=>ask('',b.dataset.ex,b.dataset.t,'[shows] '+b.dataset.t));
+// ---- hold-to-talk ----
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;const mic=$('#mic');
+if(!SR)mic.style.display='none';else{let rec=null;const start=e=>{e.preventDefault();rec=new SR();rec.lang='en-US';rec.interimResults=true;rec.onresult=ev=>{$('#q').value=[...ev.results].map(r=>r[0].transcript).join(' ')};rec.start();mic.textContent='⏺'};
+ const stop=()=>{if(rec){rec.stop();rec=null;mic.textContent='🎙';$('#q').focus()}};mic.addEventListener('pointerdown',start);mic.addEventListener('pointerup',stop);mic.addEventListener('pointerleave',stop)}
+// ---- connection check ----
+fetch(LIVE+'/health').then(r=>r.json()).then(h=>{$('#stat').textContent=h.practice?'Live interview connected. Walt answers in his own words.':'The practice suspect is not installed on the server yet.'}).catch(()=>{$('#stat').innerHTML='Can\'t reach the interview room. Turn on Tailscale on this device, then reload.'});
+</script></body></html>
