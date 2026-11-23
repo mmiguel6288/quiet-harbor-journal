@@ -172,6 +172,10 @@ main:has(#v-interview.on){padding:0 12px;height:calc(100dvh - var(--head,9rem));
 .scrub input[type=range]{width:100%}
 .livebar{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;margin:0 0 6px;color:#e6dcc3;font-size:13px;min-width:0}
 .livebar .livestat{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#b9ad8f;font-size:12px}
+[hidden]{display:none!important}
+.pm-msg{margin:12px 0 0;padding:14px 16px;color:#efe6cf;background:#2a251f;border-radius:12px;font:15px/1.5 Inter,system-ui,sans-serif;max-width:36rem}
+#ivroom .pm-msg{margin-top:8px}
+
 .livebar .pill.tight{padding-left:10px}
 .livebar label.pill{display:inline-flex;gap:6px;align-items:center;cursor:pointer;font-weight:600}
 .livebar .beta{background:var(--accent);color:#1a1209;border-radius:8px;padding:1px 6px;font-size:10px;text-transform:uppercase}
@@ -338,7 +342,7 @@ body.tv .askbar input,body.tv .askrow input,body.tv .askrow select{font-size:17p
 
 <section class="view" id="v-interview">
  <h2 class="sec">Interview room</h2>
- <p class="lede">Pick someone, type a question in plain words (“Where were you after the toast?”, “Tell me about the EpiPen”), or <b>present an exhibit</b> and watch the reaction. People answer what they're asked. Some are more honest than others. <span class="small">New to this case file? <a href="practice/">Try a practice case</a> (a made-up neighbor and a missing pie; nothing to do with this case).</span></p>
+ <p class="lede" id="ivlede">Pick someone, type a question in plain words (“Where were you after the toast?”, “Tell me about the EpiPen”), or <b>present an exhibit</b> and watch the reaction. People answer what they're asked. Some are more honest than others. <span class="small">New to this case file? <a href="practice/">Try a practice case</a> (a made-up neighbor and a missing pie; nothing to do with this case).</span></p>
  <div id="ivpick" class="ivpick"></div>
  <div id="ivroom"></div>
 </section>
@@ -1135,22 +1139,30 @@ st.iv=st.iv||{};let ivCur=null;
 const IVP=BLOB.iv;const IVORDER=['delia','owen','margo','kira','teddy','rosa'];
 let ttsSrv=null;const tts={gen:0,ctx:null,src:null,k:null};
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let rec=null,recOn=false,recT0=0,recSticky=false;
-function renderIV(){$('#ivpick').innerHTML=IVORDER.map(k=>`<button data-p="${k}" class="${k==ivCur?'on':''}"><img src="img/${IVP[k].img}.jpg" alt="">${IVP[k].name.split(' ')[0]}</button>`).join('');
- if(!ivCur){$('#ivroom').innerHTML='<p class="small" style="margin-top:12px">Choose who to interview.</p>';return}
- const p=IVP[ivCur];const log=st.iv[ivCur]||[];const onair=st.live&&liveOK;
- const livestat=st.live?(liveOK?'Live answers'+(liveLeft!=null&&liveLeft<50?` · ${liveLeft} left`:''):'Checking…'):'Scripted';
+function syncIvLede(){
+  const el=document.getElementById('ivlede');if(!el)return;
+  if(!el.dataset.live)el.dataset.live=el.innerHTML;
+  el.innerHTML=liveOK?el.dataset.live:'Choose someone to meet them. Interviews are run by the Puzzle Master — find the Puzzle Master to question a suspect. <span class="small">New to this case file? <a href="practice/">Try a practice case</a> (a made-up neighbor and a missing pie; nothing to do with this case).</span>';
+}
+function renderIV(){syncIvLede();$('#ivpick').innerHTML=IVORDER.map(k=>`<button data-p="${k}" class="${k==ivCur?'on':''}"><img src="img/${IVP[k].img}.jpg" alt="">${IVP[k].name.split(' ')[0]}</button>`).join('');
+ if(!ivCur){$('#ivroom').innerHTML=liveOK?'<p class="small" style="margin-top:12px">Choose who to interview.</p>':'<p class="pm-msg" role="status">Interviews are run by the Puzzle Master. Find the Puzzle Master to question a suspect.</p>';return}
+ const p=IVP[ivCur];const log=st.iv[ivCur]||[];const onair=liveOK&&st.live;
+ const livestat=liveOK?(st.live?'Live answers'+(liveLeft!=null&&liveLeft<50?` · ${liveLeft} left`:''):'Scripted'):'';
+ const pmMsg='Interviews are run by the Puzzle Master. Find the Puzzle Master to question a suspect.';
  const evList=[...DOCS].sort((a,b)=>((st.pins[b.id]?1:0)-(st.pins[a.id]?1:0))||0);
  const chip=d=>{const t=d.t.replace(/&amp;/g,'&');const short=t.length>28?t.slice(0,27)+'…':t;return `<button type="button" class="chip${st.pins[d.id]?' pinned':''}" data-id="${d.id}" title="${escH(t).replace(/"/g,'&quot;')}"><b>${d.id}</b> ${escH(short)}</button>`};
- $('#ivroom').innerHTML=`<div class="iv"><div class="por"><span id="pvslot"></span><div class="nameplate"><b>${p.name}</b><span>${p.role}</span></div></div><div class="iv-main"><div class="livebar"><label class="pill tight"><input type="checkbox" id="livechk" ${st.live?'checked':''}> Live</label>${onair?'<span class="onair" title="Live AI suspects connected">● ON AIR</span>':''}<span id="livestat" class="livestat">${livestat}</span><button type="button" class="pill" id="voxbtn" aria-pressed="${st.voice?'true':'false'}">${st.voice?'🔊 <span class="lbl">Voice</span>':'🔈 <span class="lbl">Voice</span>'}</button><button type="button" class="pill" id="bgmiv" aria-label="Music">🎵 <span class="lbl">Music</span></button><button type="button" class="pill help-btn" id="ivhelp" aria-expanded="false" aria-controls="ivhelp-pop" title="How interviews work">ⓘ</button></div><div class="help-pop" id="ivhelp-pop" hidden><p>Ask about specific things: people, places, times, objects. Vague questions get vague answers.${SR?' Hold 🎙 to ask out loud, or tap to start and tap again to stop; check the words, then tap Ask.':''} People may dodge or fib. Showing the right evidence, or pointing out a contradiction, works better than repeating a question. A look away means something is uncomfortable, not necessarily guilty. New to this case file? <a href="practice/">Try a practice case</a> (a made-up neighbor and a missing pie; nothing to do with this case).</p></div><div class="chat" id="chat"><div class="aa"><i>${p.intro}</i></div>${log.map(l=>`<div class="qq${l[2]=='ev'?' ev':''}">${l[0]}</div><div class="aa${l[3]?' live':''}">${l[1]}</div>`).join('')}</div><div class="dock"><div class="chips" id="evchips" aria-label="Present an exhibit">${evList.map(chip).join('')}</div><form class="askbar askrow" id="askf"><input id="askq" aria-label="Your question" placeholder="Ask ${p.name.split(' ')[0]} a question…" autocomplete="off">${SR?'<button type="button" class="icon-btn mic" id="micbtn" aria-label="Hold to ask out loud" title="Hold to talk (or tap, then tap again)">🎙</button>':''}<button class="ask-btn" type="submit">Ask</button></form><div class="listen-hint" id="listen-hint" hidden aria-live="polite">Listening…</div></div></div></div>`;
+ $('#ivroom').innerHTML=`<div class="iv"><div class="por"><span id="pvslot"></span><div class="nameplate"><b>${p.name}</b><span>${p.role}</span></div></div><div class="iv-main"><div class="livebar">${liveOK?`<label class="pill tight"><input type="checkbox" id="livechk" ${st.live?'checked':''}> Live</label>${onair?'<span class="onair" title="Live AI suspects connected">● ON AIR</span>':''}<span id="livestat" class="livestat">${livestat}</span><button type="button" class="pill" id="voxbtn" aria-pressed="${st.voice?'true':'false'}">${st.voice?'🔊 <span class="lbl">Voice</span>':'🔈 <span class="lbl">Voice</span>'}</button>`:''}<button type="button" class="pill" id="bgmiv" aria-label="Music">🎵 <span class="lbl">Music</span></button><button type="button" class="pill help-btn" id="ivhelp" aria-expanded="false" aria-controls="ivhelp-pop" title="How interviews work">ⓘ</button></div><div class="help-pop" id="ivhelp-pop" hidden><p>Ask about specific things: people, places, times, objects. Vague questions get vague answers.${SR?' Hold 🎙 to ask out loud, or tap to start and tap again to stop; check the words, then tap Ask.':''} People may dodge or fib. Showing the right evidence, or pointing out a contradiction, works better than repeating a question. A look away means something is uncomfortable, not necessarily guilty. New to this case file? <a href="practice/">Try a practice case</a> (a made-up neighbor and a missing pie; nothing to do with this case).</p></div><div class="chat" id="chat"><div class="aa"><i>${p.intro}</i></div>${log.map(l=>`<div class="qq${l[2]=='ev'?' ev':''}">${l[0]}</div><div class="aa${l[3]?' live':''}">${l[1]}</div>`).join('')}</div><div class="dock">${liveOK?`<div class="chips" id="evchips" aria-label="Present an exhibit">${evList.map(chip).join('')}</div><form class="askbar askrow" id="askf"><input id="askq" aria-label="Your question" placeholder="Ask ${p.name.split(' ')[0]} a question…" autocomplete="off">${SR?'<button type="button" class="icon-btn mic" id="micbtn" aria-label="Hold to ask out loud" title="Hold to talk (or tap, then tap again)">🎙</button>':''}<button class="ask-btn" type="submit">Ask</button></form><div class="listen-hint" id="listen-hint" hidden aria-live="polite">Listening…</div>`:`<div class="pm-msg" role="status">${pmMsg}</div>`}</div></div></div>`;
  pvMount(ivCur);const c=$('#chat');c.scrollTop=c.scrollHeight;
- $('#askf').onsubmit=e=>{e.preventDefault();micStop();const q=$('#askq').value.trim();if(!q)return;ttsUnlock();ttsStop();ask(q);$('#askq').value=''};
- const presentEv=id=>{if(!id)return;ttsUnlock();ttsStop();const d=DOCS.find(x=>x.id==id);if(!d)return;const t=d.t.replace(/&amp;/g,'&');const a=p.present[id]||p.npres[(log.length)%p.npres.length];const q=`You show ${p.name.split(' ')[0]} exhibit ${id} (${escH(t)}).`;if(st.live&&liveOK)liveAsk(q,'',id,t,a,'ev');else push([q,a,'ev'],moodNoise('neutral'))};
- $('#evchips').onclick=e=>{const b=e.target.closest('.chip');if(b)presentEv(b.dataset.id)};
+ if(liveOK){
+  $('#askf').onsubmit=e=>{e.preventDefault();micStop();const q=$('#askq').value.trim();if(!q)return;ttsUnlock();ttsStop();ask(q);$('#askq').value=''};
+  const presentEv=id=>{if(!id)return;ttsUnlock();ttsStop();const d=DOCS.find(x=>x.id==id);if(!d)return;const t=d.t.replace(/&amp;/g,'&');const a=p.present[id]||p.npres[(log.length)%p.npres.length];const q=`You show ${p.name.split(' ')[0]} exhibit ${id} (${escH(t)}).`;if(st.live&&liveOK)liveAsk(q,'',id,t,a,'ev');else push([q,a,'ev'],moodNoise('neutral'))};
+  $('#evchips').onclick=e=>{const b=e.target.closest('.chip');if(b)presentEv(b.dataset.id)};
+  if(SR)micWire();
+  $('#livechk').onchange=e=>{st.live=e.target.checked;save();renderIV()};
+  $('#voxbtn').onclick=()=>{st.voice=!st.voice;save();if(st.voice){ttsUnlock();toast('Suspects will speak their answers out loud')}else ttsStop();renderIV()};
+ }
  $('#ivhelp').onclick=()=>{const pop=$('#ivhelp-pop'),on=pop.hidden;pop.hidden=!on;$('#ivhelp').setAttribute('aria-expanded',on?'true':'false')};
- $('#voxbtn').onclick=()=>{st.voice=!st.voice;save();if(st.voice){ttsUnlock();toast('Suspects will speak their answers out loud')}else ttsStop();renderIV()};
- if(window.CaseBGM)CaseBGM.refresh();
- if(SR)micWire();
- $('#livechk').onchange=e=>{st.live=e.target.checked;save();if(st.live)liveCheck();else renderIV()};if(st.live&&!liveOK&&!liveChecking)liveCheck()}
+ if(window.CaseBGM)CaseBGM.refresh()}
 function push(e,mood){const k=ivCur;(st.iv[k]=st.iv[k]||[]).push(e);save();renderIV();clickSnd();presentAnswer(k,e[1],mood);setTimeout(()=>$('#askq')&&$('#askq').focus(),0)}
 const LIVE='https://predator.tail66b1e9.ts.net/s/whitcombe';let liveOK=false,liveChecking=false,liveLeft=null;
 if(!st.sid){st.sid=Array.from(crypto.getRandomValues(new Uint8Array(12)),b=>b.toString(16).padStart(2,'0')).join('');save()}
@@ -1158,10 +1170,9 @@ const escH=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}
 const PEND='<i class="typing">…</i>';
 // an answer left "thinking" by a reload never arrived: say so instead of showing dots forever
 Object.values(st.iv).forEach(l=>l.forEach(e=>{if(e[1]==PEND)e[1]='<i>(the recorder clicked off before the answer. Ask again.)</i>'}));
-async function liveCheck(){liveChecking=true;toast('Connecting to the live interview server… if your browser asks to access devices on your local network, choose Allow.');const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),30000);
- try{const r=await fetch(LIVE+'/health',{signal:ctl.signal});liveOK=r.ok;if(r.ok){try{const j=await r.json();ttsSrv=!!j.tts}catch(e){}}}catch(e){liveOK=false}clearTimeout(tm);liveChecking=false;
- if(!liveOK&&st.live){st.live=false;save();toast('Live interrogation server isn\'t reachable from this device (it runs on a private network). Using scripted answers. (It needs a device on the host\'s private network, and local-network access allowed.)')}
- if(ivCur)renderIV()}
+async function liveCheck(){if(liveChecking)return;liveChecking=true;const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),3000);
+ try{const r=await fetch(LIVE+'/health',{signal:ctl.signal,cache:'no-store'});liveOK=r.ok;if(r.ok){try{const j=await r.json();ttsSrv=!!j.tts}catch(e){}if(st.live==null){st.live=true;save()}}}catch(e){liveOK=false}clearTimeout(tm);liveChecking=false;
+ if(document.getElementById('ivroom'))renderIV()}
 // ===== no dead air: neutral fidgets while a suspect "thinks" (every suspect gets equally ordinary beats) =====
 const BEATS={delia:['checks her phone, then sets it face down','taps a pen on the table','exhales slowly','straightens a cuff'],
  owen:['rubs his eyes','turns his wedding ring','glances at the window','clears his throat'],
@@ -1283,7 +1294,7 @@ $('#tvbtn').onclick=()=>setTV(!st.tv,true);
 if(new URLSearchParams(location.search).get('tv')=='1')st.tv=1;
 if(st.tv){setTV(1,false);document.addEventListener('pointerdown',()=>{wakeOn();ttsUnlock()},{once:true})}
 document.addEventListener('pointerdown',ttsUnlock,{once:true});
-if(st.live)setTimeout(()=>{if(!liveOK&&!liveChecking)liveCheck()},800);
+liveCheck();
 $('#ivpick').onclick=e=>{const b=e.target.closest('button');if(b){ttsStop();micStop();ivCur=b.dataset.p;renderIV()}};
 // ===== Tools =====
 let tool='lock';

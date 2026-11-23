@@ -2,6 +2,7 @@
 (()=>{
 const LS='practice-pie-v1';
 const LIVE='https://predator.tail66b1e9.ts.net/s/whitcombe';
+let liveOK=false;
 const FACE='teddy', K='practice';
 const SALT='pie-practice|';
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
@@ -190,7 +191,7 @@ const BEATS=['scratches his chin','glances at the fence','rocks back on his heel
 const ADM=/(pickles|she).{0,90}(ate|eaten|got (into|through)|pulled|stole)|((dozed|napped|asleep).{0,90}(pie|pickles|fence))|(sorry.{0,50}(june|pie|embarrass))|(i('ll| will) (bake|make|buy).{0,40}pie)/i;
 let busy=false;
 function fileSupp(){if(st.sup.S1)return;st.sup.S1=1;save();addDoc('S1',EXTRA.S1[0],EXTRA.S1[1],'Witness statements');st.pins.S1=1;toast('New exhibit filed: S1 (supplemental statement)');renderChips()}
-async function ask(msg,ex,title,label){if(busy)return;busy=true;add('qq'+(ex?' ev':''),esc(label||msg));const el=add('aa','<i class="typing sd">…</i>');let b=0;const ft=setInterval(()=>{el.innerHTML=`<i class="typing sd">${BEATS[b++%4]}…</i>`},1800);
+async function ask(msg,ex,title,label){if(busy||!liveOK)return;busy=true;add('qq'+(ex?' ev':''),esc(label||msg));const el=add('aa','<i class="typing sd">…</i>');let b=0;const ft=setInterval(()=>{el.innerHTML=`<i class="typing sd">${BEATS[b++%4]}…</i>`},1800);
   let j=null;try{for(let t=0;t<2;t++){const r=await fetch(LIVE+'/api/ask',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session:sid,suspect:K,message:msg||'',present:ex||undefined,present_title:title||undefined})});
     j=await r.json().catch(()=>({}));if(r.status==429&&t==0){el.innerHTML='<i class="typing sd">Give him a moment…</i>';await new Promise(s=>setTimeout(s,Math.min(15,Math.max(2,+j.retry_after||5))*1000));continue}if(!r.ok)throw new Error(j.error||'error');break}}
   catch(e){clearInterval(ft);el.innerHTML='<i class="sd">Walt needs a moment. Ask that again in a few seconds.</i>';busy=false;return}
@@ -216,7 +217,30 @@ if(!SR){if(mic)mic.style.display='none'}else{
   mic.addEventListener('pointercancel',()=>{if(recOn&&!recSticky)micStop()});
   mic.addEventListener('contextmenu',e=>e.preventDefault());
 ;if(window.CaseBGM)CaseBGM.setDuck(false,'tts')}
-fetch(LIVE+'/health').then(r=>r.json()).then(h=>{$('#stat').textContent=h.practice?'Live interview connected. Walt answers in his own words.':'The practice suspect is not installed on the server yet.'}).catch(()=>{$('#stat').innerHTML='Can\'t reach the interview room. Turn on Tailscale on this device, then reload.'});
+function setLiveUI(){
+  const ask=$('#iv-ask'), msg=$('#pm-msg'), st=$('#stat'), vox=$('#vox'), lede=$('#ivlede');
+  if(ask)ask.hidden=!liveOK;
+  if(msg)msg.hidden=!!liveOK;
+  if(vox)vox.hidden=!liveOK;
+  if(st) st.textContent=liveOK?'Live interview connected. Walt answers in his own words.':'';
+  if(lede){
+    if(!lede.dataset.live)lede.dataset.live=lede.innerHTML;
+    lede.innerHTML=liveOK?lede.dataset.live:'To question Walt, find the Puzzle Master.';
+  }
+}
+setLiveUI();
+(async()=>{
+  const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),3000);
+  try{
+    const r=await fetch(LIVE+'/health',{signal:ctl.signal,cache:'no-store'});
+    const h=r.ok?await r.json().catch(()=>({})):{};
+    liveOK=!!(r.ok&&h.practice);
+    setLiveUI();
+    if(r.ok&&!h.practice) $('#stat').textContent='The practice suspect is not installed on the server yet.';
+  }catch(e){liveOK=false;setLiveUI()}
+  clearTimeout(tm);
+})();
+
 
 if(window.CaseBGM)CaseBGM.init({base:'../'});
 show((location.hash||'').replace('#','')||'brief');

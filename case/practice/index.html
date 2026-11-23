@@ -65,9 +65,9 @@
 
 <section class="view" id="v-interview">
  <h2 class="sec">Interview room</h2>
- <p class="lede">Ask Walt in plain words, or present an exhibit and watch the reaction. People may dodge or fib. A look away means something is uncomfortable, not necessarily guilty.</p>
+ <p class="lede" id="ivlede">Ask Walt in plain words, or present an exhibit and watch the reaction. People may dodge or fib. A look away means something is uncomfortable, not necessarily guilty.</p>
  <div class="ivbar">
-  <div class="stat" id="stat">Connecting to the interview room…</div>
+  <div class="stat" id="stat"></div>
   <button class="pill" id="vox" type="button" aria-pressed="true">🔊 <span class="lbl">Voice</span></button>
   <button class="pill" id="bgmiv" type="button" aria-pressed="true" aria-label="Music">🎵 <span class="lbl">Music</span></button>
   <button class="pill" id="ivreset" type="button">↺ <span class="lbl">Reset chat</span></button>
@@ -88,13 +88,16 @@
   <div class="col">
     <div class="chat" id="chat"><div class="aa"><i class="sd">Walt tugs at his cardigan.</i> “Practice run, is it? Fire away, Detective. I've got nothing to hide. Mostly.”</div></div>
     <div class="dock">
-      <div class="chips" id="evchips" aria-label="Present an exhibit"></div>
-      <form class="askbar" id="f">
-        <input id="q" placeholder="Ask Walt a question…" autocomplete="off" aria-label="Your question">
-        <button type="button" class="icon-btn mic" id="mic" title="Hold to talk, or tap to start and tap again to stop" aria-label="Hold to talk, or tap to start and tap again to stop">🎙</button>
-        <button class="ask-btn" type="submit">Ask</button>
-      </form>
-      <div class="listen-hint" id="listen-hint" hidden aria-live="polite">Listening…</div>
+      <div class="pm-msg" id="pm-msg" role="status">Interviews are run by the Puzzle Master. Find the Puzzle Master to question a suspect.</div>
+      <div id="iv-ask" hidden>
+        <div class="chips" id="evchips" aria-label="Present an exhibit"></div>
+        <form class="askbar" id="f">
+          <input id="q" placeholder="Ask Walt a question…" autocomplete="off" aria-label="Your question">
+          <button type="button" class="icon-btn mic" id="mic" title="Hold to talk, or tap to start and tap again to stop" aria-label="Hold to talk, or tap to start and tap again to stop">🎙</button>
+          <button class="ask-btn" type="submit">Ask</button>
+        </form>
+        <div class="listen-hint" id="listen-hint" hidden aria-live="polite">Listening…</div>
+      </div>
     </div>
   </div>
  </div>
