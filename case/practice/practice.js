@@ -17,7 +17,7 @@ const HASH={lock:'547074241b9266a2b1fe18cb',who:'06fb4f95ecf3f493757c02e9',mot:'
 
 function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>t.style.display='none',2200)}
 function syncHead(){const h=$('header.top');if(h){const b=$('.prac-banner');const ht=(h.offsetHeight+(b?b.offsetHeight:0));document.documentElement.style.setProperty('--head',ht+'px')}}
-function show(v){$$('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.v==v));$$('.view').forEach(x=>x.classList.toggle('on',x.id=='v-'+v));window.scrollTo(0,0);
+function show(v){if(v=='interview'&&!liveOK&&typeof liveCheck=='function')liveCheck(20000);$$('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.v==v));$$('.view').forEach(x=>x.classList.toggle('on',x.id=='v-'+v));window.scrollTo(0,0);
   if(v=='board')renderBoard();if(v=='files')renderFiles();if(v=='accuse')renderAccuse();if(v=='hints')renderHints();if(v=='interview'){renderChips();play('listen',true)}if(v=='tools')renderTool();syncHead();requestAnimationFrame(syncHead)}
 $('#tabs').onclick=e=>{const b=e.target.closest('button[data-v]');if(b)show(b.dataset.v)};
 addEventListener('resize',syncHead);syncHead();
@@ -229,8 +229,11 @@ function setLiveUI(){
   }
 }
 setLiveUI();
-(async()=>{
-  const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),3000);
+let liveBusy=false;
+async function liveCheck(ms){
+  if(liveBusy)return;liveBusy=true;
+  const b=document.querySelector('.pm-retry');if(b){b.disabled=true;b.textContent='Connecting…'}
+  const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),ms||3000);
   try{
     const r=await fetch(LIVE+'/health',{signal:ctl.signal,cache:'no-store'});
     const h=r.ok?await r.json().catch(()=>({})):{};
@@ -238,8 +241,11 @@ setLiveUI();
     setLiveUI();
     if(r.ok&&!h.practice) $('#stat').textContent='The practice suspect is not installed on the server yet.';
   }catch(e){liveOK=false;setLiveUI()}
-  clearTimeout(tm);
-})();
+  clearTimeout(tm);liveBusy=false;
+  if(b){b.disabled=false;b.textContent='Puzzle Master: connect'}
+}
+liveCheck();
+document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('.pm-retry')){toast('Connecting… If the browser asks to allow access to devices on your local network, choose Allow.');liveCheck(25000)}});
 
 
 if(window.CaseBGM)CaseBGM.init({base:'../'});
