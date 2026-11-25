@@ -252,8 +252,9 @@ const DX=-0.35,DZ=-0.35;
 {const g=group('outline',-0.25,0.006,0.85);g.rotation.y=-1.07;
  const pts=[[0,.88],[.08,.85],[.1,.78],[.08,.7],[.05,.66],[.22,.62],[.3,.45],[.4,.25],[.36,.2],[.24,.38],[.19,.3],[.18,.05],[.17,-.4],[.16,-.8],[.07,-.82],[.06,-.4],[0,-.05],[-.06,-.4],[-.07,-.82],[-.16,-.8],[-.17,-.4],[-.18,.05],[-.19,.3],[-.24,.38],[-.36,.2],[-.4,.25],[-.3,.45],[-.22,.62],[-.05,.66],[-.08,.7],[-.1,.78],[-.08,.85],[0,.88]];
  const tapeM=M({color:0xf2f0e6,roughness:.8});for(let i=0;i<pts.length-1;i++){const [a,b]=[pts[i],pts[i+1]];const len=Math.hypot(b[0]-a[0],b[1]-a[1]);const segs=Math.max(1,Math.round(len/0.07));for(let s=0;s<segs;s++){const t0=s/segs,t1=(s+0.65)/segs;const x0=a[0]+(b[0]-a[0])*t0,z0=a[1]+(b[1]-a[1])*t0,x1=a[0]+(b[0]-a[0])*t1,z1=a[1]+(b[1]-a[1])*t1;const m=add(new THREE.Mesh(new THREE.BoxGeometry(Math.hypot(x1-x0,z1-z0),0.002,0.016),tapeM),g,false,true);m.position.set((x0+x1)/2,0,(z0+z1)/2);m.rotation.y=-Math.atan2(z1-z0,x1-x0)}}}
-{const tent=(n,x,y,z)=>{const t=label(128,128,'#f2c81e',(c)=>{c.fillStyle='#111';c.font='bold 80px Arial';c.textAlign='center';c.fillText(n,64,95)});const m=add(new THREE.Mesh(new THREE.ConeGeometry(.045,.07,4,1,true),M({map:t,roughness:.6,side:THREE.DoubleSide})),S);m.position.set(x,y+0.035,z);m.rotation.y=Math.PI/4};
- tent('3',0.0,0,1.52);tent('4',-1.56,0,0.93);tent('1',DX+0.62,0.79,DZ+0.22);tent('2',DX+0.78,0.79,DZ+0.0)}
+{const tent=(n,x,y,z,key)=>{const t=label(128,128,'#f2c81e',(c)=>{c.fillStyle='#111';c.font='bold 80px Arial';c.textAlign='center';c.fillText(n,64,95)});const m=add(new THREE.Mesh(new THREE.ConeGeometry(.045,.07,4,1,true),M({map:t,roughness:.6,side:THREE.DoubleSide})),S);m.position.set(x,y+0.035,z);m.rotation.y=Math.PI/4;if(key){m.userData.key=key;clickables.push(m)}};
+ // tapping a numbered evidence tent inspects the item it marks (police item numbers: 1 mug, 2 drawer, 3 device, 4 glasses)
+ tent('3',0.0,0,1.52,'trainer');tent('4',-1.56,0,0.93,'glasses');tent('1',DX+0.62,0.79,DZ+0.22,'mug');tent('2',DX+0.78,0.79,DZ+0.0,'drawer')}
 // trainer by the right-hand position (green label, blue cap)
 {const g=group('trainer',-0.12,0.014,1.4);g.rotation.y=0.7;
  const bar=add(new THREE.Mesh(new THREE.CylinderGeometry(.013,.013,.12,16),M({color:0xd8dad6,roughness:.4})),g);bar.rotation.z=Math.PI/2;
@@ -289,7 +290,7 @@ function keyOf(o){while(o){if(o.userData&&o.userData.key)return o.userData.key;o
 function setGlow(key,on){const g=byKey[key];if(!g)return;g.traverse(m=>{if(m.isMesh&&m.material&&!Array.isArray(m.material)){if(on){if(!m.userData.em){m.userData.em=m.material.emissive?m.material.emissive.clone():null;m.userData.ei=m.material.emissiveIntensity}if(!m.material.userData.cloned){m.material=m.material.clone();m.material.userData.cloned=1}m.material.emissive&&m.material.emissive.setHex(0x4a3410);m.material.emissiveIntensity=Math.max(.22,m.userData.ei||0)}else if(m.userData.em){m.material.emissive.copy(m.userData.em);m.material.emissiveIntensity=m.userData.ei}}})}
 function pick(x,y){ptr.set(x/innerWidth*2-1,-(y/innerHeight)*2+1);ray.setFromCamera(ptr,cam);const h=ray.intersectObjects(clickables,true);return h.length?keyOf(h[0].object):null}
 let down=null;canvas.addEventListener('pointerdown',e=>{down=[e.clientX,e.clientY]});
-canvas.addEventListener('pointerup',e=>{if(down&&Math.hypot(e.clientX-down[0],e.clientY-down[1])<7){const k=pick(e.clientX,e.clientY);if(k)select(k,false);else closePanel()}down=null});
+canvas.addEventListener('pointerup',e=>{if(down&&Math.hypot(e.clientX-down[0],e.clientY-down[1])<7){const k=pick(e.clientX,e.clientY);if(k)select(k,k==='outline');else closePanel()}down=null}); // tapping the tape outline steps in to look down at the scene around it (its small floor items are hard to frame on a phone otherwise)
 canvas.addEventListener('pointermove',e=>{if(isMobile||e.buttons)return;const k=pick(e.clientX,e.clientY);if(k!==hover){if(hover&&hover!==sel)setGlow(hover,false);hover=k;if(k)setGlow(k,true);canvas.style.cursor=k?'pointer':'grab';need=2}});
 const tw={on:false};
 const V=(p,t)=>[new THREE.Vector3(...p),new THREE.Vector3(...t)];
