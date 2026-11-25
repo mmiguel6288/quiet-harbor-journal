@@ -19,6 +19,12 @@ select.wsf{width:100%;box-sizing:border-box;font:13px 'Courier New',monospace;co
 input.wscin{width:8.5em}
 .wsco{font:bold 17px 'Courier New',monospace;color:#00308f;min-width:9em}
 @media screen and (max-width:640px){.wscl{min-width:100%}.wscrow input.wscin{flex:1 1 7em}.wscrow select.wscin{flex:1 1 11em}.wsco{flex-basis:100%}}
+.wstop{position:sticky;top:0;z-index:20;background:#fff;border-bottom:2px solid #111;margin:0 0 8px;padding:6px 0;display:flex;align-items:center;gap:10px}
+a.wsgame{display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box;padding:0 16px;background:#111;color:#fff;border-radius:6px;font:bold 16px 'Courier New',monospace;text-decoration:none}
+.wsbottom{margin:22px 0 10px}
+.wsnote{font-size:13px;color:#8a1b12}
+.ws-embed .wstop,.ws-embed .wsbottom,.ws-embed button[onclick="print()"]{display:none!important}
+.ws-embed body{margin:8px auto}
 .wsone{font-size:14px;border-left:4px solid #111;padding:4px 8px;margin:8px 0}
 .wskinds{margin:4px 0 8px 18px;padding:0;font-size:13px}.wskinds li{margin:3px 0}
 @media screen and (max-width:640px){
@@ -45,6 +51,8 @@ input.wscin{width:8.5em}
  select.wsf{color:#000;border:0;-webkit-appearance:none;appearance:none}
 }
 </style></head><body>
+<script>if(/[?&]embed=1(&|$)/.test(location.search))document.documentElement.classList.add('ws-embed')</script>
+<div class="wstop noprint"><a class="wsgame" href="index.html">← Back to game</a><span class="wsnote" hidden></span></div>
 <button class="noprint" onclick="print()" style="float:right;padding:8px 14px">🖨 Print</button>
 <h1>DETECTIVE WORKSHEET · CASE 25-1102-0417 “THE EXTRA HOUR”</h1><div class="small">Victim: Harlan Whitcombe, 68. Night of Sat 11/1 → Sun 11/2/2025, the night DST ended (2:00 AM PDT → 1:00 AM PST). PDT = UTC−7 · PST = UTC−8 · Singapore = UTC+8</div>
 <div id="wsbar" class="wsbar"><div class="wsrow"><label for="wsplayer"><b>Who's playing?</b></label> <select id="wsplayer" aria-label="Player"></select><span class="wsprint">Player: <b id="wsprintname"></b></span></div><div class="wsrow noprint"><input id="wsnew" placeholder="New player name" maxlength="30" autocomplete="off" aria-label="New player name"> <button type="button" id="wsadd">+ Add player</button> <button type="button" id="wsreset" class="wsdanger">Reset my worksheet…</button> <span id="wssaved" class="small" aria-live="polite"></span></div><div class="small noprint">Type straight into the boxes. Answers save automatically, separately for each player, <b>only in this browser on this device</b> (clearing browser data erases them; they don't sync to other devices).</div></div>
@@ -143,8 +151,23 @@ document.getElementById('wsreset').addEventListener('click',function(){
   if(a===null)return;if(a.trim().toUpperCase()!=='RESET'){alert('Not reset. Nothing was erased.');return}
   clearTimeout(tm);tm=null;try{localStorage.removeItem(DK(P.cur))}catch(e){}fill();saved.textContent=P.cur+"'s worksheet was cleared"});
 addEventListener('beforeprint',function(){fields.forEach(grow)});
+addEventListener('storage',function(e){if(!e.key||e.key.indexOf(LS)!==0||tm)return;var np=load(PK,P);if(np&&np.list&&np.list.length)P=np;if(P.list.indexOf(P.cur)<0)P.cur=P.list[0];renderPlayers();fill()});
+if(document.documentElement.classList.contains('ws-embed')&&window.parent!==window){var lastH=0;var post=function(){var h=Math.ceil(document.documentElement.scrollHeight);if(Math.abs(h-lastH)>2){lastH=h;try{parent.postMessage({src:'worksheet',t:'h',h:h},location.origin)}catch(x){}}};
+ if(window.ResizeObserver)new ResizeObserver(post).observe(document.body);addEventListener('load',post);addEventListener('resize',post);setTimeout(post,300);fields.forEach(function(f){f.addEventListener('input',post)})}
 addEventListener('resize',function(){fields.forEach(grow)});
 store(PK,P);renderPlayers();fill();
+})();
+</script>
+<div class="wsbottom noprint"><a class="wsgame" href="index.html">← Back to game</a> <span class="wsnote" hidden></span></div>
+<script>
+(function(){
+// Back to game: if the game opened this worksheet, save and close this tab (the game tab is still there, untouched).
+// Never open a second copy of the game (two game tabs could overwrite each other's saved progress).
+document.querySelectorAll('a.wsgame').forEach(function(a){a.addEventListener('click',function(e){
+ try{var f0=document.querySelector('.wsf');if(f0)f0.dispatchEvent(new Event('change'))}catch(x){}
+ var op=null;try{op=(window.opener&&!window.opener.closed&&window.opener.location.origin===location.origin)?window.opener:null}catch(x){}
+ if(!op)return; e.preventDefault();try{op.focus()}catch(x){}window.close();
+ setTimeout(function(){document.querySelectorAll('.wsnote').forEach(function(n){n.hidden=false;n.textContent='Your answers are saved. The game is still open in your other tab: switch back to it.'})},400)})});
 })();
 </script>
 <script>
