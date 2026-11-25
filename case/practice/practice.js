@@ -17,9 +17,11 @@ const HASH={lock:'547074241b9266a2b1fe18cb',who:'06fb4f95ecf3f493757c02e9',mot:'
 
 function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>t.style.display='none',2200)}
 function syncHead(){const h=$('header.top');if(h){const b=$('.prac-banner');const ht=(h.offsetHeight+(b?b.offsetHeight:0));document.documentElement.style.setProperty('--head',ht+'px')}}
-function show(v){if(v=='interview'&&!liveOK&&typeof liveCheck=='function')liveCheck(20000);$$('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.v==v));$$('.view').forEach(x=>x.classList.toggle('on',x.id=='v-'+v));window.scrollTo(0,0);
+let prevTab='brief';
+function show(v){if(v!='interview')prevTab=v;if(v=='interview'&&!liveOK&&typeof liveCheck=='function')liveCheck(20000);$$('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.v==v));$$('.view').forEach(x=>x.classList.toggle('on',x.id=='v-'+v));window.scrollTo(0,0);
   if(v=='board')renderBoard();if(v=='files')renderFiles();if(v=='accuse')renderAccuse();if(v=='hints')renderHints();if(v=='interview'){renderChips();play('listen',true)}if(v=='tools')renderTool();syncHead();requestAnimationFrame(syncHead)}
 $('#tabs').onclick=e=>{const b=e.target.closest('button[data-v]');if(b)show(b.dataset.v)};
+{const bk=$('#ivback');if(bk)bk.onclick=()=>show(prevTab||'brief')}
 addEventListener('resize',syncHead);syncHead();
 
 const T=$$('template[id^="d-"]');const DOCS=T.map(t=>({id:t.id.slice(2),g:t.dataset.g,t:t.dataset.t,el:t}));const NBASE=DOCS.length;
