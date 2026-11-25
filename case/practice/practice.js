@@ -249,6 +249,7 @@ document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('.pm
 
 
 if(window.CaseBGM)CaseBGM.init({base:'../'});
+try{updPill()}catch(e){}
 show((location.hash||'').replace('#','')||'brief');
 window.__practiceApp={show,openDoc,open3D,unlockL1,st,DOCS,toast,ask,fileSupp,renderTool,renderFiles,renderAccuse,renderHints,renderBoard,toolSet:t=>{tool=t;$$('#toolnav button').forEach(x=>x.classList.toggle('on',x.dataset.t==t));renderTool()}};
 })();

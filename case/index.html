@@ -294,6 +294,42 @@ body.tv .askbar input,body.tv .askrow input,body.tv .askrow select{font-size:17p
 @media(max-width:440px){.score-pill{white-space:normal;text-align:center;max-width:74px;line-height:1.25;padding:3px 6px}header.top .bar .ttl{min-width:0}}
 @media(max-width:440px){.score-pill{max-width:104px;font-size:10px;padding:3px 7px}header.top .bar .ttl{font-size:10.5px;letter-spacing:0}}
 @media(max-width:600px){#tdu,#tdl{font-size:16px;min-height:36px}}
+
+/* v24: compact phone interview layout (portrait + landscape). Desktop is untouched. */
+.ivswitch{display:none}
+@media (max-width:700px), (orientation:landscape) and (max-height:520px){
+ #v-interview{position:relative}
+ #v-interview:has(.iv) .ivswitch{display:inline-flex;align-items:center;gap:4px;position:absolute;top:6px;right:0;z-index:6;background:#2a231b;color:#eadfc4;border:1px solid #4a3d2c;border-radius:999px;padding:6px 11px;font:600 12px Inter,system-ui,sans-serif;cursor:pointer}
+ #v-interview.pickopen:has(.iv) .ivswitch{position:static;align-self:flex-end;margin:2px 0 6px;flex:none}
+ #v-interview:has(.iv):not(.pickopen) #ivpick{display:none}
+ #v-interview:has(.iv) .iv{margin-top:2px}
+ #v-interview .iv .por{flex-direction:row!important;align-items:center!important;justify-content:flex-start;gap:10px;text-align:left!important;padding:2px 128px 6px 0;min-height:48px}
+ #v-interview .iv .por .pv{width:44px!important;height:44px!important;max-height:44px!important;aspect-ratio:auto!important;border-radius:50%!important;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+ #v-interview .iv .nameplate{position:static!important;transform:none!important;width:auto!important;max-width:none!important;padding:0!important;background:none!important;text-align:left!important;border-radius:0!important;min-width:0}
+ #v-interview .iv .nameplate b{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ #v-interview .iv .nameplate span{font-size:11px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ #v-interview .iv-main .chat{flex:1;min-height:0}
+ #v-interview .chat .aa{font-size:16.5px;line-height:1.55;max-width:100%}
+ #v-interview .chat .qq{font-size:14px}
+ #v-interview .livebar{margin:0 0 4px;gap:6px}
+ #v-interview .livebar .lbl{display:none}
+ #v-interview .chips{flex-wrap:nowrap!important;overflow-x:auto!important;overflow-y:hidden!important;max-height:none!important;padding:2px 0 4px}
+ #v-interview .chip{font-size:11px;padding:4px 8px}
+}
+@media (orientation:landscape) and (max-height:520px){
+ body:has(#v-interview.on) .ttl small{display:none}
+ body:has(#v-interview.on) header .sl{display:none}
+ body:has(#v-interview.on) nav.tabs{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start}
+ body:has(#v-interview.on) nav.tabs button{padding:6px 10px}
+ #v-interview:has(.iv) .iv{display:grid!important;grid-template-columns:150px minmax(0,1fr)!important;gap:12px;align-items:stretch}
+ #v-interview .iv .por{flex-direction:column!important;align-items:flex-start!important;padding:40px 0 0 0;gap:6px}
+ #v-interview .iv .nameplate b,#v-interview .iv .nameplate span{white-space:normal}
+ #v-interview:has(.iv) .ivswitch{left:0;right:auto;top:4px}
+ #v-interview.pickopen:has(.iv) .ivswitch{align-self:flex-start}
+ #v-interview:has(.iv) .iv-main{height:100%;min-height:0}
+ main:has(#v-interview.on){padding:0 12px;height:calc(100dvh - var(--head,6rem));max-height:calc(100dvh - var(--head,6rem));overflow:hidden;box-sizing:border-box}
+ #v-interview.on:has(.iv){height:100%!important;max-height:100%!important}
+}
 </style>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='14' font-size='14'%3E%F0%9F%95%B5%3C/text%3E%3C/svg%3E">
 </head>
@@ -359,6 +395,7 @@ body.tv .askbar input,body.tv .askrow input,body.tv .askrow select{font-size:17p
 <section class="view" id="v-interview" role="tabpanel">
  <h2 class="sec">Interview room</h2>
  <p class="lede" id="ivlede">Pick someone, type a question in plain words (“Where were you after the toast?”, “Tell me about the EpiPen”), or <b>present an exhibit</b> and watch the reaction. People answer what they're asked. Some are more honest than others. <span class="small">New to this case file? <a href="practice/">Try a practice case</a> (a made-up neighbor and a missing pie; nothing to do with this case).</span></p>
+ <button type="button" id="ivswitch" class="ivswitch" aria-expanded="false" aria-controls="ivpick">👥 Switch person</button>
  <div id="ivpick" class="ivpick"></div>
  <div id="ivroom"></div>
 </section>
@@ -1320,7 +1357,9 @@ if(st.tv){setTV(1,false);document.addEventListener('pointerdown',()=>{wakeOn();t
 document.addEventListener('pointerdown',ttsUnlock,{once:true});
 liveCheck();
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('.pm-retry')){toast('Connecting… If the browser asks to allow access to devices on your local network, choose Allow.');liveCheck(25000)}});
-$('#ivpick').onclick=e=>{const b=e.target.closest('button');if(b){ttsStop();micStop();ivCur=b.dataset.p;renderIV()}};
+$('#ivpick').onclick=e=>{const b=e.target.closest('button');if(b){ttsStop();micStop();ivCur=b.dataset.p;ivSwitch(false);renderIV()}};
+function ivSwitch(o){const v=$('#v-interview'),b=$('#ivswitch');if(!v||!b)return;v.classList.toggle('pickopen',o);b.setAttribute('aria-expanded',o);b.textContent=o?'✕ Close list':'👥 Switch person'}
+$('#ivswitch').onclick=()=>ivSwitch(!$('#v-interview').classList.contains('pickopen'));
 // ===== Tools =====
 let tool='places';
 $('#toolnav').onclick=e=>{const b=e.target.closest('button');if(!b)return;tool=b.dataset.t;$$('#toolnav button').forEach(x=>x.classList.toggle('on',x==b));renderTool()};
@@ -1377,7 +1416,7 @@ const PL=window.PLACES||{OBS:{},order:[],meta:{},locs:{}};const PLG='Location wa
 st.v3=st.v3||{};const restoreV=()=>Object.keys(st.v3).forEach(id=>{if(V3D[id])addDoc(id,V3D[id][0],V3D[id][1],'3D walkthrough');else if(PL.OBS[id])addDoc(id,PL.OBS[id][0],PL.OBS[id][1],PLG)});restoreV();
 window.__whitObs=id=>!!st.v3[id];
 function open3D(){if($('#s3d'))return;const o=document.createElement('div');o.id='s3d';o.style.cssText='position:fixed;inset:0;z-index:9999;background:#000';o.innerHTML='<iframe src="study3d.html'+(st.tv?'?tv=1':'')+'" title="3D study" style="border:0;width:100%;height:100%" allow="fullscreen"></iframe>';document.body.appendChild(o);document.body.style.overflow='hidden'}
-function close3D(){const o=$('#s3d');if(o)o.remove();document.body.style.overflow='';if(tool=='study')renderTool()}
+function close3D(){const o=$('#s3d');if(o)o.remove();document.body.style.overflow='';if(tool=='study'||tool=='places')renderTool()}
 function openPlace(loc){closePlace();const o=document.createElement('div');o.id='splace';o.style.cssText='position:fixed;inset:0;z-index:9999;background:#000';o.innerHTML='<iframe src="places/place.html?loc='+encodeURIComponent(loc)+(st.hints>=1?'&hint=1':'')+'" title="Walkthrough" style="border:0;width:100%;height:100%" allow="fullscreen"></iframe>';document.body.appendChild(o);document.body.style.overflow='hidden'}
 function closePlace(){const o=$('#splace');if(o){o.remove();document.body.style.overflow='';if(tool=='places'||tool=='study')renderTool()}}
 window.addEventListener('message',e=>{if(e.origin!==location.origin)return;const m=e.data;if(!m||m.src!=='place')return;
