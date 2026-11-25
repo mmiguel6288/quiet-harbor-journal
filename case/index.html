@@ -1304,7 +1304,7 @@ async function speak(k,html,onStart){let started=false;const st1=()=>{if(!starte
   catch(e){if(g!=tts.gen)return;await browserSay(k,ss.slice(i),g,st1);if(g==tts.gen)setTalking(null);clearTimeout(guard);return}}
  await browserSay(k,ss,g,st1);if(g==tts.gen)setTalking(null);clearTimeout(guard)}
 // ===== Listen: the Lieutenant reads a document aloud. Uses the laptop's narrator voice when the Puzzle Master is reachable, else this device's own voice =====
-var LSN={g:0,btn:null};VOXB.lt={p:.8,r:.95};
+var LSN={g:0,btn:null};VOXB.lt={p:.8,r:.95};const LSN_VOICE='teddy'; // laptop narrator = Kokoro am_onyx (Matthew's pick); 'lt' stays the internal speaker tag so no suspect portrait animates
 function lsnOn(){return !!(LSN&&LSN.g&&LSN.g==tts.gen)}
 function lsnUI(state){if(!LSN)return;const on=lsnOn();if(!on)LSN.g=0;document.querySelectorAll('.lsn').forEach(b=>{const me=on&&b==LSN.btn;b.setAttribute('aria-pressed',me?'true':'false');b.classList.toggle('busy',me&&state=='load');
   const isPill=b.classList.contains('pill');b.innerHTML=me?(isPill?'■ <span class="lbl">Stop</span>':'■<span class="pl"> Stop</span>'):(isPill?'🔊 <span class="lbl">Listen</span>':'🔊<span class="pl"> Listen</span>');
@@ -1329,7 +1329,7 @@ function lsnChunks(t){const pcs=t.match(/[^.!?…]*[.!?…]+["”’)]*\s*|[^.!?
  return out.filter(x=>/[a-z]/i.test(x))}
 async function lsnPlay(text,btn){ttsUnlock();ttsStop();const ch=lsnChunks(text);if(!ch.length)return;const g=++tts.gen;LSN.g=g;LSN.btn=btn;lsnUI('load');
  const done=()=>{if(g==tts.gen)setTalking(null);if(LSN.g==g)LSN.g=0;lsnUI()};let i=0;
- if(liveOK&&ttsSrv!==false&&tts.ctx){try{const pf=x=>{const pr=ttsFetch('lt',x);pr.catch(()=>{});return pr};const jobs=ch.map((x,j)=>j<2?pf(x):null);
+ if(liveOK&&ttsSrv!==false&&tts.ctx){try{const pf=x=>{const pr=ttsFetch(LSN_VOICE,x);pr.catch(()=>{});return pr};const jobs=ch.map((x,j)=>j<2?pf(x):null);
    for(;i<ch.length;i++){if(i+2<ch.length&&!jobs[i+2])jobs[i+2]=pf(ch[i+2]);const buf=await jobs[i];if(g!=tts.gen)return done();lsnUI('play');setTalking('lt');await playBuf(buf,g);if(g!=tts.gen)return done()}
    return done()}catch(e){if(g!=tts.gen)return done();lsnUI('play')}}
  else if(!liveOK&&!liveChecking)liveCheck(4000);
