@@ -219,13 +219,16 @@ const DX=-0.35,DZ=-0.35;
 // mug on coaster (with pale gritty film above the cocoa line: 3D-only)
 {const g=group('mug',DX+0.48,0.79,DZ+0.12);
  add(new THREE.Mesh(new THREE.CylinderGeometry(.055,.055,.006,24),mBlack),g).position.y=0.003;
- const mugTex=label(512,128,'#fbfbf8',(c)=>{c.fillStyle='#222';c.font='bold 30px Arial';c.fillText("WORLD'S OKAYEST",60,54);c.fillText('GRANDPA',150,98)});
+ const mugTex=label(1024,256,'#fbfbf8',(c)=>{c.fillStyle='#222';c.textAlign='center';let f=44;do{c.font=`bold ${f}px Arial`;f--}while(c.measureText("WORLD'S OKAYEST").width>300&&f>16);c.fillText("WORLD'S OKAYEST",512,112);c.fillText('GRANDPA',512,112+f*1.45)});
+ // Mug is turned in place (MUG_TURN) so the handle sits back-right (~147 deg, attachment ~115-179 deg) and the print is
+ // centred on the face the desk camera sees (~35 deg); the lettering spans about +/-53 deg, so the handle never crosses it.
+ const MUG_TURN=1.0,PRINT_AT=0.61;mugTex.wrapS=THREE.RepeatWrapping;mugTex.offset.x=0.5-(PRINT_AT+0.4-MUG_TURN)/(2*Math.PI);mugTex.needsUpdate=true;
  const body=add(new THREE.Mesh(new THREE.CylinderGeometry(.042,.04,.1,32,1,true),M({map:mugTex,roughness:.25})),g);body.position.y=0.056;body.rotation.y=-0.4;
  const inner=add(new THREE.Mesh(new THREE.CylinderGeometry(.0415,.0395,.1,32,1,true),M({color:0xf6f5f0,roughness:.3,side:THREE.BackSide})),g,false,false);inner.position.y=0.056;
  add(new THREE.Mesh(new THREE.CircleGeometry(.04,32),M({color:0xfbfbf8})),g).rotation.x=-Math.PI/2;
  const film=M({color:0xd8c7a4,roughness:1,side:THREE.DoubleSide});const ring=add(new THREE.Mesh(new THREE.CylinderGeometry(.0405,.0398,.012,32,1,true),film),g,false,false);ring.position.y=0.036;
  const coco=add(new THREE.Mesh(new THREE.CircleGeometry(.0398,32),M({color:0x2e1a10,roughness:.95})),g,false,false);coco.rotation.x=-Math.PI/2;coco.position.y=0.028;
- const handle=add(new THREE.Mesh(new THREE.TorusGeometry(.026,.007,10,20,Math.PI),M({color:0xfbfbf8,roughness:.25})),g);handle.rotation.z=-Math.PI/2;handle.position.set(0.044,0.056,0);handle.rotation.y=-0.4}
+ const handle=add(new THREE.Mesh(new THREE.TorusGeometry(.026,.007,10,20,Math.PI),M({color:0xfbfbf8,roughness:.25})),g);handle.rotation.z=-Math.PI/2;handle.position.set(0.044,0.056,0);handle.rotation.y=-0.4;g.rotation.y=MUG_TURN}
 // chair (pushed back, south of desk)
 {const g=new THREE.Group();g.position.set(0.55,0,1.6);g.rotation.y=2.6;S.add(g);const lea=M({color:0x3b1d12,roughness:.55});
  rbox(0.55,0.1,0.52,0.04,lea,0,0.5,0,g);rbox(0.55,0.6,0.08,0.04,lea,0,0.85,0.24,g);[[-.24,-.22],[.24,-.22],[-.24,.22],[.24,.22]].forEach(([x,z])=>box(0.04,0.45,0.04,mWood,x,0.225,z,g));}
