@@ -11,11 +11,15 @@ textarea.wsf{display:block;width:100%;box-sizing:border-box;border:0;background:
 textarea.wsf:focus,input.ws-inline:focus{outline:2px solid #e0a800;background:#fffbe6}
 input.ws-inline{font:13px 'Courier New',monospace;color:#00308f;border:0;border-bottom:1px solid #333;background:transparent;width:9em;max-width:60%}
 td.wscell{cursor:text}
+select.wsf{width:100%;box-sizing:border-box;font:13px 'Courier New',monospace;color:#00308f;background:transparent;border:0;border-bottom:1px solid #999;padding:2px 0}
+.wsone{font-size:14px;border-left:4px solid #111;padding:4px 8px;margin:8px 0}
+.wskinds{margin:4px 0 8px 18px;padding:0;font-size:13px}.wskinds li{margin:3px 0}
 @media screen and (max-width:640px){
  body{margin:10px auto;padding:0 10px}
  h1{font-size:16px}
  table{font-size:14px}
- textarea.wsf,input.ws-inline{font-size:16px}
+ textarea.wsf,input.ws-inline,select.wsf{font-size:16px}
+ .wskinds{font-size:14px}
  .wsbar select{max-width:100%}
  table.ws-two>tbody>tr>td{display:block;width:auto!important}
  table.wsdata,table.wsdata>tbody,table.wsdata>tbody>tr,table.wsdata>tbody>tr>td,table.wsdata>tbody>tr>th{display:block;width:auto!important;height:auto!important}
@@ -31,16 +35,22 @@ td.wscell{cursor:text}
  .wsprint{display:inline}
  textarea.wsf{color:#000;overflow:visible;height:auto}
  input.ws-inline{color:#000}
+ select.wsf{color:#000;border:0;-webkit-appearance:none;appearance:none}
 }
 </style></head><body>
 <button class="noprint" onclick="print()" style="float:right;padding:8px 14px">🖨 Print</button>
 <h1>DETECTIVE WORKSHEET · CASE 25-1102-0417 “THE EXTRA HOUR”</h1><div class="small">Victim: Harlan Whitcombe, 68. Night of Sat 11/1 → Sun 11/2/2025, the night DST ended (2:00 AM PDT → 1:00 AM PST). PDT = UTC−7 · PST = UTC−8 · Singapore = UTC+8</div>
 <div id="wsbar" class="wsbar"><div class="wsrow"><label for="wsplayer"><b>Who's playing?</b></label> <select id="wsplayer" aria-label="Player"></select><span class="wsprint">Player: <b id="wsprintname"></b></span></div><div class="wsrow noprint"><input id="wsnew" placeholder="New player name" maxlength="30" autocomplete="off" aria-label="New player name"> <button type="button" id="wsadd">+ Add player</button> <button type="button" id="wsreset" class="wsdanger">Reset my worksheet…</button> <span id="wssaved" class="small" aria-live="polite"></span></div><div class="small noprint">Type straight into the boxes. Answers save automatically, separately for each player, <b>only in this browser on this device</b> (clearing browser data erases them; they don't sync to other devices).</div></div>
 <h2>0 · Time Desk (read this first)</h2>
-<table><tr><td style="width:50%"><b>The rule</b><br>Before 2:00 AM on Sun 11/2 the clocks were on <b>PDT = UTC−7</b>.<br>At 2:00 AM PDT (= 09:00 UTC) they fell back to 1:00 AM, and from then on it was <b>PST = UTC−8</b>.<br>So every local time from <b>1:00 to 1:59 AM happened twice</b>: once in PDT (08:00–08:59 UTC) and again in PST (09:00–09:59 UTC).<br><br><b>To convert:</b> UTC → PDT subtract 7 h; UTC → PST subtract 8 h. A local “1:xx” is ambiguous until you know which pass it was.</td>
-<td><b>Quick table</b><br><table class="tl"><tr><th>UTC</th><th>Local</th></tr><tr><td>07:30Z</td><td>12:30 AM PDT</td></tr><tr><td>08:00Z</td><td>1:00 AM PDT (first 1 o'clock)</td></tr><tr><td>08:30Z</td><td>1:30 AM PDT</td></tr><tr><td>08:59Z</td><td>1:59 AM PDT</td></tr><tr><td>09:00Z</td><td>2:00 AM PDT → 1:00 AM PST</td></tr><tr><td>09:30Z</td><td>1:30 AM PST (second 1 o'clock)</td></tr><tr><td>10:00Z</td><td>2:00 AM PST</td></tr></table></td></tr></table>
-<p class="small">Clocks come in three kinds. Fill in each device you meet: (a) records in UTC; (b) local time, adjusts itself (phones, network-synced registers); (c) local time, set by hand or never adjusted, so after the change it may read an hour off. Counters that only go up (sequence numbers, transaction numbers) tell you order no matter what any clock says.</p>
-<table class="tl"><tr><th style="width:30%">Device / record</th><th style="width:22%">Kind (a / b / c)</th><th>How to convert to UTC</th></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></table>
+<p class="wsone"><b>In one line:</b> Clocks lied that night because 1 AM happened twice. Convert everything to UTC to see the true order.</p>
+<table class="ws-two"><tr><td style="width:50%"><b>What happened</b><br>On the night of Sat 11/1 → Sun 11/2/2025, daylight saving time ended.<br>At <b>2:00 AM PDT</b> the clocks went back to <b>1:00 AM PST</b>.<br>So every time from <b>1:00 to 1:59 AM happened twice</b>: first the <b>first 1 o'clock</b> (PDT), then the <b>second 1 o'clock</b> (PST).<br><br><b>The fix: use UTC</b>, one clock that never jumps.<br>PDT = UTC−7: add <b>7</b> hours to get UTC.<br>PST = UTC−8: add <b>8</b> hours to get UTC.<br>A local time like “1:20 AM” is a puzzle until you know <b>which 1 o'clock</b> it was.<br><br><b>Made-up example:</b> a phone showing 1:30 AM <i>after</i> the clocks went back = 09:30 UTC. The same phone showing 1:30 AM <i>before</i> = 08:30 UTC.</td>
+<td><b>Quick table</b><br><table class="tl"><tr><th>UTC</th><th>Local time</th></tr><tr><td>07:30Z</td><td>12:30 AM PDT</td></tr><tr><td>08:00Z</td><td>1:00 AM PDT (first 1 o'clock starts)</td></tr><tr><td>08:30Z</td><td>1:30 AM PDT (first 1 o'clock)</td></tr><tr><td>08:59Z</td><td>1:59 AM PDT (first 1 o'clock ends)</td></tr><tr><td>09:00Z</td><td>2:00 AM PDT: clocks go back to 1:00 AM PST</td></tr><tr><td>09:30Z</td><td>1:30 AM PST (second 1 o'clock)</td></tr><tr><td>10:00Z</td><td>2:00 AM PST</td></tr></table></td></tr></table>
+<p><b>Three kinds of clock.</b> For each device or record you meet, write it below and pick its kind:</p>
+<ul class="wskinds"><li><b>A · UTC</b>: the record is already in UTC. Use its time as it is.</li>
+<li><b>B · Auto local</b>: local time that sets itself (phones, network-synced devices). Before the clocks went back it shows PDT: add 7 h. After, it shows PST: add 8 h.</li>
+<li><b>C · Hand-set</b>: local time set by hand, or never changed. After the clocks went back it may read an hour off. Work out which offset it was really on, then convert.</li></ul>
+<p><b>Counters don't lie.</b> Numbers that only go up (sequence numbers, transaction numbers) show the true order, whatever any clock says.</p>
+<table class="tl"><tr><th style="width:30%">Device / record</th><th style="width:26%" data-ws="kind">Clock kind (A · UTC / B · Auto local / C · Hand-set)</th><th>How to get UTC</th></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></table>
 <h2>1 · Motive / Means / Opportunity grid</h2>
 <p class="small">Mark ✓ (has it, with exhibit #), ✗ (provably lacks it, with exhibit #), or ? (unsure). The killer must have all three. Everyone else lacks at least one, provably.</p>
 <table class="tall"><tr><th style="width:18%">Suspect</th><th>MOTIVE (why?) · exhibits</th><th>MEANS (how? access to what?) · exhibits</th><th>OPPORTUNITY (when? where?) · exhibits</th></tr>
@@ -86,7 +96,9 @@ document.querySelectorAll('table').forEach(function(t){
   rows.forEach(function(r,ri){
     [].forEach.call(r.cells,function(c,ci){
       if(c.tagName!=='TD'||c.querySelector('table')||c.textContent.trim()!=='')return;
-      var ta=document.createElement('textarea');ta.className='wsf';ta.rows=1;ta.dataset.k='f'+(n++);ta.setAttribute('autocomplete','off');
+      var isKind=head&&head.cells[ci]&&head.cells[ci].getAttribute('data-ws')==='kind';
+      var ta;if(isKind){ta=document.createElement('select');['','A · UTC','B · Auto local','C · Hand-set'].forEach(function(v){var o=document.createElement('option');o.value=v;o.textContent=v||'— pick —';ta.appendChild(o)})}else{ta=document.createElement('textarea');ta.rows=1}
+      ta.className='wsf';ta.dataset.k='f'+(n++);ta.setAttribute('autocomplete','off');
       var lab=labels[ci]||((r.cells[0]&&r.cells[0].textContent.trim())||'');
       var rowName=(r.cells[0]&&r.cells[0]!==c)?r.cells[0].textContent.trim().split('\n')[0]:'';
       ta.setAttribute('aria-label',(rowName?rowName+' · ':'')+(lab||'answer'));
@@ -105,7 +117,8 @@ var P=load(PK,null);if(!P||!P.list||!P.list.length)P={list:['Detective'],cur:'De
 if(P.list.indexOf(P.cur)<0)P.cur=P.list[0];
 var sel=document.getElementById('wsplayer'),saved=document.getElementById('wssaved');
 function renderPlayers(){sel.innerHTML='';P.list.forEach(function(nm){var o=document.createElement('option');o.value=nm;o.textContent=nm;sel.appendChild(o)});sel.value=P.cur;document.getElementById('wsprintname').textContent=P.cur;}
-function fill(){var d=load(DK(P.cur),{});fields.forEach(function(f){f.value=d[f.dataset.k]||'';grow(f)})}
+function setVal(f,v){if(f.tagName==='SELECT'&&v&&![].some.call(f.options,function(o){return o.value===v})){var o=document.createElement('option');o.value=v;o.textContent=v;o.className='wsold';f.appendChild(o)}f.value=v}
+function fill(){var d=load(DK(P.cur),{});fields.forEach(function(f){setVal(f,d[f.dataset.k]||'');grow(f)})}
 var tm=null;
 function saveNow(){clearTimeout(tm);tm=null;var d={};fields.forEach(function(f){if(f.value)d[f.dataset.k]=f.value});
   saved.textContent=store(DK(P.cur),d)?'✓ saved for '+P.cur:'⚠ could not save (browser storage blocked)'}
