@@ -125,8 +125,7 @@ rimfuel:{title:'Rim Fuel & Market',where:'Running Springs',idle:'Daniel, the nig
    {k:'register',l:59,t:45,w:20,h:24,label:'Register',clue:true,obs:'V12',ev:['F1']},
    {k:'bags',l:68,t:18,w:18,h:26,label:'Carry-out bags'},
    {k:'feesign',l:80,t:56,w:8,h:17,label:'Notice on the counter',clue:true,obs:'V10'},
-   {k:'coffee',l:82,t:33,w:17,h:22,label:'Coffee station'},
-   {k:'dome',l:60,t:0,w:8,h:8,label:'Ceiling camera'}]},
+   {k:'coffee',l:82,t:33,w:17,h:22,label:'Coffee station'}]},
   aisle:{t:'Aisle by the register',file:'img/rim-aisle.jpg',hots:[
    {k:'pb',l:64,t:55,w:34,h:32,label:'Jars by the counter',clue:true,obs:'V11'},
    {k:'counter2',l:43,t:42,w:21,h:18,label:'Counter',go:'counter'},

@@ -34,7 +34,7 @@ body.tv #panel{font-size:18px;width:min(560px,calc(100% - 24px))}body.tv #panel 
 <div id="load">Opening the study…</div>
 <div id="hud"><div class="t"><b>The study</b> · as found 11/02, 08:14<br><span id="help">Drag to look around · scroll/pinch to zoom · tap objects to inspect</span></div><div class="hbtns"><button id="close">✕ Close</button><button id="qmode" type="button"></button></div></div>
 <div id="panel"><button class="x" id="px">×</button><div class="tag" id="ptag"></div><h3 id="pt"></h3><div id="pb"></div><div class="row" id="pr"></div></div>
-<div id="bar"></div><div id="toast"></div>
+<div id="toast"></div>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <script type="module">
 import * as THREE from 'three';
@@ -216,8 +216,8 @@ const DX=-0.35,DZ=-0.35;
  const cap=add(new THREE.Mesh(new THREE.CylinderGeometry(.018,.018,.03,14),M({color:0xf2c81e,roughness:.4})),g);cap.rotation.z=Math.PI/2;cap.position.set(0.15,-0.034,0.1);
  {const fm=M({color:0xfbfbf6,roughness:1,emissive:0x333333,emissiveIntensity:.4});const pl=new THREE.Group();pl.position.set(0.19,0.066,0.05);pl.scale.setScalar(2.4);g.add(pl);add(new THREE.Mesh(new THREE.SphereGeometry(.0018,8,6),fm),pl,false,false);for(let i=0;i<14;i++){const b=add(new THREE.Mesh(new THREE.CylinderGeometry(.00035,.0002,.006,3),fm),pl,false,false);const a1=i/14*Math.PI*2,a2=rnd(-.9,.9);b.position.set(Math.cos(a1)*.003*Math.cos(a2),Math.sin(a2)*.003+.001,Math.sin(a1)*.003*Math.cos(a2));b.lookAt(b.position.clone().multiplyScalar(3));b.rotateX(Math.PI/2)}}
 }
-// index card taped under the open top-right drawer (visible from low angles)
-{const g=group('card',DX+0.55,0.588,DZ+0.52);const c=label(256,160,'#f6f3ea',(x,w,h)=>{x.strokeStyle='#9ec1e6';for(let y=40;y<h;y+=22){x.beginPath();x.moveTo(0,y);x.lineTo(w,y);x.stroke()}x.fillStyle='#1d3f8f';x.font='italic 26px Georgia';x.fillText('PHONE —',20,32);x.font='italic 18px Georgia';x.fillText('the year the garage…',20,74)});
+// index card taped under the open top-right drawer; its front edge sticks out past the drawer front so it can be spotted and tapped without the old object list
+{const g=group('card',DX+0.55,0.588,DZ+0.71);const c=label(256,160,'#f6f3ea',(x,w,h)=>{x.strokeStyle='#9ec1e6';for(let y=40;y<h;y+=22){x.beginPath();x.moveTo(0,y);x.lineTo(w,y);x.stroke()}x.fillStyle='#1d3f8f';x.font='italic 26px Georgia';x.fillText('PHONE —',20,32);x.font='italic 18px Georgia';x.fillText('the year the garage…',20,74)});
  const m=add(new THREE.Mesh(new THREE.PlaneGeometry(0.125,0.078),M({map:c,side:THREE.DoubleSide})),g,false,false);m.rotation.x=Math.PI/2;
  {const fl=new THREE.PointLight(0xfff1d6,0.9,0.8,2);fl.position.set(0,-0.22,0.25);g.add(fl)}const tape=M({color:0xf3eed0,transparent:true,opacity:.7});box(0.03,0.002,0.09,tape,-0.05,0.001,0,g);box(0.03,0.002,0.09,tape,0.05,0.001,0,g)}
 // lamp
@@ -312,9 +312,9 @@ function post(m){if(P)P.postMessage(Object.assign({src:'study3d'},m),location.or
 function toast(s){const t=document.getElementById('toast');t.textContent=s;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',1800)}
 document.getElementById('px').onclick=closePanel;document.getElementById('close').onclick=()=>post({t:'close'});
 const order=['desk','mug','drawer','trainer','outline','notepad','papers','card','lamp','door','window','credenza','printer','clock','hearth','shelves','glasses'];
-document.getElementById('bar').innerHTML=order.map(k=>`<button data-k="${k}">${INFO[k].t.replace(/\s*\(.*\)/,'').replace(/^Under the /,'Under ')}</button>`).join('');
+// no object list: players look around the room and tap things
 markBar();
-document.getElementById('bar').onclick=e=>{const b=e.target.closest('button');if(b)select(b.dataset.k)};
+
 if(isMobile)document.getElementById('help').textContent='Drag to look · pinch to zoom · two fingers to pan · tap objects';
 
 // ---------- fake contact shading (baked blobs) + sharper grazing-angle textures ----------
