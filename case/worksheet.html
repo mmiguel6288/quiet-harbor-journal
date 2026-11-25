@@ -12,6 +12,13 @@ textarea.wsf:focus,input.ws-inline:focus{outline:2px solid #e0a800;background:#f
 input.ws-inline{font:13px 'Courier New',monospace;color:#00308f;border:0;border-bottom:1px solid #333;background:transparent;width:9em;max-width:60%}
 td.wscell{cursor:text}
 select.wsf{width:100%;box-sizing:border-box;font:13px 'Courier New',monospace;color:#00308f;background:transparent;border:0;border-bottom:1px solid #999;padding:2px 0}
+.wscalc{border:2px solid #111;background:#f4f8ff;padding:8px 10px;margin:10px 0}
+.wscrow{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin:8px 0}
+.wscl{font-weight:bold;min-width:9.5em}
+.wscin{font:16px 'Courier New',monospace;min-height:44px;padding:6px 8px;border:1px solid #333;border-radius:6px;background:#fff;box-sizing:border-box}
+input.wscin{width:8.5em}
+.wsco{font:bold 17px 'Courier New',monospace;color:#00308f;min-width:9em}
+@media screen and (max-width:640px){.wscl{min-width:100%}.wscrow input.wscin{flex:1 1 7em}.wscrow select.wscin{flex:1 1 11em}.wsco{flex-basis:100%}}
 .wsone{font-size:14px;border-left:4px solid #111;padding:4px 8px;margin:8px 0}
 .wskinds{margin:4px 0 8px 18px;padding:0;font-size:13px}.wskinds li{margin:3px 0}
 @media screen and (max-width:640px){
@@ -49,6 +56,7 @@ select.wsf{width:100%;box-sizing:border-box;font:13px 'Courier New',monospace;co
 <ul class="wskinds"><li><b>A · UTC</b>: the record is already in UTC. Use its time as it is.</li>
 <li><b>B · Auto local</b>: local time that sets itself (phones, network-synced devices). Before the clocks went back it shows PDT: add 7 h. After, it shows PST: add 8 h.</li>
 <li><b>C · Hand-set</b>: local time set by hand, or never changed. After the clocks went back it may read an hour off. Work out which offset it was really on, then convert.</li></ul>
+<div class="wscalc noprint" id="wscalc"><b>Time converter</b> <span class="small">(just arithmetic: which zone a record uses is up to you)</span><div class="wscrow"><label class="wscl" for="wsc-lt">Local → UTC</label><input id="wsc-lt" class="wscin" inputmode="text" autocomplete="off" placeholder="e.g. 1:30 AM" aria-label="Local time"><select id="wsc-lz" class="wscin" aria-label="Local time zone"><option value="-7">PDT (UTC−7)</option><option value="-8">PST (UTC−8)</option><option value="8">Singapore (UTC+8)</option><option value="0">UTC</option></select><output id="wsc-lo" class="wsco" aria-live="polite"></output></div><div class="wscrow"><label class="wscl" for="wsc-ut">UTC → local</label><input id="wsc-ut" class="wscin" inputmode="text" autocomplete="off" placeholder="e.g. 09:30" aria-label="UTC time"><select id="wsc-uz" class="wscin" aria-label="Show in time zone"><option value="-7">PDT (UTC−7)</option><option value="-8">PST (UTC−8)</option><option value="8">Singapore (UTC+8)</option><option value="0">UTC</option></select><output id="wsc-uo" class="wsco" aria-live="polite"></output></div><div class="small">Type times like 1:30 AM, 13:45 or 0130.</div></div>
 <p><b>Counters don't lie.</b> Numbers that only go up (sequence numbers, transaction numbers) show the true order, whatever any clock says.</p>
 <table class="tl"><tr><th style="width:30%">Device / record</th><th style="width:26%" data-ws="kind">Clock kind (A · UTC / B · Auto local / C · Hand-set)</th><th>How to get UTC</th></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></table>
 <h2>1 · Motive / Means / Opportunity grid</h2>
@@ -137,6 +145,31 @@ document.getElementById('wsreset').addEventListener('click',function(){
 addEventListener('beforeprint',function(){fields.forEach(grow)});
 addEventListener('resize',function(){fields.forEach(grow)});
 store(PK,P);renderPlayers();fill();
+})();
+</script>
+<script>
+(function(){
+// Time converter: arithmetic only (local zone <-> UTC). Not saved; hidden in print.
+function parse(s){s=(s||'').trim().toLowerCase().replace(/\s+/g,'').replace(/\.m\.?$/,'m');
+  var m=s.match(/^(\d{1,2})(?::|\.)?(\d{2})?(am|pm|a|p)?$/);if(!m)return null;
+  var h=+m[1],mi=m[2]?+m[2]:0,ap=m[3];if(mi>59)return null;
+  if(ap){if(h<1||h>12)return null;if(ap[0]==='a'){if(h===12)h=0}else if(h!==12)h+=12}else if(h>23)return null;
+  return h*60+mi}
+function pad(n){return (n<10?'0':'')+n}
+function day(d){return d>0?' (next day)':d<0?' (day before)':''}
+var NAME={'-7':'PDT','-8':'PST','8':'Singapore time','0':'UTC'};
+function utc(min){return pad(Math.floor(min/60))+':'+pad(min%60)+' UTC'}
+function local(min,z){if(z===0)return utc(min);var h=Math.floor(min/60),m=min%60,ap=h<12?'AM':'PM',hh=h%12;if(hh===0)hh=12;return hh+':'+pad(m)+' '+ap+' '+NAME[String(z)]}
+function wrap(t){var d=Math.floor(t/1440);return [((t%1440)+1440)%1440,d]}
+var lt=document.getElementById('wsc-lt'),lz=document.getElementById('wsc-lz'),lo=document.getElementById('wsc-lo');
+var ut=document.getElementById('wsc-ut'),uz=document.getElementById('wsc-uz'),uo=document.getElementById('wsc-uo');
+if(!lt)return;
+function l2u(){var v=parse(lt.value);if(lt.value.trim()===''){lo.textContent='';return}if(v===null){lo.textContent='? try 1:30 AM';return}
+  var z=+lz.value,r=wrap(v-z*60);lo.textContent='= '+utc(r[0])+day(r[1])}
+function u2l(){var v=parse(ut.value);if(ut.value.trim()===''){uo.textContent='';return}if(v===null){uo.textContent='? try 09:30';return}
+  var z=+uz.value,r=wrap(v+z*60);uo.textContent='= '+local(r[0],z)+day(r[1])}
+[lt,lz].forEach(function(e){e.addEventListener('input',l2u);e.addEventListener('change',l2u)});
+[ut,uz].forEach(function(e){e.addEventListener('input',u2l);e.addEventListener('change',u2l)});
 })();
 </script>
 </body></html>
