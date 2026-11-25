@@ -1,7 +1,41 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Detective Worksheet · Case 25-1102-0417</title>
-<style>body{font-family:'Courier New',monospace;color:#111;max-width:900px;margin:20px auto;padding:0 14px}h1{font-size:20px;margin:0}h2{font-size:15px;border-bottom:2px solid #111;margin:22px 0 6px}table{width:100%;border-collapse:collapse;font-size:12px}td,th{border:1px solid #333;padding:6px;vertical-align:top}th{background:#eee}.tall td{height:58px}.tl td{height:22px}.small{font-size:11px;color:#444}@media print{.noprint{display:none}body{margin:0}}</style></head><body>
+<style>body{font-family:'Courier New',monospace;color:#111;max-width:900px;margin:20px auto;padding:0 14px}h1{font-size:20px;margin:0}h2{font-size:15px;border-bottom:2px solid #111;margin:22px 0 6px}table{width:100%;border-collapse:collapse;font-size:12px}td,th{border:1px solid #333;padding:6px;vertical-align:top}th{background:#eee}.tall td{height:58px}.tl td{height:22px}.small{font-size:11px;color:#444}@media print{.noprint{display:none}body{margin:0}}</style><style>
+/* editable worksheet (worksheet-only) */
+.wsbar{border:2px dashed #555;padding:8px 10px;margin:12px 0 4px;background:#fafaf5}
+.wsrow{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin:4px 0}
+.wsbar select,.wsbar input,.wsbar button{font:16px 'Courier New',monospace;padding:6px 8px;border:1px solid #333;background:#fff;border-radius:4px}
+.wsbar button{cursor:pointer}.wsdanger{color:#8a1b12;border-color:#8a1b12!important}
+.wsprint{display:none}
+textarea.wsf{display:block;width:100%;box-sizing:border-box;border:0;background:transparent;resize:none;overflow:hidden;font:13px/1.35 'Courier New',monospace;color:#00308f;padding:0;margin:0;min-height:20px}
+.tall textarea.wsf{min-height:46px}
+textarea.wsf:focus,input.ws-inline:focus{outline:2px solid #e0a800;background:#fffbe6}
+input.ws-inline{font:13px 'Courier New',monospace;color:#00308f;border:0;border-bottom:1px solid #333;background:transparent;width:9em;max-width:60%}
+td.wscell{cursor:text}
+@media screen and (max-width:640px){
+ body{margin:10px auto;padding:0 10px}
+ h1{font-size:16px}
+ table{font-size:14px}
+ textarea.wsf,input.ws-inline{font-size:16px}
+ .wsbar select{max-width:100%}
+ table.ws-two>tbody>tr>td{display:block;width:auto!important}
+ table.wsdata,table.wsdata>tbody,table.wsdata>tbody>tr,table.wsdata>tbody>tr>td,table.wsdata>tbody>tr>th{display:block;width:auto!important;height:auto!important}
+ table.wsdata>tbody>tr.wshead{display:none}
+ table.wsdata>tbody>tr{border:1px solid #333;margin:0 0 8px;background:#fff}
+ table.wsdata>tbody>tr>td,table.wsdata>tbody>tr>th{border:0;border-bottom:1px dotted #bbb;padding:6px 8px}
+ table.wsdata>tbody>tr>td[data-label]::before{content:attr(data-label);display:block;font-size:11px;color:#555;font-weight:bold;margin-bottom:2px}
+ table.wsdata textarea.wsf{border-bottom:1px solid #999;min-height:28px}
+}
+@media print{
+ .wsbar{border:0;padding:0;margin:6px 0;background:none}
+ .wsbar select,.wsbar .wsrow label{display:none}
+ .wsprint{display:inline}
+ textarea.wsf{color:#000;overflow:visible;height:auto}
+ input.ws-inline{color:#000}
+}
+</style></head><body>
 <button class="noprint" onclick="print()" style="float:right;padding:8px 14px">🖨 Print</button>
 <h1>DETECTIVE WORKSHEET · CASE 25-1102-0417 “THE EXTRA HOUR”</h1><div class="small">Victim: Harlan Whitcombe, 68. Night of Sat 11/1 → Sun 11/2/2025, the night DST ended (2:00 AM PDT → 1:00 AM PST). PDT = UTC−7 · PST = UTC−8 · Singapore = UTC+8</div>
+<div id="wsbar" class="wsbar"><div class="wsrow"><label for="wsplayer"><b>Who's playing?</b></label> <select id="wsplayer" aria-label="Player"></select><span class="wsprint">Player: <b id="wsprintname"></b></span></div><div class="wsrow noprint"><input id="wsnew" placeholder="New player name" maxlength="30" autocomplete="off" aria-label="New player name"> <button type="button" id="wsadd">+ Add player</button> <button type="button" id="wsreset" class="wsdanger">Reset my worksheet…</button> <span id="wssaved" class="small" aria-live="polite"></span></div><div class="small noprint">Type straight into the boxes. Answers save automatically, separately for each player, <b>only in this browser on this device</b> (clearing browser data erases them; they don't sync to other devices).</div></div>
 <h2>0 · Time Desk (read this first)</h2>
 <table><tr><td style="width:50%"><b>The rule</b><br>Before 2:00 AM on Sun 11/2 the clocks were on <b>PDT = UTC−7</b>.<br>At 2:00 AM PDT (= 09:00 UTC) they fell back to 1:00 AM, and from then on it was <b>PST = UTC−8</b>.<br>So every local time from <b>1:00 to 1:59 AM happened twice</b>: once in PDT (08:00–08:59 UTC) and again in PST (09:00–09:59 UTC).<br><br><b>To convert:</b> UTC → PDT subtract 7 h; UTC → PST subtract 8 h. A local “1:xx” is ambiguous until you know which pass it was.</td>
 <td><b>Quick table</b><br><table class="tl"><tr><th>UTC</th><th>Local</th></tr><tr><td>07:30Z</td><td>12:30 AM PDT</td></tr><tr><td>08:00Z</td><td>1:00 AM PDT (first 1 o'clock)</td></tr><tr><td>08:30Z</td><td>1:30 AM PDT</td></tr><tr><td>08:59Z</td><td>1:59 AM PDT</td></tr><tr><td>09:00Z</td><td>2:00 AM PDT → 1:00 AM PST</td></tr><tr><td>09:30Z</td><td>1:30 AM PST (second 1 o'clock)</td></tr><tr><td>10:00Z</td><td>2:00 AM PST</td></tr></table></td></tr></table>
@@ -29,7 +63,7 @@
 <table class="tl"><tr><th>Who said it</th><th>Claim</th><th>Contradicted by (exhibit)</th></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></table>
 <h2>5 · Codes, ciphers &amp; locks</h2>
 <table class="tl"><tr><th style="width:30%">Puzzle</th><th>Working</th><th style="width:18%">Answer</th></tr>
-<tr><td>Notepad indentations (P7)<br><span class="small">Cipher key: ____ (where from?)</span></td><td style="height:70px"></td><td></td></tr>
+<tr><td>Notepad indentations (P7)<br><span class="small">Cipher key: <input class="wsf ws-inline" data-k="cipherkey" aria-label="Cipher key and where it came from" autocomplete="off"> (where from?)</span></td><td style="height:70px"></td><td></td></tr>
 <tr><td>Harlan's iPhone, 6 digits (P8)</td><td style="height:44px"></td><td></td></tr>
 <tr><td>Study credenza, 4 digits</td><td style="height:44px"></td><td></td></tr></table>
 <p class="small">Alphabet strip: A B C D E F G H I J K L M N O P Q R S T U V W X Y Z</p>
@@ -38,4 +72,58 @@
 <tr><td>1</td><td></td><td></td><td></td><td></td></tr><tr><td>2</td><td></td><td></td><td></td><td></td></tr><tr><td>3</td><td></td><td></td><td></td><td></td></tr><tr><td>4</td><td></td><td></td><td></td><td></td></tr><tr><td>5</td><td></td><td></td><td></td><td></td></tr><tr><td>6</td><td></td><td></td><td></td><td></td></tr><tr><td>7</td><td></td><td></td><td></td><td></td></tr><tr><td>8</td><td></td><td></td><td></td><td></td></tr><tr><td>9</td><td></td><td></td><td></td><td></td></tr><tr><td>10</td><td></td><td></td><td></td><td></td></tr><tr><td>11</td><td></td><td></td><td></td><td></td></tr><tr><td>12</td><td></td><td></td><td></td><td></td></tr>
 <h2>7 · Our accusation</h2>
 <table class="tall"><tr><th style="width:18%">Killer</th><td></td></tr><tr><th>Motive + exhibits</th><td></td></tr><tr><th>Means + exhibits</th><td></td></tr><tr><th>Opportunity + exhibits</th><td></td></tr></table>
+<script>
+(function(){
+var LS='xh-worksheet-v1',PK=LS+':players',DK=function(n){return LS+':data:'+n};
+function load(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+function store(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}
+// 1) turn every blank answer cell into a typing box (stable keys by position)
+var n=0;
+document.querySelectorAll('table').forEach(function(t){
+  var rows=[].slice.call(t.rows),head=rows[0],labels=[];
+  if(head&&head.querySelector('th')&&!head.querySelector('td'))[].forEach.call(head.cells,function(c){labels.push(c.textContent.trim())});
+  var made=false;
+  rows.forEach(function(r,ri){
+    [].forEach.call(r.cells,function(c,ci){
+      if(c.tagName!=='TD'||c.querySelector('table')||c.textContent.trim()!=='')return;
+      var ta=document.createElement('textarea');ta.className='wsf';ta.rows=1;ta.dataset.k='f'+(n++);ta.setAttribute('autocomplete','off');
+      var lab=labels[ci]||((r.cells[0]&&r.cells[0].textContent.trim())||'');
+      var rowName=(r.cells[0]&&r.cells[0]!==c)?r.cells[0].textContent.trim().split('\n')[0]:'';
+      ta.setAttribute('aria-label',(rowName?rowName+' · ':'')+(lab||'answer'));
+      c.appendChild(ta);c.classList.add('wscell');made=true;
+    });
+  });
+  if(made){t.classList.add('wsdata');
+    if(labels.length){rows[0].classList.add('wshead');rows.forEach(function(r){[].forEach.call(r.cells,function(c,ci){if(c.tagName==='TD'&&labels[ci])c.setAttribute('data-label',labels[ci])})})}}
+});
+var first=document.querySelector('h2+table');if(first&&!first.classList.contains('wsdata'))first.classList.add('ws-two');
+document.addEventListener('click',function(e){var c=e.target.closest&&e.target.closest('td.wscell');if(c&&e.target===c){var f=c.querySelector('.wsf');if(f)f.focus()}});
+var fields=[].slice.call(document.querySelectorAll('.wsf'));
+function grow(f){if(f.tagName==='TEXTAREA'){f.style.height='auto';f.style.height=f.scrollHeight+'px'}}
+// 2) players
+var P=load(PK,null);if(!P||!P.list||!P.list.length)P={list:['Detective'],cur:'Detective'};
+if(P.list.indexOf(P.cur)<0)P.cur=P.list[0];
+var sel=document.getElementById('wsplayer'),saved=document.getElementById('wssaved');
+function renderPlayers(){sel.innerHTML='';P.list.forEach(function(nm){var o=document.createElement('option');o.value=nm;o.textContent=nm;sel.appendChild(o)});sel.value=P.cur;document.getElementById('wsprintname').textContent=P.cur;}
+function fill(){var d=load(DK(P.cur),{});fields.forEach(function(f){f.value=d[f.dataset.k]||'';grow(f)})}
+var tm=null;
+function saveNow(){clearTimeout(tm);tm=null;var d={};fields.forEach(function(f){if(f.value)d[f.dataset.k]=f.value});
+  saved.textContent=store(DK(P.cur),d)?'✓ saved for '+P.cur:'⚠ could not save (browser storage blocked)'}
+function queue(){saved.textContent='saving…';clearTimeout(tm);tm=setTimeout(saveNow,400)}
+fields.forEach(function(f){f.addEventListener('input',function(){grow(f);queue()});f.addEventListener('change',saveNow)});
+addEventListener('pagehide',function(){if(tm)saveNow()});
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden'&&tm)saveNow()});
+sel.addEventListener('change',function(){if(tm)saveNow();P.cur=sel.value;store(PK,P);renderPlayers();fill();saved.textContent='Showing '+P.cur+"'s worksheet"});
+document.getElementById('wsadd').addEventListener('click',function(){var inp=document.getElementById('wsnew');var nm=(inp.value||'').replace(/\s+/g,' ').trim().slice(0,30);
+  if(!nm){inp.focus();return}if(tm)saveNow();if(P.list.indexOf(nm)<0)P.list.push(nm);P.cur=nm;store(PK,P);inp.value='';renderPlayers();fill();saved.textContent='Now playing as '+nm});
+document.getElementById('wsnew').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();document.getElementById('wsadd').click()}});
+document.getElementById('wsreset').addEventListener('click',function(){
+  var a=prompt('This erases everything '+P.cur+' wrote on this worksheet (other players are not affected).\nType RESET to confirm.');
+  if(a===null)return;if(a.trim().toUpperCase()!=='RESET'){alert('Not reset. Nothing was erased.');return}
+  clearTimeout(tm);tm=null;try{localStorage.removeItem(DK(P.cur))}catch(e){}fill();saved.textContent=P.cur+"'s worksheet was cleared"});
+addEventListener('beforeprint',function(){fields.forEach(grow)});
+addEventListener('resize',function(){fields.forEach(grow)});
+store(PK,P);renderPlayers();fill();
+})();
+</script>
 </body></html>
