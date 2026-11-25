@@ -58,6 +58,8 @@ h2.sec{font-family:'Special Elite';font-weight:400;font-size:22px;margin:6px 0 1
 .vtools{position:sticky;top:0;display:flex;gap:8px;justify-content:space-between;align-items:center;padding:10px 14px;background:#0e0c0a;border-bottom:1px solid #332a20;z-index:2}
 .vtools button{background:#2a231b;border:1px solid #4a3d2c;color:#eadfc4;border-radius:6px;padding:7px 12px;font-size:13px}
 .vtools .vt{font:600 13px 'IBM Plex Mono';color:#d8c8a0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lsn[aria-pressed=true]{background:#5a3a1c!important;border-color:#b8862f!important;color:#fff3d6!important}.lsn.busy{animation:lsnp 1.2s ease-in-out infinite}@keyframes lsnp{50%{opacity:.55}}@media(prefers-reduced-motion:reduce){.lsn.busy{animation:none}}
+.lsn-row{margin:0 0 8px}.lsn-row .lsn{background:#2a251f;color:#eadfc4}
 .vbody{max-width:860px;margin:20px auto 60px;padding:0 10px}
 /* documents */
 .doc{background:var(--paper2);color:var(--ink);padding:28px 30px;box-shadow:0 12px 40px rgba(0,0,0,.6);font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.55;position:relative;overflow-x:auto}
@@ -355,6 +357,7 @@ body.tv .askbar input,body.tv .askrow input,body.tv .askrow select{font-size:17p
  <div class="brief">
   <div class="memo">
    <div class="stamp">CONFIDENTIAL</div>
+   <div class="lsn-row"><button type="button" class="pill lsn" id="memolsn" aria-pressed="false" aria-label="Listen: read this memo aloud">🔊 <span class="lbl">Listen</span></button></div>
    <h3>MEMORANDUM</h3>
    TO: &nbsp;&nbsp;Investigating Detective (you)<br>
    FROM: Lt. D. Haverford, Specialized Investigations<br>
@@ -441,7 +444,7 @@ body.tv .askbar input,body.tv .askrow input,body.tv .askrow select{font-size:17p
 </section>
 </main>
 
-<div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-labelledby="vtitle"><div class="vtools"><button id="vprev" aria-label="Previous file">‹</button><span class="vt" id="vtitle"></span><span class="vbtns"><button id="vpin" aria-label="Pin to board">📌<span class="pl"> Pin</span></button> <button id="vnext" aria-label="Next file">›</button> <button id="vclose" aria-label="Close">✕</button></span></div><div class="vbody" id="vbody"></div></div>
+<div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-labelledby="vtitle"><div class="vtools"><button id="vprev" aria-label="Previous file">‹</button><span class="vt" id="vtitle"></span><span class="vbtns"><button id="vlsn" class="lsn" aria-pressed="false" aria-label="Listen: read this file aloud">🔊<span class="pl"> Listen</span></button> <button id="vpin" aria-label="Pin to board">📌<span class="pl"> Pin</span></button> <button id="vnext" aria-label="Next file">›</button> <button id="vclose" aria-label="Close">✕</button></span></div><div class="vbody" id="vbody"></div></div>
 <div class="toast" id="toast"></div>
 <template id="d-R1" data-g="Official reports" data-t="Incident / Crime Report">
 <div class="doc">
@@ -1147,9 +1150,9 @@ function renderFiles(){const gs=[...new Set(DOCS.map(d=>d.g))];const nl=Object.k
 function updPill(){const n=Object.keys(st.seen).filter(k=>ALLD.some(d=>d.id==k)&&DOCS.some(d=>d.id==k)).length;const f=Object.keys(EVID).filter(id=>st.found[id]).length,ft=Object.keys(EVID).length;$('#pill').textContent=st.locked?`Score ${st.score}/100`:`Read ${n}/${DOCS.filter(d=>ALLD.includes(d)).length} · 📁 ${f}/${ft}`}
 $('#groups').onclick=e=>{const f=e.target.closest('.folder');if(f)openDoc(DOCS.findIndex(d=>d.id==f.dataset.id))};
 let cur=0;
-function openDoc(i){cur=(i+DOCS.length)%DOCS.length;const d=DOCS[cur];$('#vtitle').textContent=`${d.id} · ${d.el.dataset.t.replace(/&amp;/g,'&')}`;$('#vbody').innerHTML='';$('#vbody').appendChild(d.el.content.cloneNode(true));const PM={S1:'rosa',S2:'margo',S3:'delia',S4:'owen',S5:'kira',S6:'teddy'};if(PM[d.id]){const hd=$('#vbody .hd');if(hd)hd.insertAdjacentHTML('afterbegin',`<img src="img/${PM[d.id]}.jpg" alt="" style="width:84px;height:112px;object-fit:cover;border:1px solid #777;margin-right:4px">`)}$('#vbody').insertAdjacentHTML('beforeend','<p class="small" style="text-align:center;margin-top:14px">Tap a photo to zoom in.</p>');$('#vbody').querySelectorAll('.photo svg').forEach(s=>{s.style.cursor='zoom-in';s.onclick=()=>{const z=s.dataset.z!='1';s.dataset.z=z?'1':'0';s.style.width=z?'250%':'100%';s.style.cursor=z?'zoom-out':'zoom-in';s.parentElement.style.overflow='auto'}});$('#vpin').innerHTML=st.pins[d.id]?'📌<span class="pl"> Unpin</span>':'📌<span class="pl"> Pin</span>';$('#viewer').classList.add('on');$('#viewer').scrollTop=0;document.body.style.overflow='hidden';st.seen[d.id]=1;save();clickSnd()}
-function closeDoc(){$('#viewer').classList.remove('on');document.body.style.overflow='';renderFiles()}
-$('#vclose').onclick=closeDoc;$('#vprev').onclick=()=>openDoc(cur-1);$('#vnext').onclick=()=>openDoc(cur+1);
+function openDoc(i){if(lsnOn())ttsStop();cur=(i+DOCS.length)%DOCS.length;const d=DOCS[cur];$('#vtitle').textContent=`${d.id} · ${d.el.dataset.t.replace(/&amp;/g,'&')}`;$('#vbody').innerHTML='';$('#vbody').appendChild(d.el.content.cloneNode(true));const PM={S1:'rosa',S2:'margo',S3:'delia',S4:'owen',S5:'kira',S6:'teddy'};if(PM[d.id]){const hd=$('#vbody .hd');if(hd)hd.insertAdjacentHTML('afterbegin',`<img src="img/${PM[d.id]}.jpg" alt="" style="width:84px;height:112px;object-fit:cover;border:1px solid #777;margin-right:4px">`)}$('#vbody').insertAdjacentHTML('beforeend','<p class="small vhint" style="text-align:center;margin-top:14px">Tap a photo to zoom in.</p>');$('#vbody').querySelectorAll('.photo svg').forEach(s=>{s.style.cursor='zoom-in';s.onclick=()=>{const z=s.dataset.z!='1';s.dataset.z=z?'1':'0';s.style.width=z?'250%':'100%';s.style.cursor=z?'zoom-out':'zoom-in';s.parentElement.style.overflow='auto'}});$('#vpin').innerHTML=st.pins[d.id]?'📌<span class="pl"> Unpin</span>':'📌<span class="pl"> Pin</span>';$('#viewer').classList.add('on');$('#viewer').scrollTop=0;document.body.style.overflow='hidden';st.seen[d.id]=1;save();clickSnd()}
+function closeDoc(){if(lsnOn())ttsStop();$('#viewer').classList.remove('on');document.body.style.overflow='';renderFiles()}
+$('#vclose').onclick=closeDoc;$('#vlsn').onclick=()=>{if(lsnOn())return ttsStop();const d=DOCS[cur];lsnPlay('Exhibit '+d.id+'. '+d.el.dataset.t.replace(/&amp;/g,'&')+'. '+lsnText($('#vbody')),$('#vlsn'))};$('#vprev').onclick=()=>openDoc(cur-1);$('#vnext').onclick=()=>openDoc(cur+1);
 $('#vpin').onclick=()=>{const id=DOCS[cur].id;if(st.pins[id])delete st.pins[id];else st.pins[id]=1;save();$('#vpin').innerHTML=st.pins[id]?'📌<span class="pl"> Unpin</span>':'📌<span class="pl"> Pin</span>';toast(st.pins[id]?'Pinned to board':'Unpinned')};
 document.addEventListener('keydown',e=>{if(!$('#viewer').classList.contains('on'))return;if(e.key=='Escape')closeDoc();if(e.key=='ArrowRight')openDoc(cur+1);if(e.key=='ArrowLeft')openDoc(cur-1)});
 // board
@@ -1285,7 +1288,7 @@ const VOXB={delia:{p:1.05,r:1.1},owen:{p:.85,r:.93},margo:{p:.95,r:.92},kira:{p:
 if(st.voice===undefined){st.voice=true;save()}
 function ttsUnlock(){try{if(!tts.ctx){const C=window.AudioContext||window.webkitAudioContext;if(C)tts.ctx=new C()}if(tts.ctx&&tts.ctx.state=='suspended')tts.ctx.resume()}catch(e){}}
 function setTalking(k){tts.k=k;const im=document.querySelector('#ivroom .por img');if(im)im.classList.toggle('talking',!!k&&k==ivCur);pvTalk(!!k&&k==ivCur);if(window.CaseBGM)CaseBGM.setDuck(!!k,'tts')}
-function ttsStop(){tts.gen++;try{tts.src&&tts.src.stop()}catch(e){}tts.src=null;try{window.speechSynthesis&&speechSynthesis.cancel()}catch(e){}setTalking(null)}
+function ttsStop(){tts.gen++;try{tts.src&&tts.src.stop()}catch(e){}tts.src=null;try{window.speechSynthesis&&speechSynthesis.cancel()}catch(e){}setTalking(null);lsnUI()}
 function sayText(html){const d=document.createElement('div');d.innerHTML=html;d.querySelectorAll('i,em,.small').forEach(x=>x.remove());return d.textContent.replace(/[“”"]/g,'').replace(/\s+/g,' ').trim()}
 function sents(t){const raw=t.match(/[^.!?…]+(?:[.!?…]+|$)/g)||[];const out=[];raw.forEach(x=>{x=x.trim();if(!x)return;if(out.length&&out[out.length-1].length<30)out[out.length-1]+=' '+x;else out.push(x)});return out.filter(x=>/[a-z]/i.test(x))}
 async function ttsFetch(k,text){const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),25000);try{const r=await fetch(LIVE+'/api/tts',{method:'POST',headers:{'Content-Type':'application/json'},signal:ctl.signal,body:JSON.stringify({character:k,text})});if(!r.ok)throw new Error('tts '+r.status);const ab=await r.arrayBuffer();return await tts.ctx.decodeAudioData(ab)}finally{clearTimeout(tm)}}
@@ -1300,6 +1303,37 @@ async function speak(k,html,onStart){let started=false;const st1=()=>{if(!starte
    setTalking(null);clearTimeout(guard);return}
   catch(e){if(g!=tts.gen)return;await browserSay(k,ss.slice(i),g,st1);if(g==tts.gen)setTalking(null);clearTimeout(guard);return}}
  await browserSay(k,ss,g,st1);if(g==tts.gen)setTalking(null);clearTimeout(guard)}
+// ===== Listen: the Lieutenant reads a document aloud. Uses the laptop's narrator voice when the Puzzle Master is reachable, else this device's own voice =====
+var LSN={g:0,btn:null};VOXB.lt={p:.8,r:.95};
+function lsnOn(){return !!(LSN&&LSN.g&&LSN.g==tts.gen)}
+function lsnUI(state){if(!LSN)return;const on=lsnOn();if(!on)LSN.g=0;document.querySelectorAll('.lsn').forEach(b=>{const me=on&&b==LSN.btn;b.setAttribute('aria-pressed',me?'true':'false');b.classList.toggle('busy',me&&state=='load');
+  const isPill=b.classList.contains('pill');b.innerHTML=me?(isPill?'■ <span class="lbl">Stop</span>':'■<span class="pl"> Stop</span>'):(isPill?'🔊 <span class="lbl">Listen</span>':'🔊<span class="pl"> Listen</span>');
+  b.setAttribute('aria-label',me?'Stop reading':(b.id=='vlsn'?'Listen: read this file aloud':'Listen: read this memo aloud'))})}
+// document text only: no pictures, buttons or hints; table cells become short spoken lists
+function lsnText(root){const c=root.cloneNode(true);c.querySelectorAll('svg,img,script,style,button,.vhint,.stamp,.lsn-row').forEach(x=>x.remove());
+ const out=[];const BL=/^(P|DIV|H[1-6]|LI|TR|TABLE|BLOCKQUOTE|UL|OL|SECTION|TBODY)$/;
+ const walk=n=>{if(n.nodeType==3){out.push(n.textContent);return}if(n.nodeType!=1)return;const t=n.tagName;if(t=='BR'){out.push('\n');return}
+  n.childNodes.forEach(walk);if(t=='TD'||t=='TH'){out.push(' ;; ');return}
+  const pa=n.parentNode;if(pa&&pa.classList&&pa.classList.contains('fld')&&[...pa.children].indexOf(n)%2==0){out.push(': ');return}if(BL.test(t))out.push('\n')};
+ walk(c);
+ return out.join('').replace(/\u00a0/g,' ').split('\n').map(l=>l.replace(/(\s*;;\s*)+$/,'').replace(/\s*;;\s*/g,', ').replace(/\s+/g,' ').trim()).filter(l=>/[a-z0-9]/i.test(l)).map((l,i,A)=>/[.!?…:;,]["”’)]?$/.test(l)?l.replace(/[:;,]$/,'.'):(A[i+1]&&/^[a-z]/.test(A[i+1])?l:l+'.')).join(' ')
+  .replace(/\s*→\s*/g,' to ').replace(/•+/g,' ').replace(/\s*[·|]\s*/g,', ').replace(/[*_#~^]/g,' ').replace(/[\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}]/gu,'').replace(/\s+([,.])/g,'$1').replace(/([.!?…])\s*,/g,'$1').replace(/([,.]){2,}/g,'$1').replace(/\s+/g,' ').trim()}
+// sentence-ish chunks for the voice: don't break on initials, titles or decimals; short first chunk so it starts quickly
+function lsnChunks(t){const pcs=t.match(/[^.!?…]*[.!?…]+["”’)]*\s*|[^.!?…]+$/g)||[];const ss=[];
+ const ABR=/(?:^|[\s(])(?:[A-Z]|Mr|Mrs|Ms|Dr|Dep|Det|Lt|Sgt|Capt|St|Ave|Rd|No|Inc|Co|Corp|Jr|Sr|vs|approx|Ltd|Ore|Calif|Mt|Ft|[ap]\.m|e\.g|i\.e|etc|U\.S)\.["”’)]*\s*$/;
+ pcs.forEach(x=>{if(ss.length&&(ABR.test(ss[ss.length-1])||/^\s*[a-z0-9$%)]/.test(x)))ss[ss.length-1]+=x;else ss.push(x)});
+ const out=[];let cur='';const lim=()=>out.length?360:170;
+ const push=x=>{x=x.trim();if(x)out.push(x)};
+ ss.map(x=>x.trim()).filter(Boolean).forEach(x=>{while(x.length>380){let k=x.lastIndexOf(', ',360);if(k<120)k=x.lastIndexOf(' ',360);if(k<1)k=360;if(cur){push(cur);cur=''}push(x.slice(0,k+1));x=x.slice(k+1).trim()}
+  if(cur&&(cur+' '+x).length>lim()){push(cur);cur=x}else cur=cur?cur+' '+x:x});push(cur);
+ return out.filter(x=>/[a-z]/i.test(x))}
+async function lsnPlay(text,btn){ttsUnlock();ttsStop();const ch=lsnChunks(text);if(!ch.length)return;const g=++tts.gen;LSN.g=g;LSN.btn=btn;lsnUI('load');
+ const done=()=>{if(g==tts.gen)setTalking(null);if(LSN.g==g)LSN.g=0;lsnUI()};let i=0;
+ if(liveOK&&ttsSrv!==false&&tts.ctx){try{const pf=x=>{const pr=ttsFetch('lt',x);pr.catch(()=>{});return pr};const jobs=ch.map((x,j)=>j<2?pf(x):null);
+   for(;i<ch.length;i++){if(i+2<ch.length&&!jobs[i+2])jobs[i+2]=pf(ch[i+2]);const buf=await jobs[i];if(g!=tts.gen)return done();lsnUI('play');setTalking('lt');await playBuf(buf,g);if(g!=tts.gen)return done()}
+   return done()}catch(e){if(g!=tts.gen)return done();lsnUI('play')}}
+ else if(!liveOK&&!liveChecking)liveCheck(4000);
+ await browserSay('lt',ch.slice(i),g,()=>{if(g==tts.gen)lsnUI('play')});done()}
 // typed-out subtitle for the newest answer, paced to the voice when one is speaking
 function typeOut(el,cps){const w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);const ns=[];while(w.nextNode())ns.push(w.currentNode);const spans=[];
  ns.forEach(n=>{const f=document.createDocumentFragment();n.textContent.split(/(\s+)/).forEach(tok=>{if(!tok)return;if(/^\s+$/.test(tok)){f.appendChild(document.createTextNode(tok));return}const sp=document.createElement('span');sp.className='tw';sp.textContent=tok;spans.push(sp);f.appendChild(sp)});n.parentNode.replaceChild(f,n)});
@@ -1367,6 +1401,7 @@ if(new URLSearchParams(location.search).get('tv')=='1')st.tv=1;
 if(st.tv){setTV(1,false);document.addEventListener('pointerdown',()=>{wakeOn();ttsUnlock()},{once:true})}
 document.addEventListener('pointerdown',ttsUnlock,{once:true});
 liveCheck();
+$('#memolsn').onclick=()=>{if(lsnOn())return ttsStop();lsnPlay(lsnText(document.querySelector('#v-brief .memo')),$('#memolsn'))};
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('.pm-retry')){toast('Connecting… If the browser asks to allow access to devices on your local network, choose Allow.');liveCheck(25000)}});
 $('#ivpick').onclick=e=>{const b=e.target.closest('button');if(b){ttsStop();micStop();ivCur=b.dataset.p;ivSwitch(false);renderIV()}};
 function ivSwitch(o){const v=$('#v-interview'),b=$('#ivswitch');if(!v||!b)return;v.classList.toggle('pickopen',o);b.setAttribute('aria-expanded',o);b.textContent=o?'✕ Close list':'👥 Switch person'}
